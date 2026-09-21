@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DS Datasets · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/exercises/ds/datasets.html">
+<link rel="stylesheet" href="../../styles.css">
+<script src="../../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../../index.html">Home</a></li><li><a href="../../overview.html">Overview</a></li><li><a href="../../outcomes.html">Outcomes</a></li><li><a href="../../schedule.html">Schedule</a></li><li><a href="../../lectures.html">Lectures</a></li><li><a href="../../labs.html">Labs</a></li><li><a href="../../cases.html">Case Studies</a></li><li><a href="../../exercises.html" aria-current="page">Exercises</a></li><li><a href="../../assignments.html">Assignments</a></li><li><a href="../../projects.html">Projects</a></li><li><a href="../../resources.html">Resources</a></li><li><a href="../../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../../index.html">Home</a> › DS Datasets</nav>
+<h1 class="page-title">DS Datasets</h1>
+<p>All datasets are student-visible and may be freely copied. Every dataset that contains defects documents them here, together with the <em>expected values</em> a correct program must produce — so students can self-check and graders compare.</p>
+<p>Generated inputs are also welcome; when a task says "use the dataset", use these files so outputs are comparable.</p>
+<h2 id="files">Files</h2>
+<h3 id="temperatures-txt-18-clean-readings">temperatures.txt — 18 clean readings</h3>
+<p>No defects. For DS-04.</p>
+<ul><li>mean = <strong>20.8</strong> (exact sum 374.4 / 18 = 20.7999…, prints 20.8 at 1 dp)</li><li>values <strong>strictly above</strong> the true mean: <strong>6</strong> (the six ≥ 21.8)</li></ul>
+<h3 id="survey-ratings-txt-40-non-blank-lines">survey_ratings.txt — 40 non-blank lines</h3>
+<p>For DS-06. Defects on purpose:</p>
+<ul><li><strong>35</strong> valid ratings 1..5</li><li><strong>3</strong> out-of-range (<code>0</code>, <code>9</code>, <code>-2</code>)</li><li><strong>2</strong> non-numeric (<code>five</code>, <code>missing?</code>)</li><li>counts: 1→3, 2→4, 3→6, 4→14, 5→8; relative for 4 = 14/35 = <strong>0.40</strong></li></ul>
+<h3 id="readings-na-txt-15-non-blank-lines-1-blank-line-to-ignore">readings_na.txt — 15 non-blank lines (+ 1 blank line to ignore)</h3>
+<p>For DS-09. Line classes:</p>
+<ul><li><strong>11</strong> loaded (all parse and lie in −50..60)</li><li><strong>2</strong> missing (<code>NA</code> on N-02 and N-03)</li><li><strong>2</strong> invalid (<code>twenty</code> non-numeric; <code>N-06</code> has no value field)</li><li>class identity holds: 11 + 2 + 2 = 15</li><li>mean of loaded = <strong>21.0455… → 21.0 at 1 dp</strong> (231.5 / 11)</li></ul>
+<h3 id="scores-csv-11-lines">scores.csv — 11 lines</h3>
+<p>For DS-13. Defects on purpose:</p>
+<ul><li>header <code>name,score</code> — per the task's stated rule, it classifies as <strong>bad-score</strong> (it is data-shaped, that is the lesson)</li><li><code>Farah 90</code> — no comma → <strong>no-comma</strong> (1)</li><li><code>Gus,101</code> (range) and <code>Ivan,abc</code> (non-numeric) → <strong>bad-score</strong> (2 more)</li><li><strong>7 loaded</strong>: 88, 72, 95, 61, 79, 90, 100</li><li>mean = <strong>83.57</strong> (585/7); max <strong>100</strong> owned by <strong>Jade</strong> (unique owner)</li></ul>
+<h3 id="students-txt-12-lines">students.txt — 12 lines</h3>
+<p>For DS-14. Defects:</p>
+<ul><li><code>Eli 300 2.0</code> — age out of 16..90 → rejected</li><li><code>Gus 22 4.1</code> — gpa out of 0..4 → rejected</li><li><code>Ivy 21 three</code> — non-numeric gpa → rejected</li><li><strong>9 valid rows</strong>; overall mean age <strong>20.89</strong>, mean gpa <strong>3.37</strong></li><li>Ana appears <strong>3×</strong> (3.4, 3.9, 3.6) → Ana mean <strong>3.63</strong>; Joy and Cy are single-row groups; first-appearance order: Ana, Ben, Cy, Dee, Fay, Gus, Hal, Joy</li></ul>
+<h3 id="messy-grades-txt-20-non-blank-lines">messy_grades.txt — 20 non-blank lines</h3>
+<p>For DS-15. Defect classes (your program must state its classification rule for the 3 no-name lines; suggested rule: no name ⇒ corrupt):</p>
+<ul><li><strong>13</strong> valid (min 41, max 100)</li><li><strong>2</strong> missing (<code>Ben NA</code>, <code>Ned NA</code>)</li><li><strong>2</strong> corrupt values (<code>Dan abc</code>, <code>Qu 101</code> out of range)</li><li><strong>3</strong> no-name lines (<code>72</code>, <code>79</code>, the lone <code>NA</code>)</li><li>expected: mean <strong>74.92</strong>, median <strong>79.00</strong>, usable <strong>65.0 %</strong> (13/20)</li></ul>
+<h3 id="stations-three-station-files-index-txt">stations/ — three station files + index.txt</h3>
+<p>For DS-18. Format <code>day temperature</code>; temperature plausible range −50..60.</p>
+<table><thead><tr><th>File</th><th>loaded</th><th>missing</th><th>invalid</th><th>mean</th></tr></thead><tbody><tr><td>station_north.txt</td><td>9</td><td>1</td><td>0</td><td>21.06 (21.0556)</td></tr><tr><td>station_south.txt</td><td>7</td><td>1</td><td>2 (<code>twenty</code>, <code>700</code> out of range)</td><td>26.07</td></tr><tr><td>station_coast.txt</td><td>8</td><td>1</td><td>1 (<code>foggy</code>)</td><td>18.75</td></tr></tbody></table>
+<ul><li>hottest single reading: <strong>27.5</strong> at station_south day 7</li><li>coldest single reading: <strong>17.5</strong> at station_coast day 4</li><li>mean ranking (hottest first): south 26.07, north 21.06, coast 18.75</li><li>no ties in this data; the tie rule (alphabetical) exists for robustness — test it by adding a temporary file with an equal mean.</li></ul>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

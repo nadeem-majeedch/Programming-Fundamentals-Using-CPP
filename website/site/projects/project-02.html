@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Project 02 · Expense Tracking System · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/projects/project-02.html">
+<link rel="stylesheet" href="../styles.css">
+<script src="../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../index.html">Home</a></li><li><a href="../overview.html">Overview</a></li><li><a href="../outcomes.html">Outcomes</a></li><li><a href="../schedule.html">Schedule</a></li><li><a href="../lectures.html">Lectures</a></li><li><a href="../labs.html">Labs</a></li><li><a href="../cases.html">Case Studies</a></li><li><a href="../exercises.html">Exercises</a></li><li><a href="../assignments.html">Assignments</a></li><li><a href="../projects.html" aria-current="page">Projects</a></li><li><a href="../resources.html">Resources</a></li><li><a href="../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="narrow">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../index.html">Home</a> › Project 02 · Expense Tracking System</nav>
+<h1 class="page-title">Project 02 · Expense Tracking System</h1>
+<p><strong>Modules 9–12 (Weeks 9–12) · arrays as collections, parallel arrays, sorting, reports — no files, no structs yet</strong> Outcomes: CLO-6 (PF-9…PF-12). Difficulty: ★★☆☆☆ · Builds directly on P1.</p>
+<h2 id="1-problem-description">1. Problem description</h2>
+<p>A student club treasurer tracks small cash expenses (canteen, transport, printing, supplies, other) during an event day. Write a console program that accepts a day's expenses, stores them in memory, and produces the reports the treasurer reads aloud at the evening meeting: totals per category, the largest expense, a sorted listing, and a category-share line.</p>
+<h2 id="2-learning-objectives">2. Learning objectives</h2>
+<ol><li>Use arrays as collections with exact bounds discipline (n, cap).</li><li>Manage parallel arrays safely — or explain why you avoided them.</li><li>Implement and apply your own selection or insertion sort (L24).</li><li>Produce aggregate reports (category totals, shares) from stored data.</li><li>Keep validation at the input boundary so reports never see bad rows.</li></ol>
+</ol>
+<h2 id="3-functional-requirements">3. Functional requirements</h2>
+<ul><li>FR1 — Categories are fixed: <code>food transport printing supplies other</code> (single words, lower-case). Amounts are doubles 0.01..5000.</li><li>FR2 — Add phase: read expenses until sentinel <code>done</code>: each entry is <code>category amount</code>. Capacity 200; a 201st entry prints <code>full</code> and stops accepting.</li><li>FR3 — Reports (in this order, exact labels):</li><li><code>total: &lt;sum&gt;</code> (2 dp) — all valid expenses.</li><li><code>by category:</code> then one line per category <code>&lt;name&gt; &lt;sum&gt; &lt;share%&gt;</code> (2 dp; share of total; zero-count categories print <code>0.00 0.00%</code>).</li><li><code>largest: &lt;amount&gt; (&lt;category&gt;)</code> — first wins ties.</li><li><code>sorted:</code> all expenses ascending on one line (2 dp each).</li><li><code>over 100: &lt;k&gt;</code> — count strictly greater than 100.</li><li>FR4 — Sorting must be your own insertion or selection sort on the amounts array; <code>std::sort</code> is banned.</li><li>FR5 — An <code>undo</code> entry removes the most recent still-present expense (multiple <code>undo</code> allowed; <code>undo</code> on empty log prints <code>nothing to undo</code>).</li></ul>
+<h2 id="4-non-functional-requirements">4. Non-functional requirements</h2>
+<ul><li>NFR1 — Capacity is a named constant; every array access is provably in bounds (report treats this as the correctness gate it is).</li><li>NFR2 — Reports are produced by functions that take the arrays and counts — no report function reads input.</li><li>NFR3 — Compiles with the course contract, zero warnings.</li><li>NFR4 — No files, no structs, no vectors (Module 13+ skills; parallel arrays or an amount+index design is the intended struggle).</li><li>NFR5 — Money math: amounts are double but the <em>sum</em> uses a stated rounding policy (round-half-up at display only — never mutate stored values).</li></ul>
+<h2 id="5-suggested-data-structures">5. Suggested data structures</h2>
+<ul><li><code>double amounts[200];</code> + <code>int categoryIndex[200];</code> (parallel arrays) — the classic form; every swap during sorting must move BOTH arrays or you corrupt the category report (the L20-era misalignment bug, now yours to avoid).</li><li><code>double catTotal[5]; int catCount[5];</code> — category aggregates.</li><li>Alternative (accepted, defend in a comment): sort an array of <em>indices</em> by amount, leaving the data arrays untouched — this is the cleaner design and is graded favorably under quality.</li></ul>
+<h2 id="6-user-interaction-design">6. User interaction design</h2>
+<pre><code class="language-text">expense (cat amount | undo | done): food 12.50
+expense (cat amount | undo | done): transport 45
+expense (cat amount | undo | done): food 8
+expense (cat amount | undo | done): done
+total: 65.50
+by category:
+food 20.50 31.30%
+transport 45.00 68.70%
+printing 0.00 0.00%
+supplies 0.00 0.00%
+other 0.00 0.00%
+largest: 45.00 (transport)
+sorted: 8.00 12.50 45.00
+over 100: 0</code></pre>
+<h2 id="7-input-validation-requirements">7. Input validation requirements</h2>
+<ul><li>VR1 — Unknown category word: <code>bad category</code>, entry rejected, continue.</li><li>VR2 — Amount outside 0.01..5000 or non-numeric: <code>bad amount</code>, rejected.</li><li>VR3 — Rejected entries never partially enter the arrays (category without amount or vice versa).</li><li>VR4 — Zero valid expenses at <code>done</code>: print <code>no expenses</code> instead of reports, exit 0.</li><li>VR5 — Undo interacts correctly with capacity (undo then add works; undo never decrements below 0).</li></ul>
+<h2 id="8-testing-plan">8. Testing plan</h2>
+<table><thead><tr><th>#</th><th>Class</th><th>Input</th><th>Expected</th></tr></thead><tbody><tr><td>T1</td><td>typical</td><td>the session above</td><td>the report above (shares sum ≈ 100 %)</td></tr><tr><td>T2</td><td>tie</td><td>two 45.00 in different categories</td><td>largest names the FIRST</td></tr><tr><td>T3</td><td>sort</td><td>5 unsorted amounts incl. equal</td><td>ascending line, equal values adjacent</td></tr><tr><td>T4</td><td>boundary</td><td>amount 0.01 and 5000 accepted</td><td>both appear; 5000.01 rejected</td></tr><tr><td>T5</td><td>invalid</td><td><code>snacks 10</code></td><td><code>bad category</code>, count unchanged</td></tr><tr><td>T6</td><td>invalid</td><td><code>food 0</code></td><td><code>bad amount</code></td></tr><tr><td>T7</td><td>undo</td><td>add 3, undo 1, report</td><td>total has 2 entries; undo again removes next</td></tr><tr><td>T8</td><td>undo-empty</td><td><code>undo</code> first</td><td><code>nothing to undo</code></td></tr><tr><td>T9</td><td>capacity</td><td>201 adds</td><td>201st → <code>full</code></td></tr><tr><td>T10</td><td>empty</td><td><code>done</code> first</td><td><code>no expenses</code></td></tr></tbody></table>
+<h2 id="9-milestones">9. Milestones</h2>
+<ol><li><strong>M1:</strong> add-phase with validation into parallel arrays + T5/T6.</li><li><strong>M2:</strong> total + by-category report + T1 (first three lines).</li><li><strong>M3:</strong> your own sort + sorted line + largest + T2/T3.</li><li><strong>M4:</strong> undo + capacity + empty cases + T7–T10.</li></ol>
+</ol>
+<h2 id="10-extension-ideas">10. Extension ideas ⚙</h2>
+<ul><li>⚙ <code>max &lt;category&gt;</code> sub-report (max within one category).</li><li>⚙ Percent-share bars using <code>#</code> characters (fixed-width, Module 11).</li><li>⚙ Second event day: run the report twice in one session and diff the totals (Module 9 discipline, still no files).</li></ul>
+<h2 id="11-assessment-rubric-10-points-when-graded-as-homework">11. Assessment rubric (10 points when graded as homework)</h2>
+<table><thead><tr><th>Points</th><th>Line</th></tr></thead><tbody><tr><td>0–3</td><td>Storage + validation correct (VR1–VR3, T4–T6)</td></tr><tr><td>0–2</td><td>Reports exact (labels, 2 dp, shares, T1)</td></tr><tr><td>0–2</td><td>Own sort + largest + over-100 (FR3/FR4, T2/T3)</td></tr><tr><td>0–2</td><td>Undo + capacity + empty (FR5, VR4–VR5, T7–T10)</td></tr><tr><td>0–1</td><td>Bounds discipline visible (NFR1) + test table</td></tr></tbody></table>
+<p>Course-gate: does not compile with the contract → 0.</p>
+<h2 id="12-student-instructions">12. Student instructions</h2>
+<p>Work individually. The parallel-array alignment bug is the famous one — your test table MUST include a case where sorting happens before the category report (T1's order does this) to prove categories still match amounts. Deliverables: <code>expenses.cpp</code>, <code>test_table.md</code> (T1–T10), <code>postmortem.md</code> (one real defect narrated). Zip as <code>p02_&lt;yourid&gt;.zip</code>. <code>std::sort</code> or <code>vector</code> here = scope violation: correctness capped at 3/10 under the scope-calibration line.</p>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

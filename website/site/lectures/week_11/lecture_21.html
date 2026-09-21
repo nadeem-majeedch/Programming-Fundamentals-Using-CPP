@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L21 · Characters and Strings: `char` Processing and the `std::string` Class · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/lectures/week_11/lecture_21.html">
+<link rel="stylesheet" href="../../styles.css">
+<script src="../../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../../index.html">Home</a></li><li><a href="../../overview.html">Overview</a></li><li><a href="../../outcomes.html">Outcomes</a></li><li><a href="../../schedule.html">Schedule</a></li><li><a href="../../lectures.html" aria-current="page">Lectures</a></li><li><a href="../../labs.html">Labs</a></li><li><a href="../../cases.html">Case Studies</a></li><li><a href="../../exercises.html">Exercises</a></li><li><a href="../../assignments.html">Assignments</a></li><li><a href="../../projects.html">Projects</a></li><li><a href="../../resources.html">Resources</a></li><li><a href="../../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="narrow">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../../index.html">Home</a> › L21 · Characters and Strings: `char` Processing and the `std::string` Class</nav>
+<h1 class="page-title">L21 · Characters and Strings: `char` Processing and the `std::string` Class</h1>
+<p><strong>Module 11 — Strings and Character Processing · Week 11 · Lecture 21 of 32 · 120 minutes</strong> <strong>Outcomes:</strong> CLO-6 · PF-11.1, PF-11.2 · <a href="../../outcomes.html">LEARNING_OUTCOMES.md</a></p>
+<h2 id="learning-objectives">Learning objectives</h2>
+<ol><li>Apply <code>&lt;cctype&gt;</code> character classification and conversion functions (<code>isdigit</code>, <code>isalpha</code>, <code>isspace</code>, <code>isupper</code>, <code>islower</code>, <code>toupper</code>, <code>tolower</code>) inside loops over text (PF-11.1).</li><li>Manipulate <code>std::string</code> objects: indexing, <code>length()</code>, <code>+</code>/<code>+=</code>, comparison, <code>substr</code>, <code>find</code>, and choose <code>getline</code> vs <code>&gt;&gt;</code> correctly (PF-11.2).</li><li>Explain the array-of-chars view of strings (including the <code>'\0'</code> terminator concept for C-strings) and why <code>std::string</code> is the course default (PF-11.2).</li></ol>
+</ol>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>M9 (array indexing/traversal — strings <em>are</em> traversed arrays); L06 (<code>char</code>/<code>int</code> casts); L04 (why <code>&gt;&gt;</code> stops at whitespace).</p>
+<h2 id="concept-sequence">Concept sequence</h2>
+<ol><li>Text as data: from <code>char</code> (L03) to sequences of <code>char</code></li><li><code>&lt;cctype&gt;</code> toolkit with a classification table demo</li><li><code>std::string</code>: declaration, indexing, length</li><li>Building and comparing strings (<code>+</code>, <code>+=</code>, <code>==</code>, <code>&lt;</code>)</li><li>Slicing and searching: <code>substr</code>, <code>find</code></li><li>Reading full lines: <code>getline</code> (and its <code>&gt;&gt;</code> interaction trap)</li></ol>
+</ol>
+<h2 id="teaching-topics-detailed">Teaching topics (detailed)</h2>
+<ul><li><strong>char classification:</strong> each <code>&lt;cctype&gt;</code> predicate demonstrated on <code>'7'</code>, <code>' '</code>, <code>'Q'</code>, <code>'q'</code>; <code>toupper('a')</code> → <code>'A'</code>; char arithmetic (<code>'a' + 2</code>) revisited from L06 — digit value trick: <code>c - '0'</code>.</li><li><strong><code>std::string</code> basics:</strong> <code>std::string name{"Ayesha"};</code>; <code>name[0]</code> (index, no bounds check — same discipline as arrays), <code>name.length()</code> (size_t printed via <code>static_cast&lt;int&gt;</code> per style); indexing loop = M9 traversal skills applied to text.</li><li><strong>Building/comparison:</strong> <code>+</code> concatenation, <code>+=</code> append; lexicographic <code>==</code>, <code>&lt;</code> (dictionary order — "apple" &lt; "banana"; case matters: <code>"Zebra" &lt; "apple"</code>, why: char codes — ties to L06 char↔int).</li><li><strong><code>substr(pos, len)</code> and <code>find(needle)</code>:</strong> <code>find</code> returns <code>std::string::npos</code> when absent — the not-found check pattern; first-occurrence semantics; slicing a fixed-format record (<code>"2026-09-18"</code> → year/month/day).</li><li><strong><code>getline(cin, line)</code>:</strong> reads whole lines incl. spaces; the classic <code>cin &gt;&gt; n; getline(cin, s);</code> trap (leftover newline consumed by getline → empty string) demonstrated live and fixed with <code>cin.ignore()</code> — the full treatment lands in Module 15; here it is named and worked around.</li><li><strong>C-string note (concept only):</strong> <code>char word[] = "hi";</code> and the invisible <code>'\0'</code> terminator — one slide, historical context, <code>std::string</code> stays the default (<a href="../../resources.html#cpp-standard">docs/CPP_STANDARD.md</a> § 4).</li></ul>
+<h2 id="c-examples-required">C++ examples required</h2>
+<table><thead><tr><th>File</th><th>Role</th></tr></thead><tbody><tr><td><code>string_processing.cpp</code> ✅</td><td>classification table, indexing/length, compare, substr/find with npos check, getline demo</td></tr><tr><td>(live) <code>name_formatter.cpp</code></td><td>initials extractor: <code>getline</code> full name → toupper initials (builds toward L22)</td></tr></tbody></table>
+<h2 id="common-student-misconceptions">Common student misconceptions</h2>
+<ul><li>"<code>std::string</code> is a built-in type like <code>int</code>." (It's a library class — the Module 16 preview; behaves like one for now.)</li><li>"<code>find</code> returns -1 when not found." (<code>std::string::npos</code> — an unsigned giant; comparing to -1 "works" by accident but is wrong; course pattern: <code>if (pos != std::string::npos)</code>.)</li><li>"<code>substr</code> mutates the string." (It returns a <em>new</em> string.)</li><li>"<code>getline</code> and <code>&gt;&gt;</code> mix freely." (The leftover-newline trap; demonstrated, not hidden.)</li></ul>
+<h2 id="conceptual-explanation-beginner-first">Conceptual explanation (beginner-first)</h2>
+<p>Strings are the first <em>objects</em> most students meet, even before Module 16 names the idea: a <code>std::string</code> bundles data (the characters) with operations it knows how to do on itself — tell its length, find a substring, hand back a piece, compare itself to another. The dot syntax <code>s.size()</code> reads as "s, report your size" — that mental model pays off in M16, so plant it now.</p>
+<p>Under the comfort, the array knowledge from Module 9 still applies: <code>s[i]</code> is a real <code>char</code>, indices run <code>0..size()-1</code>, and out-of-range accesses are exactly as dangerous as array overruns. The <em>additional</em> machinery is modest: <code>find</code> (position of a substring or <code>std::string::npos</code> if absent), <code>substr</code> (copy a slice), and comparison operators that order strings by character codes — dictionary order, with the uppercase/lowercase wrinkle that <code>"apple" &lt; "Banana"</code> is <strong>false</strong> because 'a' (97) sorts after 'B' (66).</p>
+<h2 id="terminology-and-definitions">Terminology and definitions</h2>
+<table><thead><tr><th>Term</th><th>Definition</th></tr></thead><tbody><tr><td><code>std::string</code></td><td>The library text type; grows as needed, remembers its length</td></tr><tr><td>Member function</td><td>Operation called on an object with dot syntax: <code>s.size()</code></td></tr><tr><td>Indexing / length</td><td><code>s[i]</code> is a <code>char</code>; valid <code>0..s.size()-1</code></td></tr><tr><td><code>find</code></td><td>Position of first match; <code>std::string::npos</code> when absent</td></tr><tr><td><code>std::string::npos</code></td><td>The largest <code>size_t</code> value — the "not found" sentinel</td></tr><tr><td><code>substr(pos, len)</code></td><td>Copy of the slice starting at <code>pos</code>, up to <code>len</code> chars</td></tr><tr><td>Lexicographic order</td><td><code>&lt;</code> <code>&gt;</code> compare char codes position by position</td></tr><tr><td><code>&lt;cctype&gt;</code></td><td>Per-char tests/maps: <code>isalpha</code>, <code>isdigit</code>, <code>toupper</code>, <code>tolower</code>, <code>isspace</code></td></tr><tr><td><code>getline</code></td><td>Reads a full line (spaces included) into a string</td></tr><tr><td>Leftover newline</td><td><code>cin &gt;&gt; x</code> leaves <code>\n</code>; the next <code>getline</code> reads it as an empty line</td></tr></tbody></table>
+<h2 id="syntax-and-c-examples">Syntax and C++ examples</h2>
+<pre><code class="language-cpp">std::string name{&quot;Grace Hopper&quot;};
+
+std::cout &lt;&lt; name.size() &lt;&lt; &#x27;\n&#x27;;        // 12
+std::cout &lt;&lt; name[0] &lt;&lt; &#x27;\n&#x27;;            // &#x27;G&#x27; — a plain char
+name[0] = &#x27;g&#x27;;                           // assignment through the index
+
+std::size_t pos = name.find(&#x27; &#x27;);        // 5
+if (pos != std::string::npos)
+    std::cout &lt;&lt; name.substr(0, pos);    // &quot;grace&quot; after the write above
+
+// lexicographic comparison — code-point order, not dictionary intuition
+// &quot;apple&quot; &lt; &quot;Banana&quot; is FALSE: &#x27;a&#x27;(97) &gt; &#x27;B&#x27;(66)
+
+// classification &amp; mapping
+char ch{&#x27;q&#x27;};
+if (std::isalpha(static_cast&lt;unsigned char&gt;(ch)))
+    ch = static_cast&lt;char&gt;(std::toupper(static_cast&lt;unsigned char&gt;(ch)));   // &#x27;Q&#x27;
+
+// the getline pattern (and the repair after &gt;&gt;)
+int age{};
+std::cin &gt;&gt; age;
+std::cin.ignore(1000, &#x27;\n&#x27;);             // drain the leftover newline
+std::string title;
+std::getline(std::cin, title);           // now reads the whole line</code></pre>
+<h2 id="line-by-line-code-explanation">Line-by-line code explanation</h2>
+<p><code>examples/string_processing.cpp</code>:</p>
+<ol><li>The classification table prints <code>isalpha/isupper/isdigit/isspace</code> results for a fixed character set — a reference students copy.</li><li>The indexing block mutates <code>s[1]</code> and prints — strings are mutable through their indices, like arrays.</li><li>The <code>find</code>/<code>substr</code> block guards with <code>!= std::string::npos</code> before slicing: slicing with <code>npos</code>-derived garbage is the classic crash.</li><li>The comparison block orders three words by <code>&lt;</code> and prints the order; the apple/Banana pair demonstrates code-point order vs dictionary intuition.</li><li>The <code>getline</code> demo deliberately follows a <code>cin &gt;&gt; int</code> with <code>cin.ignore</code> — the repair pattern shown, not just told.</li></ol>
+</ol>
+<h2 id="output-prediction-questions-with-answers">Output prediction questions (with answers)</h2>
+<ol><li><code>"Compiler".size()</code> — ? — 8.</li><li><code>std::string s{"abc"}; s[1] = 'B';</code> — ? — <code>aBc</code>.</li><li><code>"data".find('a')</code> — ? — 1 (first match); <code>.find('z')</code> — <code>npos</code>.</li><li><code>"2026-09-18".substr(5, 2)</code> — ? — <code>"09"</code>.</li><li><code>"apple" &lt; "Banana"</code> — ? — <strong>false</strong>: 'a' (97) vs 'B' (66) — first position decides.</li><li>After <code>cin &gt;&gt; n</code> with input <code>7⏎Ada</code>, what does an un-repaired <code>getline</code> return? — <code>""</code> (it consumes the leftover newline).</li></ol>
+</ol>
+<h2 id="common-errors-and-debugging-examples">Common errors and debugging examples</h2>
+<table><thead><tr><th>Error</th><th>Symptom</th><th>Fix</th></tr></thead><tbody><tr><td>Mixing <code>&gt;&gt;</code> and <code>getline</code></td><td>getline returns empty</td><td><code>cin.ignore(1000, '\n')</code> between them</td></tr><tr><td>Indexing <code>s[s.size()]</code></td><td>Out of range — UB (empty strings: <code>s[0]</code> too)</td><td>Valid range <code>0..size()-1</code>; check emptiness</td></tr><tr><td>Slicing after unguarded <code>find</code></td><td>substr from garbage position</td><td>Test <code>pos != std::string::npos</code> first</td></tr><tr><td>Assuming case-insensitive <code>&lt;</code></td><td>Wrong sort order vs. intuition</td><td>Know that comparison is code-point order</td></tr><tr><td><code>toupper(s[i])</code> used raw</td><td>Works usually; UB for negative chars</td><td>Cast to <code>unsigned char</code> (established pattern)</td></tr><tr><td>Building output with <code>+</code> on chars</td><td><code>s + 'x'</code> fine; <code>"a" + 'x'</code> not</td><td>Concatenate onto a <code>std::string</code> variable</td></tr></tbody></table>
+<h2 id="classroom-demonstrations">Classroom demonstrations</h2>
+<ol><li><strong>The empty getline:</strong> run the un-repaired <code>cin &gt;&gt; n; getline(...)</code> with input <code>7⏎Ada Lovelace</code> — the name vanishes; add <code>ignore</code>, it returns. One demo, one rule, remembered all semester.</li><li><strong>npos is huge:</strong> print <code>std::string::npos</code> — the class sees the giant number and why <code>-1</code> comparisons are fragile.</li><li><strong>Code-point sort:</strong> sort <code>{"apple", "Banana", "cherry"}</code> with <code>&lt;</code> — the order surprises; connect to ASCII codes on the board.</li></ol>
+</ol>
+<h2 id="guided-student-activities">Guided student activities</h2>
+<p><strong>String safari (20 min):</strong> 8 task cards (count digits in a plate number, upper-case a word, extract the domain from an email, compare two names for dictionary order, find the first space, slice a date, classify one char, append a suffix) — pairs solve on paper, then 3 are coded live by volunteer typing.</p>
+<h2 id="practice-problems">Practice problems</h2>
+<ul><li>Classification table: given 10 chars, predict each <code>&lt;cctype&gt;</code> result.</li><li>Write <code>count_vowel</code>, <code>to_upper_copy</code>, <code>contains_digit</code> functions over strings.</li><li>Date slicer: split <code>"YYYY-MM-DD"</code> into three ints (with <code>stoi</code> mention).</li><li>(🟡 stretch) Why does <code>"apple" &lt; "Banana"</code>? Print the char codes involved.</li></ul>
+<h2 id="summary">Summary</h2>
+<p><code>std::string</code> bundles characters with operations — dot syntax plants the object mental model early. Indexing is array indexing; <code>find</code> needs its <code>npos</code> guard; comparisons follow code points, not intuition; and <code>getline</code> needs its <code>cin.ignore</code> repair after <code>&gt;&gt;</code>. Next (L22): the algorithms that build text — cleaning, splitting, and formatting.</p>
+<h2 id="exit-ticket-formative-assessment">Exit ticket / formative assessment</h2>
+<ol><li>Write the not-found check for <code>find</code>.</li><li><code>std::string s{"abc"}; s[1] = 'B';</code> — final value? What type is <code>s[1]</code>?</li><li>Which reads <code>"Data Science 101"</code> fully — <code>cin &gt;&gt; s</code> or <code>getline(cin, s)</code>?</li></ol>
+</ol>
+<h2 id="estimated-time-allocation-120-min">Estimated time allocation (120 min)</h2>
+<table><thead><tr><th>Segment</th><th>Minutes</th></tr></thead><tbody><tr><td>Recall (2-D quiz) + text-as-data motivation</td><td>10</td></tr><tr><td><code>&lt;cctype&gt;</code> toolkit + char arithmetic</td><td>25</td></tr><tr><td>Break</td><td>10</td></tr><tr><td><code>std::string</code> operations + substr/find + getline trap</td><td>45</td></tr><tr><td>String safari activity</td><td>20</td></tr><tr><td>Exit ticket + L22 preview</td><td>10</td></tr></tbody></table>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

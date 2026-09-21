@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L04 · Console I/O with `cin`/`cout`: Streams, Formatting, and Input Validation Basics · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/lectures/week_02/lecture_04.html">
+<link rel="stylesheet" href="../../styles.css">
+<script src="../../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../../index.html">Home</a></li><li><a href="../../overview.html">Overview</a></li><li><a href="../../outcomes.html">Outcomes</a></li><li><a href="../../schedule.html">Schedule</a></li><li><a href="../../lectures.html" aria-current="page">Lectures</a></li><li><a href="../../labs.html">Labs</a></li><li><a href="../../cases.html">Case Studies</a></li><li><a href="../../exercises.html">Exercises</a></li><li><a href="../../assignments.html">Assignments</a></li><li><a href="../../projects.html">Projects</a></li><li><a href="../../resources.html">Resources</a></li><li><a href="../../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="narrow">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../../index.html">Home</a> › L04 · Console I/O with `cin`/`cout`: Streams, Formatting, and Input Validation Basics</nav>
+<h1 class="page-title">L04 · Console I/O with `cin`/`cout`: Streams, Formatting, and Input Validation Basics</h1>
+<p><strong>Module 2 — Variables, Data Types, and Input/Output · Week 2 · Lecture 4 of 32 · 120 minutes</strong> <strong>Outcomes:</strong> CLO-2 · PF-2.3, PF-2.4 · <a href="../../outcomes.html">LEARNING_OUTCOMES.md</a> · <strong>Lab 1 week</strong></p>
+<h2 id="learning-objectives">Learning objectives</h2>
+<ol><li>Read values of any built-in type with <code>std::cin</code> (chained and single) and write formatted output with <code>std::cout</code> plus <code>fixed</code>, <code>setprecision</code>, <code>setw</code> manipulators from <code>&lt;iomanip&gt;</code> (PF-2.3).</li><li>Predict the stream-state consequences of typing the wrong kind of input, and write a program that detects and recovers from a failed read (PF-2.4).</li><li>Explain why <code>cin &gt;&gt; x</code> skips leading whitespace but <code>&gt;&gt;</code> stops at it (PF-2.3).</li></ol>
+</ol>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>L03 (can declare/initialize typed variables; assignment semantics).</p>
+<h2 id="concept-sequence">Concept sequence</h2>
+<ol><li>Streams as faucets: <code>cout</code> out, <code>cin</code> in</li><li>Reading into variables: <code>&gt;&gt;</code> chains, whitespace behavior</li><li>Output formatting: <code>fixed</code>, <code>setprecision</code>, <code>setw</code></li><li>When input goes wrong: stream state <code>fail()</code></li><li>Recovery: <code>clear()</code> + <code>ignore()</code>, re-prompt loop preview</li><li>Prompt-echo discipline (always echo what you read)</li></ol>
+</ol>
+<h2 id="teaching-topics-detailed">Teaching topics (detailed)</h2>
+<ul><li><strong><code>cin &gt;&gt;</code> mechanics:</strong> whitespace-delimited tokens; chained <code>cin &gt;&gt; a &gt;&gt; b;</code> consumes across lines; prompt without newline (<code>std::cout &lt;&lt; "age: "</code>).</li><li><strong>Formatting:</strong> <code>std::cout &lt;&lt; std::fixed &lt;&lt; std::setprecision(2) &lt;&lt; price;</code> — money; <code>setw(6)</code> columns for tables (used again in M10 grid output); <code>&lt;iomanip&gt;</code> include.</li><li><strong>Stream state:</strong> success/fail bits; <code>if (!(std::cin &gt;&gt; age))</code> pattern; demo: typing <code>abc</code> for an int puts the stream in fail state <em>and leaves the bad text in the buffer</em> — hence recovery = <code>clear()</code> + <code>ignore(...)</code> before re-asking.</li><li><strong>Echo discipline:</strong> read → echo → compute → label output (traceability habit that pays off in labs).</li><li><strong>Full-body minimum viable validator:</strong> a 12-line program that re-prompts until an int arrives (sentinel-free loop previewed honestly: full loops in Module 5 — here the pattern is shown once for copy-and-adapt).</li></ul>
+<h2 id="c-examples-required">C++ examples required</h2>
+<table><thead><tr><th>File</th><th>Role</th></tr></thead><tbody><tr><td><code>io_age_check.cpp</code> ✅</td><td>prompt/read/echo/validate age; fail-state recovery demonstrated live</td></tr><tr><td>(live) <code>format_table.cpp</code></td><td>3-column formatted table with <code>setw</code> (grades sheet)</td></tr></tbody></table>
+<h2 id="conceptual-explanation-beginner-first">Conceptual explanation (beginner-first)</h2>
+<p>So far every value lived inside the program text. Real programs <em>converse</em>: they ask (output), the user answers (input), and the program reacts. C++ models both directions as <strong>streams</strong> — imagine faucets: <code>cout</code> is the faucet pouring text onto the screen; <code>cin</code> is the drain collecting what the user types.</p>
+<p><code>cin &gt;&gt; age</code> reads <em>one whitespace-separated token</em> and converts it into a number stored in <code>age</code>. Two consequences surprise beginners: the read stops at the first space (one <code>&gt;&gt;</code> never grabs a full line), and if the user types something that cannot be a number, the stream itself <em>fails</em> — and stays failed until you repair it. That failure is not a crash; it is a flag, and flags can be checked and cleared. That is exactly what "input validation" means in this course: read, check the flag, repair or re-prompt.</p>
+<p>Formatting is the reverse courtesy: <code>fixed</code> and <code>setprecision(2)</code> make money look like money (<code>19.9</code> → <code>19.90</code>) without touching the stored value — only its <em>display</em> changes.</p>
+<h2 id="terminology-and-definitions">Terminology and definitions</h2>
+<table><thead><tr><th>Term</th><th>Definition</th></tr></thead><tbody><tr><td>Stream</td><td>A channel data flows through (<code>cin</code> in, <code>cout</code>/<code>cerr</code> out)</td></tr><tr><td>Token</td><td>A whitespace-separated chunk of input (<code>&gt;&gt;</code> reads one)</td></tr><tr><td>Stream state</td><td>The flags describing the last operation: good / failed</td></tr><tr><td><code>fail()</code></td><td>True when the last read could not produce the requested type</td></tr><tr><td><code>clear()</code></td><td>Reset the state flags (does NOT discard buffered text)</td></tr><tr><td><code>ignore(n, '\n')</code></td><td>Discard up to n chars, stopping after a newline (buffer repair)</td></tr><tr><td>Manipulator</td><td>A stream modifier like <code>fixed</code>, <code>setprecision</code>, <code>setw</code></td></tr><tr><td><code>&lt;iomanip&gt;</code></td><td>Header providing <code>setprecision</code>, <code>setw</code></td></tr><tr><td>Echo</td><td>Re-print what was read, so user and program agree on what happened</td></tr><tr><td>Prompt</td><td>Text printed before a read, telling the user what to type</td></tr></tbody></table>
+<h2 id="syntax-and-c-examples">Syntax and C++ examples</h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;iomanip&gt;     // setprecision, setw
+
+int age{};
+std::cout &lt;&lt; &quot;Age: &quot;;          // prompt (no newline)
+std::cin &gt;&gt; age;               // read one token into age
+
+if (!(std::cin &gt;&gt; value))      // the validation check pattern
+{
+    std::cin.clear();          // 1) reset flags
+    std::cin.ignore(1000, &#x27;\n&#x27;);  // 2) flush the bad line
+}
+
+std::cout &lt;&lt; std::fixed &lt;&lt; std::setprecision(2) &lt;&lt; 19.9 &lt;&lt; &#x27;\n&#x27;;  // 19.90
+std::cout &lt;&lt; std::setw(6) &lt;&lt; 42 &lt;&lt; &quot;|&quot; &lt;&lt; &#x27;\n&#x27;;                    // &quot;    42|&quot;</code></pre>
+<table><thead><tr><th>Piece</th><th>Meaning</th></tr></thead><tbody><tr><td><code>cin &gt;&gt; x;</code></td><td>Read one token, convert to x's type, store</td></tr><tr><td><code>cin &gt;&gt; a &gt;&gt; b;</code></td><td>Chained reads (whitespace, incl. newlines, is skipped)</td></tr><tr><td><code>if (!(std::cin &gt;&gt; x))</code></td><td>The validation test: did the read succeed?</td></tr><tr><td><code>clear()</code> + <code>ignore(...)</code></td><td>The repair PAIR — clear flags, then flush the line</td></tr><tr><td><code>fixed</code> + <code>setprecision(2)</code></td><td>Always-2-decimals display (money)</td></tr><tr><td><code>setw(6)</code></td><td>Next item printed right-aligned in a 6-wide field</td></tr></tbody></table>
+<h2 id="line-by-line-code-explanation">Line-by-line code explanation</h2>
+<p><code>examples/io_age_check.cpp</code>:</p>
+<ol><li><code>#include &lt;limits&gt;</code> — needed for the <em>large</em> count used in the professional <code>ignore</code> call.</li><li><code>int age{0};</code> — initialized before any read (never read a dirty box).</li><li><code>if (!(std::cin &gt;&gt; age))</code> — attempt the read; negate the stream's truth: a failed stream is "false", so <code>!</code> makes failure enter the <code>if</code>.</li><li><code>std::cin.clear();</code> — reset the fail flag. Without this, every later read instantly fails regardless of input.</li><li><code>std::cin.ignore(std::numeric_limits&lt;std::streamsize&gt;::max(), '\n');</code> — discard up to "a huge number" of characters, stopping after the newline — i.e., throw away the whole bad line. Doing <code>clear()</code> <em>without</em> <code>ignore()</code> leaves <code>abc</code> in the buffer; the next read fails again.</li><li><code>std::cout &lt;&lt; "Registered age: " &lt;&lt; age &lt;&lt; '\n';</code> — the echo: the user sees what the program understood (here, the default 0).</li><li>The <code>if (age &gt;= 18) ... else ...</code> — a first taste of decisions, fully</li></ol>
+</ol>
+<p>developed in Module 4.</p>
+<h2 id="output-prediction-questions-with-answers">Output prediction questions (with answers)</h2>
+<ol><li><code>cin &gt;&gt; a &gt;&gt; b;</code> with input <code>12 34</code> on one line — ? — <code>a=12, b=34</code> (whitespace, including that line break, is skipped between reads).</li><li>Same statement, input <code>12 34 56</code> — what is left unread? — <code>56</code> (nothing here consumes it — where it <em>matters</em> arrives in Module 11).</li><li>User types <code>abc</code> for an int — value of the variable? — Unspecified (often</li><li>AND the stream is now failed; both facts matter.</li><li><code>cout &lt;&lt; fixed &lt;&lt; setprecision(1) &lt;&lt; 2.25;</code> — ? — <code>2.3</code> (bankers would quibble; the display rounds, the stored value does not).</li><li><code>cout &lt;&lt; setw(5) &lt;&lt; 42 &lt;&lt; "|";</code> — ? — <code>   42|</code> (right-aligned in 5; the <code>|</code> shows the padding).</li></ol>
+</ol>
+<h2 id="common-errors-and-debugging-examples">Common errors and debugging examples</h2>
+<table><thead><tr><th>Error</th><th>Symptom</th><th>Fix</th></tr></thead><tbody><tr><td>Expecting <code>&gt;&gt;</code> to read a full line</td><td><code>"Data Science"</code> read as just <code>"Data"</code></td><td><code>getline</code> for lines (Module 11); <code>&gt;&gt;</code> reads tokens</td></tr><tr><td><code>clear()</code> without <code>ignore()</code></td><td>Next read fails again — "validation loop" spins</td><td>Always repair with the PAIR</td></tr><tr><td><code>ignore()</code> without <code>clear()</code></td><td>Stream still failed; input discarded for nothing</td><td>Same: the pair, in this order</td></tr><tr><td>Forgetting <code>&lt;iomanip&gt;</code></td><td><code>error: 'setprecision' was not declared</code></td><td>Include what you use</td></tr><tr><td>No prompt before a read</td><td>Program appears to "hang"</td><td>Print a prompt first (and no newline needed)</td></tr><tr><td>No echo</td><td>Disputes about what was typed</td><td>Echo what was read, labeled</td></tr></tbody></table>
+<h2 id="common-student-misconceptions">Common student misconceptions</h2>
+<ul><li><strong>"<code>cin &gt;&gt; x</code> reads a whole line."</strong> It stops at the first whitespace — <code>cin &gt;&gt; name</code> on input <code>Ada Lovelace</code> leaves <code>Lovelace</code> in the buffer.</li><li><strong>"A failed read just skips the value."</strong> A failed <code>cin &gt;&gt;</code> leaves <code>x</code> value-initialized to <code>0</code> and the stream in a failed state: every later read silently does nothing until the stream is cleared — validate <em>before</em> using, and reset on failure.</li><li><strong>"Mixed input order is safe."</strong> Mixing <code>&gt;&gt;</code> and <code>getline</code> without clearing the leftover newline is the classic "my getline skipped" bug; show why the newline remains and how to consume it.</li><li><strong>"Formatting is permanent."</strong> <code>std::setprecision</code> and field width stick for later output too — students are surprised when a later <code>cout</code> inherits the state; show resetting.</li></ul>
+<h2 id="classroom-demonstrations">Classroom demonstrations</h2>
+<ol><li><strong>Fail live:</strong> run <code>io_age_check.exe</code>, type <code>abc</code>; show the graceful default path. Then comment out the <code>clear()</code> line, rebuild, and show the next read failing — proving flags persist.</li><li><strong>Token vs line:</strong> type <code>Data Science 101</code> into a <code>cin &gt;&gt; s</code> program; print <code>s</code> — only <code>Data</code> arrived. (Full-line reading is L21/Module 15.)</li><li><strong>Display vs value:</strong> print <code>19.9</code> before and after <code>fixed</code> + <code>setprecision(2)</code>; then print it with 10 digits to prove the stored value never changed.</li></ol>
+</ol>
+<h2 id="guided-student-activities">Guided student activities</h2>
+<p><strong>Lab 1 (2 h, runs in this lecture slot per the calendar):</strong> students complete <a href="../../labs.html">labs/lab_manuals/lab_01</a> — toolchain verification, prompt/echo/validation drills. Lecture hour 2 = lab launch + live build of <code>io_age_check.cpp</code> together, then supervised practice.</p>
+<h2 id="practice-problems">Practice problems</h2>
+<ul><li>Write a program reading name-age-score and echoing in a <code>setw</code>-aligned row.</li><li>Given 4 "user typed garbage" scenarios, write the recovery snippet.</li><li>Predict stream state after each of 5 malformed inputs.</li><li>(🟡 stretch) Make the money formatter round-trip <code>1234.5</code> → <code>1234.50</code> and explain why <code>setprecision</code> alone (without <code>fixed</code>) does something else.</li></ul>
+<h2 id="summary">Summary</h2>
+<p>Input and output are streams. <code>cin &gt;&gt; x</code> reads one token and converts it; failure is a <em>flag</em>, checked with <code>if (!(cin &gt;&gt; x))</code> and repaired with the pair <code>clear()</code> + <code>ignore(...)</code>. Formatting manipulators (<code>fixed</code>, <code>setprecision</code>, <code>setw</code>) change display only, never stored values. Prompt, read, echo: the conversational discipline that makes every later lab debuggable. Next (Module 3): what we can <em>compute</em> with the values we now can store and read — operators and expressions.</p>
+<ul><li>"<code>cin</code> reads a whole line." (It reads a <em>token</em>; spaces split input — full lines wait for <code>getline</code>, Module 11.)</li><li>"Formatting changes the variable's value." (It changes only the display.)</li><li>"If the user types letters for an int, the variable gets 0." (It gets garbage/0 <em>and</em> the stream fails — the second half is the trap.)</li><li>"<code>endl</code> is required after every output."</li></ul>
+<h2 id="exit-ticket-formative-assessment">Exit ticket / formative assessment</h2>
+<ol><li>Write the one-line check that tests whether <code>cin &gt;&gt; n</code> succeeded.</li><li><code>cin &gt;&gt; a &gt;&gt; b;</code> with input <code>12 34 56</code> — what does <code>b</code> hold, and what is left unread?</li><li>Why must recovery call <code>clear()</code> <em>before</em> <code>ignore()</code>?</li></ol>
+</ol>
+<h2 id="estimated-time-allocation-120-min">Estimated time allocation (120 min)</h2>
+<table><thead><tr><th>Segment</th><th>Minutes</th></tr></thead><tbody><tr><td>Recall (types quiz) + streams-as-faucets</td><td>10</td></tr><tr><td><code>cin</code> mechanics + chains + echo discipline</td><td>30</td></tr><tr><td>Formatting with <code>&lt;iomanip&gt;</code> (live table)</td><td>20</td></tr><tr><td>Break</td><td>10</td></tr><tr><td>Stream state, failure demo, recovery pattern</td><td>25</td></tr><tr><td><strong>Lab 1 launch</strong> (manual walk-through + supervised start)</td><td>15</td></tr><tr><td>Exit ticket + Module 3 preview</td><td>10</td></tr></tbody></table>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Assignment 2 · Tuition Estimator — Decisions &amp; Validation · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/assignments/assignment_02.html">
+<link rel="stylesheet" href="../styles.css">
+<script src="../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../index.html">Home</a></li><li><a href="../overview.html">Overview</a></li><li><a href="../outcomes.html">Outcomes</a></li><li><a href="../schedule.html">Schedule</a></li><li><a href="../lectures.html">Lectures</a></li><li><a href="../labs.html">Labs</a></li><li><a href="../cases.html">Case Studies</a></li><li><a href="../exercises.html">Exercises</a></li><li><a href="../assignments.html" aria-current="page">Assignments</a></li><li><a href="../projects.html">Projects</a></li><li><a href="../resources.html">Resources</a></li><li><a href="../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="narrow">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../index.html">Home</a> › Assignment 2 · Tuition Estimator — Decisions &amp; Validation</nav>
+<h1 class="page-title">Assignment 2 · Tuition Estimator — Decisions &amp; Validation</h1>
+<p><strong>Modules 3–4 (L05–L08) · 40 marks · due end of Week 5</strong> Outcomes: CLO-2, CLO-3 (PF-3.x, PF-4.x)</p>
+<p>The bursary quotes a tuition estimate from credit hours and residence status. Your program reproduces their published table — exactly.</p>
+<h2 id="fee-table-authoritative">Fee table (authoritative)</h2>
+<table><thead><tr><th>Residency</th><th>Base</th><th>Per credit hour</th><th>Cap rule</th></tr></thead><tbody><tr><td><code>in</code></td><td>1200</td><td>150</td><td>total capped at 4500</td></tr><tr><td><code>out</code></td><td>2500</td><td>320</td><td>total capped at 8000</td></tr></tbody></table>
+<p><code>total = min(base + credits·rate, cap)</code>. Scholarships: input <code>scholarship</code> amount (0 or more) is subtracted <em>after</em> the cap; the result never goes below 0.</p>
+<h2 id="requirements">Requirements</h2>
+<ol><li>Read: residency word (<code>in</code>/<code>out</code>), credits (int), scholarship (double).</li><li>Validate: residency must be exactly <code>in</code> or <code>out</code> (else <code>bad residency</code>, exit 1); credits 1–24 (else <code>bad credits</code>, exit 1); scholarship ≥ 0 (else <code>bad scholarship</code>, exit 1). Check in that order, one message per run.</li><li>Print <code>estimate: &lt;total&gt;</code> with 2 decimals.</li></ol>
+</ol>
+<h2 id="sample-runs">Sample runs</h2>
+<table><thead><tr><th>Input</th><th>Output</th></tr></thead><tbody><tr><td><code>in 12 0</code></td><td><code>estimate: 3000.00</code></td></tr><tr><td><code>out 20 500</code></td><td><code>estimate: 7500.00</code> (2500 + 20·320 = 8900 → cap 8000 → −500)</td></tr><tr><td><code>in 30 0</code></td><td><code>bad credits</code></td></tr><tr><td><code>xx 10 0</code></td><td><code>bad residency</code></td></tr></tbody></table>
+<h2 id="constraints">Constraints</h2>
+<ul><li>One <code>switch</code> or if/else ladder for residency — choose one and justify in a comment.</li><li>No loops yet; a single pass of decisions.</li><li>Money math in <code>double</code> is accepted here (exactness discussion is A1's postmortem topic).</li></ul>
+<h2 id="deliverables">Deliverables</h2>
+<p><code>tuition.cpp</code> (course contract, zero warnings) · <code>test_table.md</code> covering both residencies, cap hit, scholarship floor at 0, every validation message, boundary credits 1/24/25 · <code>postmortem.md</code> (10 marks).</p>
+<h2 id="notes">Notes</h2>
+<ul><li>The cap applies before scholarship; the floor applies last.</li><li>Credits are whole hours; do not accept 12.5.</li></ul>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

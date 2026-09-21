@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Exercises · T07 strings · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/exercises/T07_strings.html">
+<link rel="stylesheet" href="../styles.css">
+<script src="../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../index.html">Home</a></li><li><a href="../overview.html">Overview</a></li><li><a href="../outcomes.html">Outcomes</a></li><li><a href="../schedule.html">Schedule</a></li><li><a href="../lectures.html">Lectures</a></li><li><a href="../labs.html">Labs</a></li><li><a href="../cases.html">Case Studies</a></li><li><a href="../exercises.html" aria-current="page">Exercises</a></li><li><a href="../assignments.html">Assignments</a></li><li><a href="../projects.html">Projects</a></li><li><a href="../resources.html">Resources</a></li><li><a href="../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../index.html">Home</a> › Exercises · T07 strings</nav>
+<h1 class="page-title">Exercises · T07 strings</h1>
+<p>Covers: <code>std::string</code> operations, indexing, find/substr, <code>&lt;cctype&gt;</code>, getline, word algorithms (two-pointer, boundary events), C-strings. Lectures L21–L22 (and L04's getline rules). Outcomes PF-11.x.</p>
+<p>12 exercises · ladder 🟢 → 🔴.</p>
+<hr>
+<h3 id="pf-e-079-name-greeting">PF-E-079 · Name Greeting</h3>
+<p><strong>Difficulty:</strong> Beginner · <strong>Lecture:</strong> L21 · <strong>Outcomes:</strong> PF-11.1 <strong>Prerequisites:</strong> E-001 <strong>Problem:</strong> Read a full name (may contain spaces) with <code>getline</code> and print <code>Hello, &lt;name&gt;!</code> plus the name's length. <strong>Input:</strong> one line · <strong>Output:</strong> greeting + length. <strong>Sample:</strong> <code>Ada Lovelace</code> → <code>Hello, Ada Lovelace!</code> / <code>length: 12</code> <strong>Hints:</strong> <code>getline</code>, not <code>cin &gt;&gt;</code> — spaces matter.</p>
+<h3 id="pf-e-080-initials-extractor">PF-E-080 · Initials Extractor</h3>
+<p><strong>Difficulty:</strong> Beginner · <strong>Lecture:</strong> L21 · <strong>Outcomes:</strong> PF-11.1, PF-11.2 <strong>Prerequisites:</strong> E-079 <strong>Problem:</strong> Read a full name; print the uppercase initials (first letter of each word) followed by periods. <strong>Input:</strong> one line · <strong>Output:</strong> initials. <strong>Sample:</strong> <code>ada lovelace</code> → <code>A.L.</code> <strong>Hints:</strong> first character is an initial; every letter <em>after a space</em> is too.</p>
+<h3 id="pf-e-081-vowel-consonant-census">PF-E-081 · Vowel/Consonant Census</h3>
+<p><strong>Difficulty:</strong> Beginner · <strong>Lecture:</strong> L21 · <strong>Outcomes:</strong> PF-11.2 <strong>Prerequisites:</strong> E-080 <strong>Problem:</strong> Read one word; count vowels, consonants, and non-letters (using <code>&lt;cctype&gt;</code>), case-insensitively. Print all three. <strong>Input:</strong> one word · <strong>Output:</strong> three counts. <strong>Sample:</strong> <code>R2-D2</code> → <code>vowels: 0</code> / <code>consonants: 2</code> / <code>other: 3</code> <strong>Hints:</strong> <code>tolower</code> first; a letter that isn't a vowel is a consonant.</p>
+<h3 id="pf-e-082-word-count-robust">PF-E-082 · Word Count (robust)</h3>
+<p><strong>Difficulty:</strong> Foundational · <strong>Lecture:</strong> L22 · <strong>Outcomes:</strong> PF-11.2, PF-11.4 <strong>Prerequisites:</strong> E-081 <strong>Problem:</strong> Read a whole line; count words correctly despite double spaces, leading/trailing spaces, and tabs. Print the count and the longest word's length. <strong>Input:</strong> one line · <strong>Output:</strong> count + longest length. <strong>Sample:</strong> <code>  one  two three  </code> → <code>words: 3</code> / <code>longest: 5</code> <strong>Hints:</strong> the boundary-event state machine (L22); track current word length as you scan.</p>
+<h3 id="pf-e-083-string-reversal-both-ways">PF-E-083 · String Reversal (both ways)</h3>
+<p><strong>Difficulty:</strong> Foundational · <strong>Lecture:</strong> L22 · <strong>Outcomes:</strong> PF-11.3 <strong>Prerequisites:</strong> E-082 <strong>Problem:</strong> Read a line. Print it reversed two ways: (1) a new reversed string built with <code>+=</code>, (2) in-place two-pointer reversal of a copy. Print both and confirm equal. <strong>Input:</strong> one line · <strong>Output:</strong> two reversed lines + verdict. <strong>Sample:</strong> <code>abc de</code> → <code>ed cba</code> / <code>ed cba</code> / <code>match: yes</code> <strong>Hints:</strong> method 2 needs <code>std::string&amp;</code> — reference parameters preview.</p>
+<h3 id="pf-e-084-palindrome-judge-case-space-insensitive">PF-E-084 · Palindrome Judge (case/space insensitive)</h3>
+<p><strong>Difficulty:</strong> Foundational · <strong>Lecture:</strong> L22 · <strong>Outcomes:</strong> PF-11.3, PF-11.4 <strong>Prerequisites:</strong> E-083 <strong>Problem:</strong> Read a line; judge palindrome ignoring case, spaces, and punctuation (digits count as characters). Print verdict and the cleaned string used. <strong>Input:</strong> one line · <strong>Output:</strong> verdict + cleaned string. <strong>Sample:</strong> <code>A man, a plan!</code> → <code>not palindrome</code> / <code>cleaned: amanaplan</code> <strong>Hints:</strong> clean into a new string first, then two-pointer judge — two passes beat one clever one.</p>
+<h3 id="pf-e-085-substring-finder-with-all-positions">PF-E-085 · Substring Finder with All Positions</h3>
+<p><strong>Difficulty:</strong> Foundational · <strong>Lecture:</strong> L21 · <strong>Outcomes:</strong> PF-11.2 <strong>Prerequisites:</strong> E-084 <strong>Problem:</strong> Read a text line and a search word. Print every position (0-based) where the word occurs and the total count. Overlaps count (e.g. <code>aa</code> in <code>aaaa</code> occurs at 0, 1, 2). <strong>Input:</strong> two lines · <strong>Output:</strong> positions + count (or <code>none</code>). <strong>Sample:</strong> text <code>ababab</code>, word <code>ab</code> → <code>positions: 0 2 4</code> / <code>count: 3</code> <strong>Hints:</strong> <code>find</code> with a start position in a loop; advance by one for overlaps.</p>
+<h3 id="pf-e-086-case-normalizer">PF-E-086 · Case Normalizer</h3>
+<p><strong>Difficulty:</strong> Intermediate · <strong>Lecture:</strong> L22 · <strong>Outcomes:</strong> PF-11.2, PF-11.3 <strong>Prerequisites:</strong> E-085 <strong>Problem:</strong> Read a line; produce the "title case" version: first letter of each word uppercase, all other letters lowercase. Preserve all non-letter characters and spacing exactly. <strong>Input:</strong> one line · <strong>Output:</strong> normalized line. <strong>Sample:</strong> <code>  hello, C++ WORLD! </code> → <code>  Hello, C++ World! </code> <strong>Hints:</strong> boundary events tell you when a word <em>starts</em>; <code>tolower</code>/<code>toupper</code> per char.</p>
+<h3 id="pf-e-087-csv-tokenizer">PF-E-087 · CSV Tokenizer</h3>
+<p><strong>Difficulty:</strong> Intermediate · <strong>Lecture:</strong> L22 · <strong>Outcomes:</strong> PF-11.2, PF-11.4 <strong>Prerequisites:</strong> E-086 <strong>Problem:</strong> Read a comma-separated line (e.g. <code>12,7,,9</code>); split into tokens and print each on its own numbered line. Empty fields (between consecutive commas) must appear as empty tokens. Print the token count. <strong>Input:</strong> one CSV line · <strong>Output:</strong> numbered tokens + count. <strong>Sample:</strong> <code>12,7,,9</code> → <code>1: 12</code> / <code>2: 7</code> / <code>3: (empty)</code> / <code>4: 9</code> / <code>count: 4</code> <strong>Hints:</strong> don't forget the final token after the last comma (L22's classic bug).</p>
+<h3 id="pf-e-088-c-string-walk-char-buffer">PF-E-088 · C-String Walk (char buffer)</h3>
+<p><strong>Difficulty:</strong> Intermediate · <strong>Lecture:</strong> L17 · <strong>Outcomes:</strong> PF-11.3 <strong>Prerequisites:</strong> E-087 <strong>Problem:</strong> Copy a read word into a <code>char buffer[32]</code> (validate length ≤ 30 first). Walk the buffer with the terminator scan (<code>while (buf[i] != '\0')</code>) to count letters vs digits, then print the buffer in reverse using the same walk backwards. No <code>std::string</code> in the processing code. <strong>Input:</strong> one word · <strong>Output:</strong> letter/digit counts + reversed buffer. <strong>Sample:</strong> <code>ab12</code> → <code>letters: 2</code> / <code>digits: 2</code> / <code>reversed: 21ba</code> <strong>Hints:</strong> find the length first by walking forward, then walk backward from length−1.</p>
+<h3 id="pf-e-089-caesar-cipher-encrypt-decrypt">PF-E-089 · Caesar Cipher (encrypt + decrypt)</h3>
+<p><strong>Difficulty:</strong> Advanced Introductory · <strong>Lecture:</strong> L22 · <strong>Outcomes:</strong> PF-11.2, PF-11.4 <strong>Prerequisites:</strong> E-088 <strong>Problem:</strong> Read a shift k (1–25) and a line. Encrypt: letters shift by k (wrapping A–Z / a–z), all other characters unchanged. Print the ciphertext. Then decrypt it back and print, confirming it matches the input. <strong>Input:</strong> integer + line · <strong>Output:</strong> ciphertext + decrypted plaintext. <strong>Sample:</strong> k=3, <code>Hello, World!</code> → <code>Khoor, Zruog!</code> / then <code>Hello, World!</code> <strong>Hints:</strong> per char: if upper, <code>'A' + (ch - 'A' + k) % 26</code> — the modular wrap; decrypt is shift 26−k.</p>
+<h3 id="pf-e-090-word-frequency-table">PF-E-090 · Word Frequency Table</h3>
+<p><strong>Difficulty:</strong> Advanced Introductory · <strong>Lecture:</strong> L22 · <strong>Outcomes:</strong> PF-11.4, PF-9.3 <strong>Prerequisites:</strong> E-089 <strong>Problem:</strong> Read a line of lowercase words (space-separated, ≤ 20 words, each ≤ 15 chars). Build a frequency table <strong>without</strong> <code>std::map</code>: parallel arrays of distinct words and counts. Print each distinct word with its count, in first-appearance order, then the most frequent word (first wins ties). <strong>Input:</strong> one line · <strong>Output:</strong> table + winner. <strong>Sample:</strong> <code>a b a c b a</code> → <code>a: 3</code> / <code>b: 2</code> / <code>c: 1</code> / <code>top: a</code> <strong>Hints:</strong> for each word, linear-search the distinct list — found: increment; missing: append.</p>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

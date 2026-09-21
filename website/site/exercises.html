@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Programming Exercises · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/exercises.html">
+<link rel="stylesheet" href="styles.css">
+<script src="site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="index.html">Home</a></li><li><a href="overview.html">Overview</a></li><li><a href="outcomes.html">Outcomes</a></li><li><a href="schedule.html">Schedule</a></li><li><a href="lectures.html">Lectures</a></li><li><a href="labs.html">Labs</a></li><li><a href="cases.html">Case Studies</a></li><li><a href="exercises.html" aria-current="page">Exercises</a></li><li><a href="assignments.html">Assignments</a></li><li><a href="projects.html">Projects</a></li><li><a href="resources.html">Resources</a></li><li><a href="instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="index.html">Home</a> › Programming Exercises</nav>
+<h1 class="page-title">Programming Exercises</h1>
+<p><strong>152 unique programming exercises</strong> spanning the full course, from first variables to classes. Every exercise has a unique ID (<code>PF-E-NNN</code>), a labeled difficulty, prerequisites, full I/O specification, hints, and the lecture it supports. Exercises train the outcomes in <a href="outcomes.html">../LEARNING_OUTCOMES.md</a>; each exercise cites its outcome codes.</p>
+<h2 id="organization">Organization</h2>
+<pre><code>exercises/
+├── README.md                      ← this file: bank index + policies
+├── by_topic/                      ← the bank itself, 12 topic files
+│   ├── T01_variables_calculations.md
+│   ├── T02_conditions.md
+│   ├── T03_loops.md
+│   ├── T04_number_problems.md
+│   ├── T05_functions.md
+│   ├── T06_arrays.md
+│   ├── T07_strings.md
+│   ├── T08_searching_sorting.md
+│   ├── T09_pointers_references.md
+│   ├── T10_structures.md
+│   ├── T11_file_handling.md
+│   └── T12_classes_objects.md
+├── data-science/                  ← BS Data Science track: PF-DS-01…18 + datasets
+├── in_class/                      ← short lecture-slot drills (authored per week)
+│   └── solutions/                 ← instructor-side until published after class
+└── homework/                      ← weekly practice sets (authored per week)
+    └── solutions/                 ← published after the related due date</code></pre>
+<p>The <code>by_topic/</code> bank is the <strong>master collection</strong>: it is how an instructor finds practice for a specific skill. The <code>in_class/</code> and <code>homework/</code> directories are the <strong>delivery layer</strong>: per-week selections drawn from the bank, authored with the week batches (<code>../docs/CONTENT_ROADMAP.md</code> § 3).</p>
+<h2 id="difficulty-ladder">Difficulty ladder</h2>
+<table><thead><tr><th>Level</th><th>Meaning</th><th>Expectation</th></tr></thead><tbody><tr><td>🟢 Beginner</td><td>One new concept, direct application</td><td>Finish in ~5 min</td></tr><tr><td>🔵 Foundational</td><td>Concept + one twist (a second input, a boundary)</td><td>~10 min</td></tr><tr><td>🟠 Intermediate</td><td>Combine 2 concepts or require design judgment</td><td>~20 min</td></tr><tr><td>🔴 Advanced Introductory</td><td>Small program with structure + edge cases</td><td>~30–45 min</td></tr></tbody></table>
+<p>Every topic file runs the ladder in order — difficulty progression is inside each topic <em>and</em> across the course (topics map to the 16-module calendar, so later topics inherently carry higher floors).</p>
+<h2 id="exercise-record-format">Exercise record format</h2>
+<p>Every exercise is a complete record:</p>
+<pre><code class="language-markdown">### PF-E-013 · Title
+**Difficulty:** Intermediate · **Lecture:** L09 · **Outcomes:** PF-5.2, PF-5.3
+**Prerequisites:** E-007, L05
+**Problem:** …full statement…
+**Input:** … / **Output:** … / **Constraints:** …
+**Sample:** input → output
+**Hints:** nudge 1 · nudge 2</code></pre>
+<h2 id="solution-policy-important">Solution policy — IMPORTANT</h2>
+<p>Complete C++ solutions live <strong>only</strong> under <code><code>instructor/exercise_solutions/</code></code> (instructor-only per <code>../instructor/ACCESS_CONTROL.md</code>). Student-facing files (<code>by_topic/</code>, <code>in_class/</code>, <code>homework/</code>) contain the exercise records <strong>without solution code</strong> — at most graduated hints. Solutions are numbered to match exercise IDs (<code>PF-E-013.cpp</code> + a README explaining the reasoning).</p>
+<h2 id="authoring-rules">Authoring rules</h2>
+<ul><li>IDs are unique across the bank and never reused (<code>tools/check_exercises.py</code> validates).</li><li>No trick questions; no unexplained advanced features beyond the lecture that introduces them (the <em>Lecture</em> field is a hard gate).</li><li>Genuine distinctness: two exercises may share a topic but must differ in task, algorithm, or edge-case focus — near-duplicates fail validation (<code>../docs/TEACHING_VALIDATION.md</code>).</li><li>Every problem states inputs, outputs, constraints, and at least one sample I/O pair (where meaningful).</li><li><code>../docs/CODE_STYLE.md</code> governs all solution code.</li></ul><h2 id="topic-banks-t01-t12">Topic banks (T01–T12)</h2><ul><li><a href="exercises/T01_variables_calculations.html">T01 variables calculations</a></li><li><a href="exercises/T02_conditions.html">T02 conditions</a></li><li><a href="exercises/T03_loops.html">T03 loops</a></li><li><a href="exercises/T04_number_problems.html">T04 number problems</a></li><li><a href="exercises/T05_functions.html">T05 functions</a></li><li><a href="exercises/T06_arrays.html">T06 arrays</a></li><li><a href="exercises/T07_strings.html">T07 strings</a></li><li><a href="exercises/T08_searching_sorting.html">T08 searching sorting</a></li><li><a href="exercises/T09_pointers_references.html">T09 pointers references</a></li><li><a href="exercises/T10_structures.html">T10 structures</a></li><li><a href="exercises/T11_file_handling.html">T11 file handling</a></li><li><a href="exercises/T12_classes_objects.html">T12 classes objects</a></li></ul><h2 id="data-science-track">Data-science track</h2><ul><li><a href="exercises/ds/DS_part1.html">DS_part1</a></li><li><a href="exercises/ds/DS_part2.html">DS_part2</a></li><li><a href="exercises/ds/DS_part3.html">DS_part3</a></li></ul><p>Datasets for the DS exercises: <a href="exercises/ds/datasets.html">dataset directory with documented defects</a>.</p>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

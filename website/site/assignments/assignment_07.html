@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Assignment 7 · Text Toolkit — Strings &amp; Sorting · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/assignments/assignment_07.html">
+<link rel="stylesheet" href="../styles.css">
+<script src="../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../index.html">Home</a></li><li><a href="../overview.html">Overview</a></li><li><a href="../outcomes.html">Outcomes</a></li><li><a href="../schedule.html">Schedule</a></li><li><a href="../lectures.html">Lectures</a></li><li><a href="../labs.html">Labs</a></li><li><a href="../cases.html">Case Studies</a></li><li><a href="../exercises.html">Exercises</a></li><li><a href="../assignments.html" aria-current="page">Assignments</a></li><li><a href="../projects.html">Projects</a></li><li><a href="../resources.html">Resources</a></li><li><a href="../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="narrow">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../index.html">Home</a> › Assignment 7 · Text Toolkit — Strings &amp; Sorting</nav>
+<h1 class="page-title">Assignment 7 · Text Toolkit — Strings &amp; Sorting</h1>
+<p><strong>Modules 11–12 (L21–L24) · 40 marks · due end of Week 13</strong> Outcomes: CLO-6 (PF-11.x, PF-12.x)</p>
+<p>A text utility with three modes, driven by one command word.</p>
+<h2 id="modes">Modes</h2>
+<ol><li><code>wc</code> — read one line; print <code>words W chars C longest L</code> (whitespace-separated words; L = longest word's length; empty line → <code>0 0 0</code>).</li><li><code>word</code> — read one word W then one line T; print <code>yes</code> if W occurs in T as a <em>whole word</em> (boundary = non-letter or line edge), else <code>no</code>. Case-sensitive.</li><li><code>sortn</code> — read n (1 ≤ n ≤ 100) then n integers; print them sorted ascending on one line, then <code>swaps S</code> where S = the number of swaps your <strong>selection sort</strong> performed (count swaps only, not comparisons).</li></ol>
+</ol>
+<h2 id="sample-runs">Sample runs</h2>
+<table><thead><tr><th>Input</th><th>Output</th></tr></thead><tbody><tr><td><code>wc / the   cat sat</code></td><td><code>words 3 chars 11 longest 3</code></td></tr><tr><td><code>word / cat / the category cat</code></td><td><code>yes</code> (two whole-word hits; category rejected)</td></tr><tr><td><code>word / cat / concatenate</code></td><td><code>no</code></td></tr><tr><td><code>sortn / 4 / 5 2 9 1</code></td><td><code>1 2 5 9</code> then <code>swaps 2</code></td></tr><tr><td><code>sortn / 3 / 1 2 3</code></td><td><code>1 2 3</code> then <code>swaps 0</code></td></tr></tbody></table>
+<p>(Verify the swap count for <code>5 2 9 1</code> by hand: pass 0 swaps 5↔1; pass 1 swaps 9↔2; pass 2 is 5 already in place → 2 swaps. Your test table must show this.)</p>
+<h2 id="constraints">Constraints</h2>
+<ul><li><code>sortn</code> must implement selection sort yourself — no <code>std::sort</code>.</li><li><code>wc</code> must use <code>getline</code>; mode dispatch reads the command word first.</li><li>Whole-word match uses index boundaries only — no <code>std::istringstream</code> for mode 2.</li><li>Strings: <code>std::string</code> only; no C-strings.</li></ul>
+<h2 id="deliverables">Deliverables</h2>
+<p><code>textkit.cpp</code> (contract, zero warnings) · <code>test_table.md</code> — multi-space lines, tab-separated words, whole-word at line start/end, word longer than any target token, sorted input, reverse-sorted input, n = 1 and n = 100 · <code>postmortem.md</code> (10 marks).</p>
+<h2 id="notes">Notes</h2>
+<ul><li><code>chars</code> counts every character of the line including spaces.</li><li>For <code>sortn</code>, after sorting you must print the sorted line <em>then</em> the swaps line — two lines total.</li></ul>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

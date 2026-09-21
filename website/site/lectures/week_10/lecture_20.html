@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L20 · 2-D Operations: Row/Column Totals, Matrix Addition, Transpose, Passing to Functions · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/lectures/week_10/lecture_20.html">
+<link rel="stylesheet" href="../../styles.css">
+<script src="../../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../../index.html">Home</a></li><li><a href="../../overview.html">Overview</a></li><li><a href="../../outcomes.html">Outcomes</a></li><li><a href="../../schedule.html">Schedule</a></li><li><a href="../../lectures.html" aria-current="page">Lectures</a></li><li><a href="../../labs.html">Labs</a></li><li><a href="../../cases.html">Case Studies</a></li><li><a href="../../exercises.html">Exercises</a></li><li><a href="../../assignments.html">Assignments</a></li><li><a href="../../projects.html">Projects</a></li><li><a href="../../resources.html">Resources</a></li><li><a href="../../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="narrow">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../../index.html">Home</a> › L20 · 2-D Operations: Row/Column Totals, Matrix Addition, Transpose, Passing to Functions</nav>
+<h1 class="page-title">L20 · 2-D Operations: Row/Column Totals, Matrix Addition, Transpose, Passing to Functions</h1>
+<p><strong>Module 10 — Two-Dimensional Arrays · Week 10 · Lecture 20 of 32 · 120 minutes</strong> <strong>Outcomes:</strong> CLO-6 · PF-10.3, PF-10.4 · <a href="../../outcomes.html">LEARNING_OUTCOMES.md</a> · <strong>Lab 5 week · Assignment 3 due</strong></p>
+<h2 id="learning-objectives">Learning objectives</h2>
+<ol><li>Implement row totals, column totals, matrix addition, and in-place transpose with correct loop bounds and destination indexing (PF-10.3).</li><li>Detect shape errors at design time: when transpose/addition are defined, and what "not square" breaks (PF-10.3).</li><li>Pass 2-D arrays to functions in fixed-column form (<code>void print(const int g[][COLS], int rows)</code>) and explain <em>why the column bound must be fixed</em> (PF-10.4).</li></ol>
+</ol>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>L19 (2-D declaration, traversals); L13–L15 (functions, <code>const</code> reference discipline).</p>
+<h2 id="concept-sequence">Concept sequence</h2>
+<ol><li>From traversal to computation: per-row and per-column aggregation</li><li>Matrix addition: the shape precondition</li><li>Transpose: in-place (square only) vs into a new grid (any shape)</li><li>2-D arrays as function parameters: the fixed-column rule</li><li>A small application: exam-seating score grid analytics</li><li>Lab 5 launch</li></ol>
+</ol>
+<h2 id="teaching-topics-detailed">Teaching topics (detailed)</h2>
+<ul><li><strong>Row totals:</strong> <code>row_sum[i]</code> accumulated in an inner loop (result array from M9); <strong>column totals:</strong> accumulate <code>col_sum[j] += g[i][j]</code> — the <em>column-wise</em> traversal from L19 finally earns its keep.</li><li><strong>Matrix addition:</strong> <code>c[i][j] = a[i][j] + b[i][j]</code> — defined only when shapes match; precondition check pattern (<code>if (ROWS_A != ROWS_B || ...)</code>) printed as error and early return.</li><li><strong>Transpose:</strong> <code>t[j][i] = g[i][j]</code> into a new grid (any shape); in-place swap <code>g[i][j] ↔ g[j][i]</code> for <code>j &gt; i</code> (square only — why <code>j &gt; i</code> prevents double-swapping: mini trace table); when each is right.</li><li><strong>Function parameters:</strong> <code>void print_grid(const int g[][COLS], int rows)</code> — rows passed separately, COLS fixed; the compiler needs the column bound to compute <code>r * COLS + c</code> offsets (connects to L19 linearization); multi-dimensional discipline for this course: fixed COLS + <code>const</code> + rows parameter.</li><li><strong>Application worked end-to-end:</strong> 5-student × 3-exam grid → per-student average (row), per-exam average (column), highest single score (aggregation trio) — the exact structure of Lab 5's tasks.</li></ul>
+<h2 id="c-examples-required">C++ examples required</h2>
+<table><thead><tr><th>File</th><th>Role</th></tr></thead><tbody><tr><td><code>matrix_ops.cpp</code> ✅</td><td>row/col totals, addition with shape check, transpose (both forms) — each function ≤ 10 lines</td></tr><tr><td>(live) <code>score_grid.cpp</code></td><td>the exam-analytics application assembled live from the matrix_ops pieces</td></tr></tbody></table>
+<h2 id="common-student-misconceptions">Common student misconceptions</h2>
+<ul><li>"Transpose works in place on any grid." (In-place requires square; otherwise use a destination grid.)</li><li>"<code>void f(int g[][], int rows)</code> is legal." (It is not — column bound required; show the exact compiler error.)</li><li>"Column totals need a separate array-of-columns data structure." (Same grid, swapped loops.)</li><li>"Matrix addition adds rows to columns." (Element-wise, shape-matched.)</li></ul>
+<h2 id="conceptual-explanation-beginner-first">Conceptual explanation (beginner-first)</h2>
+<p>Last lecture you could <em>walk</em> a grid; today you <em>work</em> one. Three jobs come up constantly: <strong>aggregation</strong> (one number per row, one per column, one for the whole table), <strong>element-wise combination</strong> (add matching cells of two grids), and <strong>rearrangement</strong> (transpose — the rows become columns). Each is a nested loop with the output statement placed at the right level: inside both loops (per cell), inside the outer only (per row/column), or after all loops (single answer).</p>
+<p>The transpose deserves special attention because it carries two lessons. Conceptually, it maps <code>dst[c][r] = src[r][c]</code> — indices swapped. Practically, it introduces the <strong>in-place vs. copy</strong> distinction: transposing into a second grid is easy and safe, while transposing in place is only possible for square grids and only works every cell pair <em>once</em> (hence the inner loop starting at <code>i+1</code>).</p>
+<p>Finally: a function that receives a 2-D array must declare the column count — <code>void f(const int g[][COLS], int rows)</code> — because the compiler uses the column width to compute each element's address (row-major, from L19). The row count stays a free parameter.</p>
+<h2 id="terminology-and-definitions">Terminology and definitions</h2>
+<table><thead><tr><th>Term</th><th>Definition</th></tr></thead><tbody><tr><td>Row total / column total</td><td>Sum across one row / down one column</td></tr><tr><td>Grand total</td><td>Sum of all elements (or of the row totals — same answer)</td></tr><tr><td>Element-wise operation</td><td>Matching cells combined: <code>c[i][j] = a[i][j] + b[i][j]</code></td></tr><tr><td>Shape match</td><td>Both operands have identical rows × columns (precondition)</td></tr><tr><td>Precondition</td><td>What a function requires of its inputs (checked, then trusted)</td></tr><tr><td>Transpose (copy form)</td><td><code>dst[c][r] = src[r][c]</code> into a new grid</td></tr><tr><td>Transpose (in-place)</td><td>Square grids only; swap <code>(i,j)</code> with <code>(j,i)</code> for <code>j &gt; i</code></td></tr><tr><td>Symmetric swap</td><td>Visiting each unordered pair once — the <code>j &gt; i</code> condition</td></tr><tr><td>2-D array parameter</td><td><code>const int g[][COLS], int rows</code> — column bound mandatory</td></tr></tbody></table>
+<h2 id="syntax-and-c-examples">Syntax and C++ examples</h2>
+<pre><code class="language-cpp">const int ROWS{3};
+const int COLS{4};
+
+// per-row total: accumulate inside the row, flush outside the inner loop
+void rowTotals(const int g[][COLS], int rows, long long out[])
+{
+    for (int r{0}; r &lt; rows; ++r)
+    {
+        long long total{0};
+        for (int c{0}; c &lt; COLS; ++c)
+            total += g[r][c];
+        out[r] = total;                  // per-ROW statement
+    }
+}
+
+// element-wise addition with a shape precondition (here: same constants)
+void addGrids(const int a[][COLS], const int b[][COLS], int sum[][COLS], int rows)
+{
+    for (int r{0}; r &lt; rows; ++r)
+        for (int c{0}; c &lt; COLS; ++c)
+            sum[r][c] = a[r][c] + b[r][c];
+}
+
+// transpose, copy form: indices swap, destination must be COLS x ROWS
+void transposeCopy(const int src[][COLS], int dst[][ROWS], int rows)
+{
+    for (int r{0}; r &lt; rows; ++r)
+        for (int c{0}; c &lt; COLS; ++c)
+            dst[c][r] = src[r][c];
+}
+
+// transpose, in-place (square only): j &gt; i visits each pair ONCE
+void transposeInPlace(int sq[][3], int n)
+{
+    for (int i{0}; i &lt; n; ++i)
+        for (int j{i + 1}; j &lt; n; ++j)
+        {
+            int tmp{sq[i][j]};
+            sq[i][j] = sq[j][i];
+            sq[j][i] = tmp;
+        }
+}</code></pre>
+<h2 id="line-by-line-code-explanation">Line-by-line code explanation</h2>
+<p><code>examples/matrix_ops.cpp</code>:</p>
+<ol><li><code>rowTotals</code> — the declaration <code>long long total{0};</code> sits <em>inside</em> the outer loop: fresh accumulator per row. Moving it outside is the classic wrong answer (rows 2 and 3 inherit row 1's total).</li><li><code>out[r] = total;</code> — placed after the inner loop: the per-row statement. The placement ladder from L10 is now a design tool, not a formatting trick.</li><li><code>addGrids</code> — element-wise; shape agreement is a precondition stated in a comment (same COLS constant, rows passed). Teaching point: the function cannot verify shapes it was never told; the <em>caller</em> carries that responsibility.</li><li><code>transposeCopy</code> — <code>dst[c][r] = src[r][c]</code>; note the dst type is <code>[COLS][ROWS]</code>-shaped. In <code>transposeInPlace</code>, <code>j</code> starts at <code>i + 1</code>: strictly above the diagonal, so each pair swaps exactly once and a diagonal cell swaps with itself (i.e., not at all).</li></ol>
+</ol>
+<h2 id="output-prediction-questions-with-answers">Output prediction questions (with answers)</h2>
+<ol><li>Grid <code>{{1,2,3},{4,5,6}}</code> — row totals? — <code>6</code> and <code>15</code>.</li><li>Same grid transposed — shape and contents? — 3×2 with rows <code>{1,4}</code>, <code>{2,5}</code>, <code>{3,6}</code>.</li><li>In-place transpose of a 4×4 run twice returns what? — the original grid; transpose is its own inverse (a nice self-check).</li><li>If <code>total</code> were declared outside the outer loop, row 2's total on <code>{{1,2},{3,4},{5,6}}</code> would be — ? — <code>6+7=13</code>, not 7 — accumulator placement bug made concrete.</li><li><code>void f(int g[][], int rows)</code> — compiles? — <strong>no</strong>: the compiler needs the column bound to compute addresses (exact error message shown in the demo).</li></ol>
+</ol>
+<h2 id="common-errors-and-debugging-examples">Common errors and debugging examples</h2>
+<table><thead><tr><th>Error</th><th>Symptom</th><th>Fix</th></tr></thead><tbody><tr><td>Accumulator outside the outer loop</td><td>Later rows include earlier rows' sums</td><td>Declare <code>total</code> inside the row loop</td></tr><tr><td><code>int g[][]</code> parameter</td><td>Compile error: missing column bound</td><td><code>const int g[][COLS], int rows</code></td></tr><tr><td>Transposing non-square in place</td><td>Overwrites unread cells — data destroyed</td><td>Copy form, or square-only precondition</td></tr><tr><td>Inner loop from <code>j = 0</code> in-place</td><td>Double swap = no change (or corruption)</td><td><code>j = i + 1</code> — each pair once</td></tr><tr><td>Adding grids of different shapes</td><td>Garbage cells / OOB reads</td><td>Shape precondition checked by caller</td></tr><tr><td>Row/col totals swapped</td><td>Totals are the wrong length</td><td>Outer loop selects which axis</td></tr></tbody></table>
+<h2 id="classroom-demonstrations">Classroom demonstrations</h2>
+<ol><li><strong>The inherited accumulator:</strong> run the buggy version with <code>total</code> outside — watch row 2's number balloon; the placement rule lands.</li><li><strong>Transpose twice = identity:</strong> transpose the same grid twice and print — students see the original return.</li><li><strong>Compiler as teacher:</strong> type <code>int g[][]</code> live; read the error aloud; fix with <code>[][COLS]</code> — the "columns mandatory" rule is earned.</li></ol>
+</ol>
+<h2 id="guided-student-activities">Guided student activities</h2>
+<p><strong>Lab 5 (2 h, this lecture slot):</strong> <a href="../../labs.html">labs/README.md</a> — grid analytics tasks: per-row/per-column aggregations, addition with precondition checks, transpose (both forms), then the score-grid application. Lecture hour 2 = lab launch + live build of <code>score_grid.cpp</code>.</p>
+<h2 id="practice-problems">Practice problems</h2>
+<ul><li>Implement <code>col_totals</code> and <code>row_totals</code> for a 4×6 grid; annotate loop bounds.</li><li>Matrix addition program with shape-mismatch error handling.</li><li>In-place transpose of a 4×4 with a trace table of the swap sequence (proving <code>j &gt; i</code> prevents double-swap).</li><li>(🟡 stretch) Multiply a 2×3 by 3×2 matrix — defined shape, triple loop; justification that the inner dot-product loop is the M12 seed.</li></ul>
+<h2 id="summary">Summary</h2>
+<p>Grid work is nested loops plus placement: per-cell, per-row/column, or whole-table statements each live at their own level. Transpose remaps indices; copy-form always works, in-place demands square symmetry with the <code>j &gt; i</code> discipline. 2-D parameters declare <code>[][COLS]</code> — the column bound feeds the address arithmetic. Next (L21): strings as objects — the friendlier face of text processing.</p>
+<h2 id="exit-ticket-formative-assessment">Exit ticket / formative assessment</h2>
+<ol><li>Write the full signature for a function that prints a <code>double g[3][5]</code> read-only.</li><li>Why does the column bound appear in the parameter but not the row bound?</li><li>Transpose condition: which pairs swap in an in-place 4×4 transpose?</li></ol>
+</ol>
+<h2 id="estimated-time-allocation-120-min">Estimated time allocation (120 min)</h2>
+<table><thead><tr><th>Segment</th><th>Minutes</th></tr></thead><tbody><tr><td>Recall (traversal quiz) + aggregation motivation</td><td>10</td></tr><tr><td>Row/col totals + addition + transpose</td><td>35</td></tr><tr><td>Break</td><td>10</td></tr><tr><td>2-D parameters + score-grid application build</td><td>35</td></tr><tr><td><strong>Lab 5 launch</strong> + supervised start</td><td>20</td></tr><tr><td>Assignment 3 hand-in + exit ticket</td><td>10</td></tr></tbody></table>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

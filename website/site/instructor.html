@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Instructor Information · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/instructor.html">
+<link rel="stylesheet" href="styles.css">
+<script src="site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="index.html">Home</a></li><li><a href="overview.html">Overview</a></li><li><a href="outcomes.html">Outcomes</a></li><li><a href="schedule.html">Schedule</a></li><li><a href="lectures.html">Lectures</a></li><li><a href="labs.html">Labs</a></li><li><a href="cases.html">Case Studies</a></li><li><a href="exercises.html">Exercises</a></li><li><a href="assignments.html">Assignments</a></li><li><a href="projects.html">Projects</a></li><li><a href="resources.html">Resources</a></li><li><a href="instructor.html" aria-current="page">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="index.html">Home</a> › Instructor Information</nav>
+<h1 class="page-title">Instructor Information</h1>
+<p class="lede">Who teaches this course and how the support model works.
+No personal contact details are published on this site — your section's
+Learning Management System lists the instructor's name, office location,
+and office hours for the current term.</p>
+<h2 id="teaching-model">Teaching model</h2>
+<p><strong>Audience:</strong> instructors, teaching assistants, and content authors. <strong>Student-facing counterpart:</strong> <a href="index.html">student/README.md</a>.</p>
+<hr>
+<h2 id="1-pedagogical-stance">1. Pedagogical stance</h2>
+<ol><li><strong>Concepts before syntax, syntax before shortcuts.</strong> Every feature is introduced with the <em>problem it solves</em> before its grammar. Example: loops appear as "how do we avoid copy-pasting 100 lines?" before any <code>for</code> is shown.</li><li><strong>Live coding is the default mode.</strong> Students must watch programs being built, broken, and fixed in real time — including failures and compiler errors. A lecture without live coding is a reading session; use the notes.</li><li><strong>Tracing is the core skill.</strong> From week 4 onward, every lecture includes at least one desk-check (state table) exercise; this is what exams assess.</li><li><strong>Errors are curriculum.</strong> Common beginner errors (missing <code>;</code>, <code>=</code> vs <code>==</code>, integer division, off-by-one, uninitialized variables) are deliberately demonstrated, named, and collected in the lecture notes' "Common pitfalls" section.</li><li><strong>Typed memory pictures from day one.</strong> Variables are introduced with a box-and-value diagram; pointers in week 12 extend the same notation rather than introducing a new mental model.</li><li><strong>Two audiences, one course.</strong> CS students need the machine model (week 12 pointers, arrays-as-memory); DS students need data pipelines (week 13 files, week 14 STL). The schedule keeps both tracks honest without splitting.</li></ol>
+</ol>
+<h2 id="2-course-load-calibration">2. Course-load calibration</h2>
+<p>This is a <strong>first course for students who have never programmed</strong>. Plan for:</p>
+<ul><li>4–6 h/week of out-of-class practice (assignments + reading).</li><li>The first three weeks are the danger zone for attrition: toolchain problems and "imposter syndrome" dominate. Mitigations:</li><li>Lab 1 is graded generously (participation-weighted).</li><li>The <a href="index.html">student/</a> kit has a 30-minute "hello world" guarantee path for each OS.</li><li>Announce office hours <em>in lecture 01</em> and again in week 3.</li></ul>
+<h2 id="3-lecture-delivery-pattern-2-hour-slot">3. Lecture delivery pattern (2-hour slot)</h2>
+<table><thead><tr><th>Minutes</th><th>Segment</th></tr></thead><tbody><tr><td>0–10</td><td>Recall: one trace-table or predict-the-output question from last lecture</td></tr><tr><td>10–60</td><td>New concept A: motivation → live coding → pitfalls</td></tr><tr><td>60–65</td><td>Break (non-negotiable; retention collapses after ~60 min)</td></tr><tr><td>65–105</td><td>New concept B (or the applied second half of concept A)</td></tr><tr><td>105–120</td><td>In-class exercise (from <code>exercises/in_class/</code>) + exit question</td></tr></tbody></table>
+<p>Exit questions feed the next lecture's recall segment — a two-minute loop that surfaces misconceptions early.</p>
+<h2 id="4-using-the-repository-materials">4. Using the repository materials</h2>
+<ul><li><strong>lectures/</strong> — one folder per week; notes are written to be projected (headings are slide-sized). Convert to decks as you prefer; sources for the canonical decks live in <code>instructor/slide_sources.md</code> (authored with the lecture batches).</li><li><strong>examples/</strong> — every program compiles standalone with <code>g++ -std=c++17 -Wall -Wextra -pedantic</code>. Prefer running them live over showing pre-pasted output.</li><li><strong>exercises/</strong> — statements are public; <code>solutions/</code> subfolders are instructor-side until after the due date (see <code>instructor/ACCESS_CONTROL.md</code>).</li><li><strong>quizzes/, exams/</strong> — student copies contain questions only; keys are in the matching <code>instructor/</code> folders.</li><li><strong>labs/</strong> — manuals include instructor checklists (what to watch for while circulating) under <code>instructor_notes/</code> inside each lab folder.</li></ul>
+<h2 id="5-ta-guidelines-do-don-t">5. TA guidelines (do/don't)</h2>
+<table><thead><tr><th>Do</th><th>Don't</th></tr></thead><tbody><tr><td>Ask "what have you tried? what did you expect?"</td><td>Take the keyboard and type the fix</td></tr><tr><td>Point to the diagnostic line and teach reading it</td><td>Translate errors into silent rewrites</td></tr><tr><td>Sketch the memory/state diagram</td><td>Give the assignment's final code</td></tr><tr><td>Encourage a debugging log</td><td>Say "this is easy" — ever</td></tr></tbody></table>
+<h2 id="6-assessment-construction">6. Assessment construction</h2>
+<ul><li>Every graded item must cite the outcomes it evidences (<a href="outcomes.html">LEARNING_OUTCOMES.md</a> codes) in its header.</li><li>Exam blueprints: <a href="assignments.html">exams/README.md</a> (midterm/final maps to outcomes with point allocations).</li><li>Rubric pattern for code (0/1/2 per row): works correctly · style guide (<code>docs/CODE_STYLE.md</code>) · testing evidence · explanation in viva.</li><li>Quiz cadence: one 15-minute module quiz per week in week <em>n</em>'s second lecture (16 total, 10 marks each; lowest two dropped — 15 % of the grade), announced a week ahead; predict-the-output and short code writing.</li></ul>
+<h2 id="7-calendar-variants">7. Calendar variants</h2>
+<ul><li><strong>14-week calendar:</strong> merge week 05 into 04 (drop nested-loop drills to lab homework) and week 15 into 14 (recursion becomes a lecture-length demo + optional exercise set).</li><li><strong>3-credit, no-lab variant:</strong> convert the six labs into assignment sections and keep only Lab 1 (toolchain) in class.</li><li><strong>Quarter (10-week) variant:</strong> cut week 14 (classes) and week 15 recursion stays; pointers become one lecture instead of two. Document your variant in your fork's <code>docs/CHANGELOG.md</code>.</li></ul>
+<h2 id="8-adapting-the-course">8. Adapting the course</h2>
+<p>If you fork/adopt this course:</p>
+<ol><li>Keep the outcome codes (<code>PF-…</code>) so assessment mapping remains traceable.</li><li>Record local policy changes (grading, integrity, late policy) in <a href="overview.html">COURSE_OVERVIEW.md</a> § 4 rather than editing assessments silently.</li><li>Maintain the audience split: never move instructor-only material into student-facing folders; see <code>instructor/ACCESS_CONTROL.md</code>.</li><li>Log changes in <code>docs/CHANGELOG.md</code>.</li></ol>
+</ol>
+<h2 id="9-first-time-instructor-checklist">9. First-time instructor checklist</h2>
+<ul><li>[ ] Read <a href="overview.html">COURSE_OVERVIEW.md</a> and this guide end-to-end.</li><li>[ ] Build every <code>examples/</code> file on the machine you will teach from.</li><li>[ ] Walk through the <a href="index.html">student/</a> install guide on each OS your students use; fix anything stale.</li><li>[ ] Review <code>instructor/PACING_GUIDE.md</code> and mark your own cut/extend decisions per lecture.</li><li>[ ] Stage the private instructor mirror before week 1 (see <code>instructor/ACCESS_CONTROL.md</code>).</li><li>[ ] Schedule labs, quizzes, and the midterm on the institutional calendar per <a href="schedule.html">COURSE_SCHEDULE.md</a> § Scheduling notes.</li></ul>
+<h2 id="support-model">Support model</h2>
+<ul>
+<li><strong>Lectures:</strong> two 2-hour sessions weekly — concepts, live coding, in-class exercises.</li>
+<li><strong>Labs:</strong> supervised practice weeks 2–15; TAs guide, they do not solve
+(<a href="labs.html">laboratory manual</a>).</li>
+<li><strong>Office hours:</strong> at least 2 hours per week per instructor and TA —
+see the LMS for this term's schedule and locations.</li>
+<li><strong>Stuck?</strong> Follow the 30-minute rule in the
+<a href="resources.html#getting-help">getting-help guide</a>: attempt, document, then bring
+your trace table to office hours.</li>
+<li><strong>Study help:</strong> <a href="resources.html">glossary, examples, and toolchain docs</a>.</li>
+</ul>
+<h2 id="course-policies">Course policies</h2>
+<p><strong>Catalog-style description · module structure · policies · grading · support model</strong></p>
+<hr>
+<h2 id="1-course-identification">1. Course identification</h2>
+<table><thead><tr><th>Field</th><th>Value</th></tr></thead><tbody><tr><td>Title</td><td>Programming Fundamentals Using C++</td></tr><tr><td>Level</td><td>Undergraduate (year 1)</td></tr><tr><td>Duration</td><td>16 weeks · <strong>16 modules</strong> (module <em>n</em> in week <em>n</em>)</td></tr><tr><td>Lectures</td><td><strong>32</strong> (two per week) × 2 hours = 64 contact hours + labs</td></tr><tr><td>Credits</td><td>3 + 1 (adjust to local credit rules)</td></tr><tr><td>Language of instruction</td><td>English (adjust locally)</td></tr><tr><td>Primary language taught</td><td><strong>C++ (C++17 standard)</strong> — see <a href="resources.html#cpp-standard">docs/CPP_STANDARD.md</a></td></tr></tbody></table>
+<h3 id="1-1-description">1.1 Description</h3>
+<p>A first course in structured programming using C++ for students with <strong>no prior programming experience</strong>. The curriculum progresses through sixteen modules — from <em>what is a program?</em> through types, operators, decisions, loops, algorithm design, functions, arrays (1-D and 2-D), strings, searching and sorting, pointers and references, dynamic memory and structures, file handling and error management, to an introduction to object-oriented programming. Students learn to design, implement, trace, test, and debug small programs, with the emphasis on <strong>correct reasoning about program behavior</strong> rather than syntax memorization. The module sequence deliberately prepares both target audiences: the machine-model track (pointers, memory, arrays) for BS Computer Science students, and the data track (files, records, string processing) for BS Data Science students.</p>
+<h3 id="1-2-intended-audience">1.2 Intended audience</h3>
+<ul><li>BS Computer Science, first semester</li><li>BS Data Science, first semester</li><li>Any undergraduate student with no prior programming experience</li></ul>
+<h3 id="1-3-prerequisites">1.3 Prerequisites</h3>
+<p>None. Basic secondary-school algebra is assumed. No prior exposure to programming, the command line, or compiler tooling is assumed — these are taught in Module 1.</p>
+<h3 id="1-4-what-this-course-is-not">1.4 What this course is <em>not</em></h3>
+<ul><li>It is <strong>not</strong> a software engineering course (design patterns, Git workflows, and testing frameworks appear only as gentle previews).</li><li>It is <strong>not</strong> a competitive-programming course; problem solving is in service of <em>understanding the machine</em>.</li><li>It is <strong>not</strong> a full OOP course: Module 16 is a bridge (classes, encapsulation, constructors), not the destination.</li></ul>
+<hr>
+<h2 id="2-module-structure-summary">2. Module structure (summary)</h2>
+<table><thead><tr><th>Module</th><th>Theme</th><th>New "hard idea"</th></tr></thead><tbody><tr><td>1</td><td>Introduction to Programming and C++</td><td>the translation pipeline</td></tr><tr><td>2</td><td>Variables, Data Types, and Input/Output</td><td>named, typed memory</td></tr><tr><td>3</td><td>Operators and Expressions</td><td>expressions as computed values</td></tr><tr><td>4</td><td>Decision-Making Statements</td><td>conditional execution</td></tr><tr><td>5</td><td>Loops and Repetition</td><td>controlled repetition</td></tr><tr><td>6</td><td>Problem-Solving and Algorithm Design</td><td>design &amp; verification as skills</td></tr><tr><td>7</td><td>Functions Fundamentals</td><td>abstraction &amp; the call stack</td></tr><tr><td>8</td><td>Advanced Function Concepts</td><td>overload resolution, references</td></tr><tr><td>9</td><td>One-Dimensional Arrays</td><td>collections &amp; indices</td></tr><tr><td>10</td><td>Two-Dimensional Arrays</td><td>grids &amp; row-major layout</td></tr><tr><td>11</td><td>Strings and Character Processing</td><td>text as processable data</td></tr><tr><td>12</td><td>Searching and Sorting</td><td>algorithm comparison &amp; cost</td></tr><tr><td>13</td><td>Pointers and References</td><td>addresses &amp; indirection</td></tr><tr><td>14</td><td>Dynamic Memory and Structures</td><td>heap lifetime &amp; records</td></tr><tr><td>15</td><td>File Handling and Error Management</td><td>persistence &amp; robustness</td></tr><tr><td>16</td><td>Introduction to Object-Oriented Programming</td><td>data + behavior + access control</td></tr></tbody></table>
+<p>The authoritative week-by-week plan with lecture titles, outcomes, and the assessment calendar is <a href="schedule.html">COURSE_SCHEDULE.md</a>. The outcome system (<code>CLO-1…8</code>, <code>PF-m.n</code>) is <a href="outcomes.html">LEARNING_OUTCOMES.md</a>.</p>
+<hr>
+<h2 id="3-weekly-rhythm">3. Weekly rhythm</h2>
+<table><thead><tr><th>Slot</th><th>Activity</th><th>Duration</th></tr></thead><tbody><tr><td>Lecture A</td><td>Module concept part 1 + live coding</td><td>2 h</td></tr><tr><td>Lecture B</td><td>Module concept part 2 + in-class exercises</td><td>2 h</td></tr><tr><td>Labs (weeks 2, 4, 6, 8, 10, 12, 15)</td><td>Supervised practice per <a href="labs.html">labs/</a></td><td>2 h</td></tr><tr><td>Homework</td><td>Released at second lecture, due before next module ends</td><td>~4–6 h self-study</td></tr></tbody></table>
+<h2 id="4-assessment-grading">4. Assessment &amp; grading</h2>
+<table><thead><tr><th>Component</th><th>Weight</th><th>Details</th></tr></thead><tbody><tr><td>Quizzes (16 module quizzes, drop lowest 2)</td><td>15 %</td><td>15 min each, week <em>n</em>'s second lecture</td></tr><tr><td>Programming assignments (8, drop lowest 1)</td><td>20 %</td><td>40 marks each, ~every 2 weeks</td></tr><tr><td>Lab reports (16 labs)</td><td>10 %</td><td>checkpoint-based, weeks 2–15</td></tr><tr><td>Midterm (week 8, L16)</td><td>15 %</td><td>90 min, closed book, Modules 1–8</td></tr><tr><td>Final (week 16, L32)</td><td>25 %</td><td>120 min, cumulative, emphasis Modules 9–16</td></tr><tr><td>Practical coding assessment</td><td>5 %</td><td>2-hour supervised lab exam (variants A–D)</td></tr><tr><td>Capstone project (P5)</td><td>10 %</td><td>proposal wk 12 · milestone wk 14 · demo wk 16</td></tr></tbody></table>
+<p><strong>Pass threshold:</strong> ≥ 50 % overall <strong>and</strong> ≥ 40 % on the final exam (local policy may adjust). The assessment calendar is <a href="schedule.html">COURSE_SCHEDULE.md</a> § Assessment calendar; rubrics live next to each assessment.</p>
+<h3 id="4-1-late-policy-suggested">4.1 Late policy (suggested)</h3>
+<p>Assignments: −10 % per 24 h up to 3 days, then instructor discretion. Documented illness/exception: equal-footing extension.</p>
+<h3 id="4-2-academic-integrity">4.2 Academic integrity</h3>
+<p>Collaboration at the <em>idea level</em> only; every submitted line must be written and understood by you. Similarity checks apply; first violation zeroes the item, second fails the course. Suggested AI policy: assistants may <em>explain</em> errors, not <em>write</em> submitted code (see <a href="resources.html#getting-help">student/GETTING_HELP.md</a> § 4).</p>
+<h2 id="5-required-tools">5. Required tools</h2>
+<p>All free; setup in <a href="resources.html#toolchain-setup">docs/TOOLCHAIN.md</a>: a C++17 compiler (MinGW-w64 / MSVC / Xcode CLT / gcc), VS Code with the C/C++ extension. Verification (Module 1, L01):</p>
+<pre><code class="language-bash">g++ -std=c++17 -Wall -Wextra -pedantic examples/hello_world.cpp -o hello</code></pre>
+<h2 id="6-content-access-policy">6. Content access policy</h2>
+<p>Student-visible: lecture planning files, examples, lab manuals, exercise statements, project specs, review guides. Instructor-only: solution folders, quiz keys, exam papers, pacing guide — the complete restricted-path map and the semester-mirror workflow are in <code>instructor/ACCESS_CONTROL.md</code>.</p>
+<h2 id="7-support-model">7. Support model</h2>
+<ul><li><strong>Lectures:</strong> new material + live coding; questions always welcome.</li><li><strong>Labs:</strong> guidance, not solutions — the TA rules are in <a href="instructor.html">TEACHING_GUIDE.md</a> § 5.</li><li><strong>Office hours:</strong> ≥ 2 h/week per instructor and TA.</li><li><strong>Stuck?</strong> Start with <a href="resources.html#getting-help">student/GETTING_HELP.md</a> (the 30-minute rule).</li></ul>
+<h2 id="8-accessibility-inclusion">8. Accessibility &amp; inclusion</h2>
+<p>Text-first markdown materials (screen-reader friendly); live coding always paired with spoken explanation and posted notes; culturally neutral problem contexts across science, data, games, and text processing. Accommodation requests in week 1 — no reason needs to be disclosed.</p>
+<h2 id="9-versioning">9. Versioning</h2>
+<p>Materials carry a semester tag (<code>2026-fall</code>). Changes are logged in <code>docs/CHANGELOG.md</code>; adaptation guidance for adopting instructors is in <a href="instructor.html">TEACHING_GUIDE.md</a> § 8.</p>
+<h2 id="contributing-and-contact">Contributing and contact</h2>
+<p>Corrections and improvements to the course materials follow the repository's
+contributing rules. Students: report broken links or confusing passages to
+your instructor or TA — the materials improve every term from exactly such reports.</p>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

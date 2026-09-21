@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L01 · What Is a Program? Computers, Algorithms, and the C++ Toolchain · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/lectures/week_01/lecture_01.html">
+<link rel="stylesheet" href="../../styles.css">
+<script src="../../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../../index.html">Home</a></li><li><a href="../../overview.html">Overview</a></li><li><a href="../../outcomes.html">Outcomes</a></li><li><a href="../../schedule.html">Schedule</a></li><li><a href="../../lectures.html" aria-current="page">Lectures</a></li><li><a href="../../labs.html">Labs</a></li><li><a href="../../cases.html">Case Studies</a></li><li><a href="../../exercises.html">Exercises</a></li><li><a href="../../assignments.html">Assignments</a></li><li><a href="../../projects.html">Projects</a></li><li><a href="../../resources.html">Resources</a></li><li><a href="../../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="narrow">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../../index.html">Home</a> › L01 · What Is a Program? Computers, Algorithms, and the C++ Toolchain</nav>
+<h1 class="page-title">L01 · What Is a Program? Computers, Algorithms, and the C++ Toolchain</h1>
+<p><strong>Module 1 — Introduction to Programming and C++ · Week 1 · Lecture 1 of 32 · 120 minutes</strong> <strong>Outcomes:</strong> CLO-1 · PF-1.1, PF-1.2 · <a href="../../outcomes.html">LEARNING_OUTCOMES.md</a></p>
+<h2 id="learning-objectives">Learning objectives</h2>
+<p>By the end of this lecture, students can:</p>
+<ol><li>Define <em>algorithm</em> and <em>program</em>, and give one everyday algorithm in precise numbered steps (PF-1.1).</li><li>Order the stages source code → preprocessor → compiler → assembler → linker → executable, and state what each stage consumes/produces (PF-1.1).</li><li>Describe the stored-program idea: memory holds both instructions and data, and the CPU fetches–decodes–executes (PF-1.2).</li><li>Name the two families of translation (compilation vs interpretation) and place C++ correctly as compiled (PF-1.2).</li></ol>
+</ol>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>None. Assumes secondary-school algebra only; no computing background.</p>
+<h2 id="concept-sequence">Concept sequence</h2>
+<ol><li>Why program? (automating repetition, data processing at scale)</li><li>Algorithms vs programs: recipe metaphor, precision requirement</li><li>The stored-program computer in 4 boxes (CPU, RAM, storage, I/O)</li><li>From source code to running program: the toolchain pipeline</li><li>Compilers vs interpreters; why C++ compiles to machine code</li><li>The course toolchain: g++, editor, command line (verified live)</li></ol>
+</ol>
+<h2 id="teaching-topics-detailed">Teaching topics (detailed)</h2>
+<ul><li><strong>Algorithms:</strong> finiteness, unambiguity, effectiveness; everyday examples (tea-making fails the unambiguity test — a teachable failure).</li><li><strong>CPU/RAM model:</strong> instruction + data in one memory; fetch-decode-execute with a 3-instruction toy program.</li><li><strong>Toolchain stages:</strong> <code>hello_world.cpp</code> → preprocessor (<code>#include</code> pasting) → compiler (object file) → linker (standard library + your code → <code>.exe</code>); emphasize <em>linker errors</em> get their own name later (L02).</li><li><strong>Compiled vs interpreted:</strong> C++ vs Python one-slide contrast; portability via recompilation.</li><li><strong>C++17 standard and the compile contract</strong> (g++ 17 flags) — connect to <a href="../../resources.html#cpp-standard">docs/CPP_STANDARD.md</a>.</li></ul>
+<h2 id="c-examples-required">C++ examples required</h2>
+<table><thead><tr><th>File</th><th>Role in lecture</th></tr></thead><tbody><tr><td><code>hello_world.cpp</code> ✅</td><td>first build; walk the pipeline on it</td></tr><tr><td>(live-typed) <code>greet.cpp</code></td><td>instructor types a 6-line variant live, then deliberately introduces a typo</td></tr></tbody></table>
+<h2 id="conceptual-explanation-beginner-first">Conceptual explanation (beginner-first)</h2>
+<p>Before any formal words: a <strong>recipe</strong>. A recipe is a list of steps that turns ingredients into a cake. An algorithm is the same idea, but the steps must be so precise that <em>no judgment calls</em> remain — "add salt to taste" is forbidden; "add 2 grams of salt" is allowed. A <strong>program</strong> is an algorithm written in a language a computer can translate, because a computer has no judgment at all: it does <em>exactly</em> what the text says, which is why imprecise steps break.</p>
+<p>Why do we care? Because a computer can repeat the steps <em>billions of times a second without tiring or improvising</em>. That is the whole value proposition: humans design the steps once; the machine executes them endlessly.</p>
+<p>The last intuition before terminology: the computer does not understand the text you write. A <strong>translator</strong> (the compiler) converts your text into the computer's native language (machine code) <em>once</em>, and the result (the executable) is what actually runs. This is why C++ is fast: translation happens before execution, not during.</p>
+<h2 id="terminology-and-definitions">Terminology and definitions</h2>
+<table><thead><tr><th>Term</th><th>Beginner definition</th><th>Precise note</th></tr></thead><tbody><tr><td>Algorithm</td><td>A finite list of unambiguous steps that solves a problem</td><td>Finiteness + definiteness + effectiveness</td></tr><tr><td>Program</td><td>An algorithm expressed in a programming language</td><td>The thing a compiler consumes</td></tr><tr><td>Source code</td><td>The human-readable text of a program (<code>.cpp</code> files)</td><td>What you edit</td></tr><tr><td>Compiler</td><td>Translates source code into machine code</td><td>Reports syntax errors; cannot run code</td></tr><tr><td>Linker</td><td>Joins your compiled code with library code into one executable</td><td>"Undefined reference" errors come from here</td></tr><tr><td>Executable</td><td>The runnable file produced by the linker</td><td>The OS loads and runs it — not the compiler</td></tr><tr><td>Machine code</td><td>The CPU's native instructions (binary)</td><td>Generated, never hand-written in this course</td></tr><tr><td>Preprocessor</td><td>Stage that performs text-level edits like <code>#include</code></td><td>Runs <em>before</em> compilation proper</td></tr><tr><td>RAM</td><td>Working memory: fast, forgets when power is lost</td><td>Where a running program lives</td></tr><tr><td>CPU</td><td>The component that executes instructions, one after another</td><td>Fetch–decode–execute cycle</td></tr></tbody></table>
+<h2 id="syntax-and-c-examples">Syntax and C++ examples</h2>
+<p>The full minimal program is introduced formally in L02; today we only <em>build and run</em> one so the pipeline is concrete:</p>
+<pre><code class="language-bash">g++ -std=c++17 -Wall -Wextra -pedantic hello_world.cpp -o hello
+./hello</code></pre>
+<table><thead><tr><th>Piece</th><th>Meaning</th></tr></thead><tbody><tr><td><code>g++</code></td><td>The compiler program we invoke</td></tr><tr><td><code>-std=c++17</code></td><td>Which dialect of C++ to accept (course standard)</td></tr><tr><td><code>-Wall -Wextra -pedantic</code></td><td>Turn on helpful warnings (course contract)</td></tr><tr><td><code>hello_world.cpp</code></td><td>The source file to translate</td></tr><tr><td><code>-o hello</code></td><td>Name the produced executable <code>hello</code></td></tr><tr><td><code>./hello</code></td><td>Ask the OS to load and run it</td></tr></tbody></table>
+<h2 id="line-by-line-code-explanation">Line-by-line code explanation</h2>
+<p><code>examples/hello_world.cpp</code>, in pipeline order:</p>
+<ol><li><code>#include &lt;iostream&gt;</code> — the preprocessor pastes in declarations for input/output (<code>cout</code> lives here). Runs <em>before</em> compiling.</li><li><code>int main()</code> — the entry point; the OS calls this function to start your program. Every program has exactly one.</li><li><code>std::cout &lt;&lt; "Hello, world!\n";</code> — send text to the standard output stream. <code>\n</code> ends the line.</li><li><code>return 0;</code> — report success to the OS (0 = success by convention).</li></ol>
+</ol>
+<p>When you run <code>g++ ... hello_world.cpp -o hello</code>:</p>
+<ol><li>the <strong>preprocessor</strong> produces the pasted source,</li><li>the <strong>compiler</strong> translates it into an object file,</li><li>the <strong>linker</strong> stitches the object file to the standard library and writes the executable <code>hello</code>,</li><li><code>./hello</code> asks the <strong>OS</strong> to load it into RAM and hand it to the <strong>CPU</strong>.</li></ol>
+</ol>
+<h2 id="output-prediction-questions-with-answers">Output prediction questions (with answers)</h2>
+<ol><li><em>You rename <code>hello</code> to <code>hello_v2</code> with <code>-o hello_v2</code>. Does the program's output change?</em> — No; the executable's name has no effect on behavior.</li><li><em>You re-run <code>g++</code> on the same file twice. Does it run the program?</em> — No; the compiler only translates. A separate <code>./hello</code> step runs it.</li><li><em>Your program contains <code>int main() { return 0; }</code> with no output at all. Is it a valid program?</em> — Yes; it compiles, runs, and exits successfully while printing nothing.</li></ol>
+</ol>
+<h2 id="common-errors-and-debugging-examples">Common errors and debugging examples</h2>
+<table><thead><tr><th>Error</th><th>Diagnostic / symptom</th><th>Fix</th></tr></thead><tbody><tr><td>Compile step skipped</td><td><code>./hello: No such file or directory</code></td><td>Run the <code>g++</code> command first, then <code>./hello</code></td></tr><tr><td>Wrong file compiled</td><td><code>undefined reference to 'main'</code> (linker)</td><td>Compile the file that contains <code>main()</code></td></tr><tr><td>Typo in filename</td><td><code>fatal error: hello_wrold.cpp: No such file...</code></td><td>Check spelling; the file must exist</td></tr><tr><td>Expecting the compiler to run code</td><td>"I compiled but nothing printed"</td><td>Compilation ≠ execution; run the executable</td></tr></tbody></table>
+<p>Standard-C++ note: everything above is standard; where the <em>printed form</em> of an error message differs between compilers, the meaning (missing file, missing <code>main</code>) is the same — only the wording varies.</p>
+<h2 id="classroom-demonstrations">Classroom demonstrations</h2>
+<ol><li><strong>The pipeline, live:</strong> build <code>hello_world.cpp</code>, run it; then delete the executable and run again to prove the compiler is not what executes.</li><li><strong>The preprocessor's work:</strong> temporarily break the include line (<code>#include &lt;iostreamm&gt;</code>) and read the diagnostic: the <em>compiler</em> now fails on unknown names — showing which stage complained.</li><li><strong>Cross-check terminology:</strong> point at each pipeline stage on the board diagram while performing it live, so the vocabulary lands on concrete actions.</li></ol>
+</ol>
+<h2 id="guided-student-activities">Guided student activities</h2>
+<p><strong>"Be the CPU" (20 min):</strong> pairs; one student is the CPU, one is the RAM. The RAM holds written instruction cards; the CPU executes literally — demonstrating why imprecise steps break. Debrief connects to the precision requirement of algorithms.</p>
+<h2 id="practice-problems">Practice problems</h2>
+<ul><li>Write the "largest of three numbers" as numbered English steps (then find a classmate's ambiguity).</li><li>Order 6 shuffled toolchain-stage cards; state each stage's input/output.</li><li>Classify 6 short scenarios as compilation vs interpretation.</li><li>(🟡 stretch) Find the real ambiguity in "sort the list quickly".</li></ul>
+<h2 id="common-student-misconceptions">Common student misconceptions</h2>
+<ul><li>"The compiler runs the program." (It only <em>translates</em>; the OS loads and runs the executable.)</li><li>"C++ is interpreted because IDEs feel instant."</li><li>"RAM and disk are the same kind of memory." (Address the speed/volatility difference explicitly; it returns in M14.)</li><li>"An algorithm must be written in a programming language."</li></ul>
+<h2 id="summary">Summary</h2>
+<p>A program is a precisely written algorithm; the computer executes it literally, without judgment. Your text (source code) is translated — preprocessed, compiled, linked — into an executable, and the OS runs <em>that</em>. C++ is compiled, which is where its speed comes from and where its error reports come from. Next lecture (L02) dissects the program text itself and introduces the three error classes you will meet all semester.</p>
+<h2 id="exit-ticket-formative-assessment">Exit ticket / formative assessment</h2>
+<ol><li>In one sentence: what does the linker do that the compiler does not?</li><li>Put in order: <em>link · compile · preprocess · execute</em>.</li><li>T/F: An algorithm becomes a program when written in a language a computer can translate. (Explain your T/F choice in one clause.)</li></ol>
+</ol>
+<h2 id="estimated-time-allocation-120-min">Estimated time allocation (120 min)</h2>
+<table><thead><tr><th>Segment</th><th>Minutes</th></tr></thead><tbody><tr><td>Hook: "programs are everywhere" + course logistics</td><td>10</td></tr><tr><td>Algorithms &amp; precision + "Be the CPU" activity</td><td>35</td></tr><tr><td>Break</td><td>10</td></tr><tr><td>Stored-program model &amp; toolchain pipeline (with live build)</td><td>40</td></tr><tr><td>Compiled vs interpreted; C++17 contract</td><td>10</td></tr><tr><td>Exit ticket + preview of L02</td><td>15</td></tr></tbody></table>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

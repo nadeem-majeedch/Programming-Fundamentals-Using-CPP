@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L03 · Variables, Built-in Types, and Initialization (`int`, `double`, `char`, `bool`, `const`) · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/lectures/week_02/lecture_03.html">
+<link rel="stylesheet" href="../../styles.css">
+<script src="../../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../../index.html">Home</a></li><li><a href="../../overview.html">Overview</a></li><li><a href="../../outcomes.html">Outcomes</a></li><li><a href="../../schedule.html">Schedule</a></li><li><a href="../../lectures.html" aria-current="page">Lectures</a></li><li><a href="../../labs.html">Labs</a></li><li><a href="../../cases.html">Case Studies</a></li><li><a href="../../exercises.html">Exercises</a></li><li><a href="../../assignments.html">Assignments</a></li><li><a href="../../projects.html">Projects</a></li><li><a href="../../resources.html">Resources</a></li><li><a href="../../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="narrow">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../../index.html">Home</a> › L03 · Variables, Built-in Types, and Initialization (`int`, `double`, `char`, `bool`, `const`)</nav>
+<h1 class="page-title">L03 · Variables, Built-in Types, and Initialization (`int`, `double`, `char`, `bool`, `const`)</h1>
+<p><strong>Module 2 — Variables, Data Types, and Input/Output · Week 2 · Lecture 3 of 32 · 120 minutes</strong> <strong>Outcomes:</strong> CLO-2 · PF-2.1, PF-2.2 · <a href="../../outcomes.html">LEARNING_OUTCOMES.md</a></p>
+<h2 id="learning-objectives">Learning objectives</h2>
+<ol><li>Declare and initialize variables of types <code>int</code>, <code>double</code>, <code>char</code>, <code>bool</code>, and <code>const</code>-qualified variants, choosing the type appropriate to the modeled quantity (PF-2.1).</li><li>Predict a variable's value, type, and (approximate) memory footprint, and explain why reading an uninitialized variable is a defect (PF-2.2).</li><li>Use brace initialization <code>{}</code> and name the two reasons the course bans uninitialized variables (PF-2.1, PF-2.2).</li></ol>
+</ol>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>L01–L02 (program anatomy; can write minimal <code>main</code> with <code>cout</code> output).</p>
+<h2 id="concept-sequence">Concept sequence</h2>
+<ol><li>Why <em>variables</em>: naming values so programs can remember and recompute</li><li>The box-and-value diagram (typed memory cell)</li><li>The built-in types and what fits in each</li><li>Declaration vs initialization vs assignment</li><li><code>const</code> — values that cannot change and why we default to them</li><li>Uninitialized variables: the undefined-behavior preview</li></ol>
+</ol>
+<h2 id="teaching-topics-detailed">Teaching topics (detailed)</h2>
+<ul><li><strong>Types:</strong> <code>int</code> (whole counts, ±~2.1 billion), <code>double</code> (measurements, ~15–16 significant digits), <code>char</code> (single character, <code>'A'</code> syntax), <code>bool</code> (<code>true</code>/<code>false</code>); <code>sizeof</code> demo showing 4/8/1/1 bytes.</li><li><strong>Declarations:</strong> <code>int score{95};</code> — brace init as course standard; explain why <code>{}</code> refuses narrowing (<code>int x{3.7};</code> won't compile — a <em>feature</em>).</li><li><strong>Assignment vs initialization:</strong> re-assignment allowed (not <code>const</code>); assignment is right-to-left (<code>total = total + 5;</code> — algebra lie, compute the right side first).</li><li><strong><code>const</code>:</strong> <code>const double TaxRate{0.15};</code> — named constants vs magic numbers; renaming demo with one edit.</li><li><strong>Uninitialized:</strong> show <code>int x; std::cout &lt;&lt; x;</code> — garbage value, no diagnostic; state the course rule and the reason (UB).</li><li><strong>Naming:</strong> <code>snake_case</code>, pronounceable, specific (<code>student_count</code> not <code>n</code>).</li></ul>
+<h2 id="c-examples-required">C++ examples required</h2>
+<table><thead><tr><th>File</th><th>Role</th></tr></thead><tbody><tr><td><code>types_and_sizes.cpp</code> ✅</td><td>declares each type, prints values + <code>sizeof</code>; brace-init narrowing failures shown commented</td></tr><tr><td>(live) <code>const_demo.cpp</code></td><td>magic-number version refactored to named constants in one pass</td></tr></tbody></table>
+<h2 id="conceptual-explanation-beginner-first">Conceptual explanation (beginner-first)</h2>
+<p>A program that cannot remember anything is useless — it could print, but not compute. A <strong>variable</strong> is a named box in memory: it has a <strong>name</strong> (so you can refer to it), a <strong>type</strong> (what kind of thing fits, and how many bytes it takes), and a <strong>value</strong> (what is in the box right now).</p>
+<p>Why must C++ know the type <em>before</em> the box is used? Because the type tells the compiler how many bytes to reserve and which operations make sense: adding two whole numbers is different, at the machine level, from adding two decimal numbers. Declaring the type once means the compiler can check every later use — that is the safety net beginners are actually buying.</p>
+<p>Two habits pay for themselves all semester:</p>
+<ol><li><strong>Initialize immediately</strong> (<code>int x{0};</code>): an uninitialized box contains garbage, and reading garbage is undefined behavior.</li><li><strong>Make values constant by default</strong> (<code>const double TaxRate{0.15};</code>): anything that should not change becomes impossible to change.</li></ol>
+</ol>
+<h2 id="terminology-and-definitions">Terminology and definitions</h2>
+<table><thead><tr><th>Term</th><th>Definition</th></tr></thead><tbody><tr><td>Variable</td><td>A named, typed memory location whose value can change</td></tr><tr><td>Type</td><td>The kind of value a variable holds (<code>int</code>, <code>double</code>, <code>char</code>, <code>bool</code>)</td></tr><tr><td>Declaration</td><td>Telling the compiler a name and its type (reserving the box)</td></tr><tr><td>Initialization</td><td>Giving a variable its first value <em>at</em> declaration</td></tr><tr><td>Assignment</td><td>Replacing a variable's value later (right side computed first)</td></tr><tr><td><code>const</code></td><td>Promise (checked by the compiler) that a value never changes</td></tr><tr><td>Named constant</td><td>A <code>const</code> with a meaningful name, replacing a "magic number"</td></tr><tr><td>Brace initialization</td><td><code>{...}</code> form; refuses narrowing conversions</td></tr><tr><td>Narrowing</td><td>A conversion that may lose information (<code>double</code> -&gt; <code>int</code>)</td></tr><tr><td>Undefined behavior</td><td>Anything may happen; reading uninitialized memory is UB</td></tr><tr><td><code>sizeof</code></td><td>Operator: bytes a type occupies (platform-dependent, <code>char</code> is always 1)</td></tr></tbody></table>
+<h2 id="syntax-and-c-examples">Syntax and C++ examples</h2>
+<pre><code class="language-cpp">int score{95};                  // whole number, initialized
+double average{91.5};           // decimal number
+char grade{&#x27;A&#x27;};                // ONE character, single quotes
+bool enrolled{true};            // logical: true/false
+const double Pi{3.14159};       // named constant
+
+int total{};                    // zero-initialized (&quot;empty braces&quot;)
+score = 100;                    // assignment: value REPLACED
+total = score + 10;             // right side computed first: 110</code></pre>
+<table><thead><tr><th>Piece</th><th>Meaning</th></tr></thead><tbody><tr><td><code>int count{42};</code></td><td>Declare <code>count</code> as int, initialize to 42</td></tr><tr><td><code>{}</code> vs <code>=</code></td><td>Braces refuse narrowing; <code>=</code> silently truncates</td></tr><tr><td><code>char c{'A'};</code></td><td>Single quotes for one character (double quotes = string)</td></tr><tr><td><code>const double r{0.15};</code></td><td>Named constant replaces the magic number <code>0.15</code></td></tr><tr><td><code>int x{};</code></td><td>Empty braces = zero — never read uninitialized</td></tr></tbody></table>
+<h2 id="line-by-line-code-explanation">Line-by-line code explanation</h2>
+<p><code>examples/types_and_sizes.cpp</code>:</p>
+<ol><li><code>int count{42};</code> — reserve an int-sized box, name it <code>count</code>, store 42.</li><li><code>bool enrolled{true};</code> — a bool prints as <code>1</code>/<code>0</code> (its integer values); the <em>words</em> true/false are for writing, not for printing.</li><li><code>const double Pi{3.14159};</code> — a box that can never be reassigned; the compiler enforces the promise.</li><li><code>std::cout &lt;&lt; sizeof(int) ...</code> — <code>sizeof</code> answers in bytes: typically int 4, double 8, char 1, bool 1 — but the standard guarantees only <em>relative</em> sizes (<code>char</code> = 1, others at least that). Portability note: exact int size is platform-defined; 4 bytes is what most teaching machines use.</li><li><code>// int bad{3.7};</code> — commented out <em>deliberately</em>: uncommenting produces <code>error: narrowing conversion of '3.7' from 'double' to 'int'</code> — the brace form refusing to lose data silently.</li><li><code>int sloppy = 3.7;</code> — the <code>=</code> form compiles and truncates to 3 — the bug the brace form prevents.</li></ol>
+</ol>
+<h2 id="output-prediction-questions-with-answers">Output prediction questions (with answers)</h2>
+<ol><li><code>int x{7}; x = x + 3; std::cout &lt;&lt; x;</code> — ? — <code>10</code> (right side first: 7+3, then store).</li><li><code>int a[partial]...</code> → simpler: <code>int b[3] = {10};</code> is Module 9; here: <code>double d{5}; std::cout &lt;&lt; d;</code> — ? — <code>5</code> (int widened to double 5.0, printed as <code>5</code>).</li><li><code>char c{'A'}; std::cout &lt;&lt; c;</code> vs <code>std::cout &lt;&lt; 'A';</code> — ? — both <code>A</code>.</li><li><code>bool flag = 3.9; std::cout &lt;&lt; flag;</code> — ? — <code>1</code> (nonzero converts to true; the fractional part does not survive).</li><li><em>Why does <code>int x{3.7};</code> fail but <code>int x = 3.7;</code> compile?</em> — Braces refuse narrowing; <code>=</code> truncates silently (to 3).</li></ol>
+</ol>
+<h2 id="common-errors-and-debugging-examples">Common errors and debugging examples</h2>
+<table><thead><tr><th>Error</th><th>Diagnostic / symptom</th><th>Fix</th></tr></thead><tbody><tr><td>Uninitialized read</td><td>Garbage value, no diagnostic</td><td>Initialize with <code>{}</code> always</td></tr><tr><td><code>int x{3.7};</code></td><td><code>error: narrowing conversion ...</code></td><td>If truncation is intended, write <code>static_cast&lt;int&gt;(3.7)</code></td></tr><tr><td><code>'A'</code> vs <code>"A"</code></td><td><code>'A'</code> is char; <code>"A"</code> is a string of two chars (A + hidden end)</td><td>Single quotes for single characters</td></tr><tr><td>Assignment in a condition (<code>if (x = 5)</code>)</td><td>Compiles; always true</td><td><code>==</code> for comparison; <code>-Wall</code> warns</td></tr><tr><td>Magic numbers (<code>if (s &gt; 90)</code>)</td><td>Code works, meaning unclear</td><td>Named constants: <code>kGradeA</code></td></tr><tr><td>Reassigning a <code>const</code></td><td><code>error: assignment of read-only variable</code></td><td>If it must change, it must not be <code>const</code></td></tr></tbody></table>
+<h2 id="classroom-demonstrations">Classroom demonstrations</h2>
+<ol><li><strong>Box-and-value, live:</strong> draw the box for <code>int score{95};</code>; erase and rewrite for the assignment <code>score = 100;</code> — the <em>box</em> persists, the <em>value</em> is replaced.</li><li><strong>The brace shield:</strong> compile <code>int x{3.7};</code> (error), then <code>int x = 3.7;</code> (silent truncation) — one design decision shown preventing a real bug.</li><li><strong>Magic-number refactor:</strong> a 6-line program with <code>0.15</code> scattered thrice; change the rate once with a named constant vs three times without.</li><li><strong><code>sizeof</code> tour:</strong> run <code>types_and_sizes.cpp</code>; note that these sizes are typical-but-not-guaranteed (standard guarantees relative sizes only).</li></ol>
+</ol>
+<h2 id="common-student-misconceptions">Common student misconceptions</h2>
+<ul><li>"<code>int</code> can hold 3.5 if I only print the whole part." (Type fixes the <em>storage</em>, not the display.)</li><li>"<code>double</code> is 'more accurate' than <code>int</code>." (Different <em>domain</em>; doubles have their own surprises — 0.1 + 0.2 ≠ 0.3, revisited in M3.)</li><li>"<code>char</code> holds 'ABC'." (One character only; strings come in Module 11.)</li><li>"Assignment means equality." (<code>x = x + 1;</code> is compute-then-store.)</li></ul>
+<h2 id="guided-student-activities">Guided student activities</h2>
+<p><strong>Type-choosing workshop (20 min):</strong> 10 real-world quantities (age, temperature, grade letter, is-enrolled, population, price, phone number, number of legs, GPA, house number). Pairs choose a type each and defend one that is <em>wrong</em> per typical intuition (phone number, house number → string/<code>int</code> identity vs quantity discussion).</p>
+<h2 id="practice-problems">Practice problems</h2>
+<ul><li>Box-and-value diagrams for 6 declaration/assignment sequences.</li><li>Predict output: 5 programs reassigning <code>int</code>/<code>double</code>/<code>bool</code> (including <code>bool b = 42;</code>).</li><li>Fix 4 programs that use magic numbers or uninitialized variables.</li><li>(🟡 stretch) Explain why <code>char letter{65};</code> prints <code>A</code> with <code>(char)</code> casting — foreshadow Module 11.</li></ul>
+<h2 id="summary">Summary</h2>
+<p>A variable is a labeled box with a type; the type fixes size, allowed values, and operations. Initialize with <code>{}</code> braces, name things for what they hold, prefer <code>const</code> for values that never change, and never read a box before you put something in it. Next (L04): getting real values in and out of programs — console I/O and formatted output.</p>
+<h2 id="exit-ticket-formative-assessment">Exit ticket / formative assessment</h2>
+<ol><li>Choose a type: <em>number of stars in a galaxy</em>; <em>a single reply y/n</em>; <em>average of 3 exam scores</em>. Justify in ≤ 1 clause each.</li><li>Why does <code>int x{3.7};</code> fail to compile, and why is that good?</li><li>Write one statement declaring a <code>const</code> named constant for π.</li></ol>
+</ol>
+<h2 id="estimated-time-allocation-120-min">Estimated time allocation (120 min)</h2>
+<table><thead><tr><th>Segment</th><th>Minutes</th></tr></thead><tbody><tr><td>Recall (anatomy quiz) + why variables</td><td>10</td></tr><tr><td>Box-and-value model + types with <code>sizeof</code> demo</td><td>35</td></tr><tr><td>Break</td><td>10</td></tr><tr><td>Declaration/init/assignment; <code>const</code>; uninitialized trap</td><td>35</td></tr><tr><td>Type-choosing workshop</td><td>20</td></tr><tr><td>Exit ticket + L04 preview</td><td>10</td></tr></tbody></table>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

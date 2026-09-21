@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Exercises · T01 variables calculations · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/exercises/T01_variables_calculations.html">
+<link rel="stylesheet" href="../styles.css">
+<script src="../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../index.html">Home</a></li><li><a href="../overview.html">Overview</a></li><li><a href="../outcomes.html">Outcomes</a></li><li><a href="../schedule.html">Schedule</a></li><li><a href="../lectures.html">Lectures</a></li><li><a href="../labs.html">Labs</a></li><li><a href="../cases.html">Case Studies</a></li><li><a href="../exercises.html" aria-current="page">Exercises</a></li><li><a href="../assignments.html">Assignments</a></li><li><a href="../projects.html">Projects</a></li><li><a href="../resources.html">Resources</a></li><li><a href="../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../index.html">Home</a> › Exercises · T01 variables calculations</nav>
+<h1 class="page-title">Exercises · T01 variables calculations</h1>
+<p>Covers: declaration, initialization, types, <code>const</code>, arithmetic, operator precedence, type conversion, <code>static_cast</code>, formatted output. Lectures L03–L06 (and L01–L02 warm-ups). Outcomes PF-1.x, PF-2.x, PF-3.x.</p>
+<p>13 exercises · difficulty ladder runs 🟢 → 🔴.</p>
+<hr>
+<h3 id="pf-e-001-hello-you">PF-E-001 · Hello, You</h3>
+<p><strong>Difficulty:</strong> Beginner · <strong>Lecture:</strong> L01 · <strong>Outcomes:</strong> PF-1.1 <strong>Prerequisites:</strong> none <strong>Problem:</strong> Print two lines: <code>Hello, world!</code> then <code>Ready to learn C++.</code> Compile and run. <strong>Input:</strong> none · <strong>Output:</strong> exactly the two lines. <strong>Sample:</strong> — → <code>Hello, world!</code> / <code>Ready to learn C++.</code> <strong>Hints:</strong> one statement per line of output; end each with <code>\n</code>.</p>
+<h3 id="pf-e-002-blank-frame-printer">PF-E-002 · Blank-Frame Printer</h3>
+<p><strong>Difficulty:</strong> Beginner · <strong>Lecture:</strong> L02 · <strong>Outcomes:</strong> PF-1.1 <strong>Prerequisites:</strong> E-001 <strong>Problem:</strong> Print a 5-line frame of asterisks (width 12) with two blank interior lines. <strong>Input:</strong> none · <strong>Output:</strong> the frame. <strong>Sample:</strong> — → <code>*********<em><strong></code> / `<code> / </code><code> / </code><code> / </code></strong></em>******<em><strong>` </strong>Hints:</em>* count the lines before typing; every line is a separate statement.</p>
+<h3 id="pf-e-003-age-in-days">PF-E-003 · Age in Days</h3>
+<p><strong>Difficulty:</strong> Beginner · <strong>Lecture:</strong> L03 · <strong>Outcomes:</strong> PF-2.1 <strong>Prerequisites:</strong> E-001 <strong>Problem:</strong> Read an age in whole years; print the (approximate) age in days, assuming 365 days per year. <strong>Input:</strong> one integer (years) · <strong>Output:</strong> one integer (days). <strong>Sample:</strong> <code>20</code> → <code>7300</code> <strong>Hints:</strong> one multiplication; store the result in a variable before printing.</p>
+<h3 id="pf-e-004-temperature-converter-c-f">PF-E-004 · Temperature Converter (C→F)</h3>
+<p><strong>Difficulty:</strong> Beginner · <strong>Lecture:</strong> L03 · <strong>Outcomes:</strong> PF-2.1, PF-3.2 <strong>Prerequisites:</strong> E-003 <strong>Problem:</strong> Read a Celsius temperature (may have decimals); print Fahrenheit with one decimal place. <strong>Input:</strong> one double · <strong>Output:</strong> one double, one decimal place. <strong>Sample:</strong> <code>36.6</code> → <code>97.9</code> <strong>Hints:</strong> F = C × 9/5 + 32; use <code>9.0/5.0</code> — why does <code>9/5</code> fail?</p>
+<h3 id="pf-e-005-circle-report">PF-E-005 · Circle Report</h3>
+<p><strong>Difficulty:</strong> Beginner · <strong>Lecture:</strong> L03 · <strong>Outcomes:</strong> PF-2.1, PF-2.3 <strong>Prerequisites:</strong> E-004 <strong>Problem:</strong> Read a radius; print diameter, circumference, and area, each labeled, each with 2 decimals. Declare π as a <code>const double</code>. <strong>Input:</strong> one double (radius) · <strong>Output:</strong> three labeled values. <strong>Sample:</strong> <code>2.5</code> → <code>diameter: 5.00</code> / <code>circumference: 15.71</code> / <code>area: 19.63</code> <strong>Hints:</strong> <code>const double PI{3.141592653589793};</code></p>
+<h3 id="pf-e-006-receipt-line">PF-E-006 · Receipt Line</h3>
+<p><strong>Difficulty:</strong> Beginner · <strong>Lecture:</strong> L04 · <strong>Outcomes:</strong> PF-2.2, PF-2.3 <strong>Prerequisites:</strong> E-005 <strong>Problem:</strong> Read an item name (one word), unit price, and quantity. Print a fixed-width receipt line: name left-aligned width 12, quantity width 4, total price (price × qty) width 10 with 2 decimals. <strong>Input:</strong> string, double, int · <strong>Output:</strong> one formatted line. <strong>Sample:</strong> <code>Mouse 499.50 3</code> → <code>Mouse             3    1498.50</code> <strong>Hints:</strong> <code>&lt;iomanip&gt;</code>: <code>std::setw</code>, <code>std::left</code>, <code>std::fixed</code>, <code>std::setprecision</code>.</p>
+<h3 id="pf-e-007-digit-splitter">PF-E-007 · Digit Splitter</h3>
+<p><strong>Difficulty:</strong> Foundational · <strong>Lecture:</strong> L05 · <strong>Outcomes:</strong> PF-3.1, PF-3.3 <strong>Prerequisites:</strong> E-003 <strong>Problem:</strong> Read a two-digit integer; print its tens digit and units digit, separated by a space. Then print their sum and product. <strong>Input:</strong> one integer 10–99 · <strong>Output:</strong> digits, then sum, then product. <strong>Sample:</strong> <code>47</code> → <code>4 7</code> / <code>sum: 11</code> / <code>product: 28</code> <strong>Hints:</strong> <code>% 10</code> and <code>/ 10</code>; no strings allowed.</p>
+<h3 id="pf-e-008-seconds-decomposer">PF-E-008 · Seconds Decomposer</h3>
+<p><strong>Difficulty:</strong> Foundational · <strong>Lecture:</strong> L05 · <strong>Outcomes:</strong> PF-3.1 <strong>Prerequisites:</strong> E-007 <strong>Problem:</strong> Read a total number of seconds; print it as hours, minutes, seconds. <strong>Input:</strong> one non-negative integer · <strong>Output:</strong> <code>H:MM:SS</code> with zero-padded minutes/seconds. <strong>Sample:</strong> <code>7385</code> → <code>2:03:05</code> <strong>Hints:</strong> <code>std::setw(2) &lt;&lt; std::setfill('0')</code> for padding; decompose from the largest unit.</p>
+<h3 id="pf-e-009-coin-change-static">PF-E-009 · Coin Change (Static)</h3>
+<p><strong>Difficulty:</strong> Foundational · <strong>Lecture:</strong> L05 · <strong>Outcomes:</strong> PF-3.1, PF-3.3 <strong>Prerequisites:</strong> E-008 <strong>Problem:</strong> Read an amount in cents (0–999); print the fewest coins (25, 10, 5, 1) that make it. <strong>Input:</strong> one integer (cents) · <strong>Output:</strong> four labeled counts. <strong>Sample:</strong> <code>187</code> → <code>25c: 7</code> / <code>10c: 1</code> / <code>5c: 0</code> / <code>1c: 2</code> <strong>Hints:</strong> greedy: take as many of the largest coin as possible, then move down.</p>
+<h3 id="pf-e-010-swap-visualization">PF-E-010 · Swap Visualization</h3>
+<p><strong>Difficulty:</strong> Foundational · <strong>Lecture:</strong> L05 · <strong>Outcomes:</strong> PF-3.1, PF-3.2 <strong>Prerequisites:</strong> E-003 <strong>Problem:</strong> Read two integers into <code>a</code> and <code>b</code>. Print them, swap their values using a temporary variable, and print them again. Then predict (in a comment) what happens without the temporary — and demonstrate it in a second, labeled block. <strong>Input:</strong> two integers · <strong>Output:</strong> values before and after each swap. <strong>Sample:</strong> <code>3 8</code> → <code>before: 3 8</code> / <code>after good swap: 8 3</code> / <code>after bad swap: 0 8</code> <strong>Hints:</strong> the "bad swap" is <code>a = b; b = a;</code> — trace why the first value is lost.</p>
+<h3 id="pf-e-011-expression-forensics">PF-E-011 · Expression Forensics</h3>
+<p><strong>Difficulty:</strong> Intermediate · <strong>Lecture:</strong> L05 · <strong>Outcomes:</strong> PF-3.1, PF-3.4 <strong>Prerequisites:</strong> E-007, E-009 <strong>Problem:</strong> Given the declarations <code>int a{7}; double b{2.0}; int c{3};</code>, write a program that prints the value and type-behavior of five expressions: <code>a / c</code>, <code>a / b</code>, <code>a % c</code>, <code>a + b <em> c</code>, <code>(a + b) </em> c</code>. First write your predicted answers in comments, then print actual values and compare. <strong>Input:</strong> none · <strong>Output:</strong> five labeled lines with actual values. <strong>Sample:</strong> — → <code>a/c: 2</code> / <code>a/b: 3.5</code> / … <strong>Hints:</strong> decide integer vs floating-point per expression <em>before</em> compiling.</p>
+<h3 id="pf-e-012-salary-calculator">PF-E-012 · Salary Calculator</h3>
+<p><strong>Difficulty:</strong> Intermediate · <strong>Lecture:</strong> L06 · <strong>Outcomes:</strong> PF-2.1, PF-3.2 <strong>Prerequisites:</strong> E-006, E-011 <strong>Problem:</strong> Read hourly wage, regular hours, and overtime hours. Overtime pays 1.5×. Compute gross pay, deduct 11% income tax and 180 fixed transport levy, print a payslip (gross, each deduction, net) with aligned columns and 2 decimals. <strong>Input:</strong> double, double, double · <strong>Output:</strong> four labeled money values. <strong>Sample:</strong> <code>50 40 5</code> → <code>gross: 2375.00</code> / <code>tax: 261.25</code> / <code>levy: 180.00</code> / <code>net: 1933.75</code> <strong>Hints:</strong> compute overtime at the multiplied rate; one variable per payslip line keeps printing trivial.</p>
+<h3 id="pf-e-013-deterministic-chaos-integer-overflow">PF-E-013 · Deterministic Chaos (Integer Overflow)</h3>
+<p><strong>Difficulty:</strong> Advanced Introductory · <strong>Lecture:</strong> L06 · <strong>Outcomes:</strong> PF-3.2, PF-3.4 <strong>Prerequisites:</strong> E-011 <strong>Problem:</strong> Starting from <code>int n{1};</code>, repeatedly print <code>n</code>, then compute <code>n *= 10; n += 7;</code> ten times, printing each step. After each step also print the value computed as <code>long long</code> from the same formula. Write a short comment explaining exactly where (and why) the <code>int</code> version stops matching the <code>long long</code> version. <strong>Input:</strong> none · <strong>Output:</strong> 10 lines: step, int value, long long value. <strong>Sample:</strong> first lines → <code>1: 17 17</code> / <code>2: 177 177</code> / … then they diverge. <strong>Hints:</strong> <code>int</code> is 32-bit on our toolchain — <em>typical, not guaranteed</em> (say so in the comment).</p>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L23 · Linear Search vs Binary Search: Correctness and Comparisons · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/lectures/week_12/lecture_23.html">
+<link rel="stylesheet" href="../../styles.css">
+<script src="../../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../../index.html">Home</a></li><li><a href="../../overview.html">Overview</a></li><li><a href="../../outcomes.html">Outcomes</a></li><li><a href="../../schedule.html">Schedule</a></li><li><a href="../../lectures.html" aria-current="page">Lectures</a></li><li><a href="../../labs.html">Labs</a></li><li><a href="../../cases.html">Case Studies</a></li><li><a href="../../exercises.html">Exercises</a></li><li><a href="../../assignments.html">Assignments</a></li><li><a href="../../projects.html">Projects</a></li><li><a href="../../resources.html">Resources</a></li><li><a href="../../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="narrow">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../../index.html">Home</a> › L23 · Linear Search vs Binary Search: Correctness and Comparisons</nav>
+<h1 class="page-title">L23 · Linear Search vs Binary Search: Correctness and Comparisons</h1>
+<p><strong>Module 12 — Searching and Sorting · Week 12 · Lecture 23 of 32 · 120 minutes</strong> <strong>Outcomes:</strong> CLO-6 · PF-12.1, PF-12.2 · <a href="../../outcomes.html">LEARNING_OUTCOMES.md</a></p>
+<h2 id="learning-objectives">Learning objectives</h2>
+<ol><li>Implement linear search and iterative binary search (with <code>low</code>/<code>high</code>/<code>mid</code>, <code>long long</code>-safe mid formula) returning index or −1, and trace both on given inputs (PF-12.1).</li><li>State and <em>use</em> binary search's precondition — the array must be sorted — and demonstrate the wrong-answer consequence of violating it (PF-12.1).</li><li>Count and compare comparisons for both algorithms (best/average/worst), and derive the O(log n) halving intuition (PF-12.2).</li></ol>
+</ol>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>M9 (arrays, linear-search pattern from L18 — now formalized); M5 (loop patterns: FIND-FIRST); L12 (trace discipline); L10 (iteration counting).</p>
+<h2 id="concept-sequence">Concept sequence</h2>
+<ol><li>The search problem; return index vs bool vs −1 conventions</li><li>Linear search: the FIND-FIRST pattern formalized</li><li>Best/average/worst comparison counts for linear search</li><li>The sorted-data idea: halving the candidate range</li><li>Binary search: low/high/mid loop with all four exit conditions</li><li>Midpoint arithmetic and the overflow note; precondition violation demo</li></ol>
+</ol>
+<h2 id="teaching-topics-detailed">Teaching topics (detailed)</h2>
+<ul><li><strong>Linear search (formal):</strong> <code>int linear_search(const int a[], int n, int key)</code> → index or −1; best 1, worst n, average n/2 comparisons; Falsifiable claim: "nothing beats checking every element when data is unsorted."</li><li><strong>Binary search loop (canonical):</strong> <code>low = 0, high = n - 1; while (low &lt;= high) { mid = low + (high - low) / 2; if (a[mid] == key) return mid; else if (a[mid] &lt; key) low = mid + 1; else high = mid - 1; } return -1;</code> — the four places it can exit; <code>mid</code> recomputed <em>inside</em> the loop (the classic bug: computing once); the <code>(low + high) / 2</code> overflow remark (why <code>low + (high - low) / 2</code>).</li><li><strong>Trace protocol:</strong> three-column trace (low, high, mid) for a 16-element array; maximum comparisons = ⌊log₂ 16⌋ + 1 = 5 vs 16 — the felt difference; 1,000,000 elements → 20 vs 1,000,000.</li><li><strong>Precondition:</strong> binary search on unsorted data <em>silently returns wrong answers</em> (not a crash) — live demo on a 6-element unsorted array; hence the contract comment and the sort-then-search tradeoff (L24 connects).</li><li><strong>Complexity vocabulary (intuition only):</strong> O(n) vs O(log n) as growth curves, not formal definition; comparison-count tables as evidence.</li></ul>
+<h2 id="c-examples-required">C++ examples required</h2>
+<table><thead><tr><th>File</th><th>Role</th></tr></thead><tbody><tr><td><code>search_compare.cpp</code> ✅</td><td>both searches; comparison counters printed; unsorted-precondition violation demo</td></tr><tr><td>(live) <code>binary_trace.cpp</code></td><td>prints (low, high, mid) per iteration for two keys: present and absent</td></tr></tbody></table>
+<h2 id="common-student-misconceptions">Common student misconceptions</h2>
+<ul><li>"Binary search is always faster." (Needs sorted data; sorting costs O(n²) with our tools — the tradeoff is L24's content.)</li><li>"<code>mid = (low + high) / 2</code> is always fine." (Fine at our sizes; the overflow-safe form is the professional habit — shown, required.)</li><li>"Binary search returns the <em>first</em> match." (It returns <em>a</em> match; duplicates need a variant — noted, not elaborated.)</li><li>"<code>while (low &lt; high)</code> is equivalent." (Off-by-one: misses the single- element range — traced.)</li></ul>
+<h2 id="conceptual-explanation-beginner-first">Conceptual explanation (beginner-first)</h2>
+<p>You already own linear search: walk the array, compare each element, stop at a match. Its cost grows <strong>linearly</strong> — twice the data, twice the comparisons. Binary search is the payoff of L10's complexity work: on a <strong>sorted</strong> array, every comparison against the middle element throws away <em>half</em> of what remains. Twenty comparisons cover a million elements; thirty cover a billion. That growth — cutting the problem in half each step — is <strong>logarithmic</strong>, and it's the first genuinely fast algorithm of the course.</p>
+<p>The price is a strict precondition: <strong>the data must be sorted</strong>. Binary search on unsorted data doesn't crash — it silently returns wrong answers, which is far worse. So the algorithm's contract has two parts: sorted input, and (when the key is absent) a well-defined not-found result (<code>-1</code>, like linear search).</p>
+<p>The loop maintains an invariant worth saying out loud: <strong>if the key is in the array, it lies between <code>low</code> and <code>high</code></strong>. Initialization (<code>low = 0</code>, <code>high = n-1</code>) makes it true; each iteration preserves it by discarding the half that cannot contain the key; when the range empties (<code>low &gt; high</code>), the invariant certifies the key is absent. This is exactly the loop-invariant discipline from L09, now proving something nontrivial.</p>
+<h2 id="terminology-and-definitions">Terminology and definitions</h2>
+<table><thead><tr><th>Term</th><th>Definition</th></tr></thead><tbody><tr><td>Linear search</td><td>Scan every element; O(n) comparisons</td></tr><tr><td>Binary search</td><td>Halve the search space each comparison; O(log n)</td></tr><tr><td>Precondition</td><td>Sorted (ascending) input — violated = wrong answers, not errors</td></tr><tr><td>Search interval</td><td><code>[low, high]</code> — the region that may still hold the key</td></tr><tr><td>Loop invariant</td><td>"The key, if present, is inside <code>[low, high]</code>" — maintained every pass</td></tr><tr><td>Midpoint</td><td><code>mid = low + (high - low) / 2</code> — the overflow-safe form (required)</td></tr><tr><td>Logarithmic growth</td><td>Doubling the data adds ~1 comparison; the log₂ curve</td></tr><tr><td>Comparison count</td><td>The measured cost — printed by the example harness</td></tr><tr><td>Not-found result</td><td><code>-1</code>, the same sentinel as linear search</td></tr></tbody></table>
+<h2 id="syntax-and-c-examples">Syntax and C++ examples</h2>
+<pre><code class="language-cpp">// linear search — the baseline (L18 revisited, now with a counter)
+int linearSearch(const int a[], int n, int key, long long&amp; comparisons)
+{
+    for (int i{0}; i &lt; n; ++i)
+    {
+        ++comparisons;
+        if (a[i] == key)
+            return i;
+    }
+    return -1;
+}
+
+// binary search — sorted input only
+int binarySearch(const int a[], int n, int key, long long&amp; comparisons)
+{
+    int low{0};
+    int high{n - 1};
+    while (low &lt;= high)                      // inclusive interval non-empty
+    {
+        int mid{low + (high - low) / 2};     // overflow-safe midpoint
+        ++comparisons;
+        if (a[mid] == key)
+            return mid;                      // found: return a position
+        else if (a[mid] &lt; key)
+            low = mid + 1;                   // key can only be right of mid
+        else
+            high = mid - 1;                  // key can only be left of mid
+    }
+    return -1;                               // interval empty: absent
+}</code></pre>
+<h2 id="line-by-line-code-explanation">Line-by-line code explanation</h2>
+<p><code>examples/search_compare.cpp</code>:</p>
+<ol><li>Both functions take <code>long long&amp; comparisons</code> — a <em>reference</em> parameter (Module 8) so the harness can read the cost; the sorted precondition is stated in a comment and <em>violated on purpose</em> once: searching unsorted data returns wrong <code>-1</code>s — no crash, no warning.</li><li><code>while (low &lt;= high)</code> — the inclusive interval <code>[low, high]</code> is non-empty; when <code>low &gt; high</code> the interval is empty and the key is certified absent. Using <code>low &lt; high</code> misses the one-element range — the off-by-one traced live.</li><li><code>mid = low + (high - low) / 2</code> — mathematically identical to <code>(low+high)/2</code> for our sizes but immune to the overflow that hits huge indices; the professional habit, required by the course.</li><li>The three-way branch does double duty: equality returns, and both inequality arms <em>shrink the interval past <code>mid</code></em> (<code>mid+1</code>/<code>mid−1</code>, not <code>mid</code>) — forgetting that is the infinite-loop bug.</li><li>The harness runs both searches over n = 10, 100, 1000 sorted arrays and prints comparison counts: linear grows ~n, binary grows ~log₂ n — the theory table, measured.</li></ol>
+</ol>
+<h2 id="output-prediction-questions-with-answers">Output prediction questions (with answers)</h2>
+<ol><li>Linear search, 1,000 elements, worst case — ? — 1,000 comparisons; best case — 1.</li><li>Binary search, 1,000 elements, worst case — ? — ⌈log₂ 1001⌉ ≈ 10.</li><li>Binary search on <code>{5, 9, 2}</code> for key 9 — ? — wrong result or −1: unsorted input violates the precondition (silently).</li><li><code>low = 3, high = 4</code>: what is <code>mid</code>, and after a failed compare the new interval? — <code>mid = 3</code>; new range is <code>[4,4]</code> or <code>[3,2]</code> — either way, progress toward termination.</li><li>Key absent: how does the loop end? — <code>high</code> drops below <code>low</code>; the interval empties; return −1.</li></ol>
+</ol>
+<h2 id="common-errors-and-debugging-examples">Common errors and debugging examples</h2>
+<table><thead><tr><th>Error</th><th>Symptom</th><th>Fix</th></tr></thead><tbody><tr><td>Searching unsorted data</td><td>Silent wrong answers — no error</td><td>Precondition: sort first, or use linear</td></tr><tr><td><code>(low + high) / 2</code></td><td>Fine at course sizes; overflow at huge scales</td><td><code>low + (high - low) / 2</code> (required)</td></tr><tr><td><code>low = mid</code> / <code>high = mid</code></td><td>Infinite loop on 2-element ranges</td><td><code>mid + 1</code> / <code>mid − 1</code> — shrink past mid</td></tr><tr><td><code>while (low &lt; high)</code></td><td>Misses the single-element interval</td><td><code>low &lt;= high</code> with inclusive bounds</td></tr><tr><td><code>mid</code> computed outside the loop</td><td>Stale midpoint — wrong halving</td><td>Recompute every iteration</td></tr><tr><td>Returning the first match with duplicates</td><td>Returns <em>a</em> match, not the first</td><td>Variant algorithm (stretch exercise)</td></tr></tbody></table>
+<h2 id="classroom-demonstrations">Classroom demonstrations</h2>
+<ol><li><strong>Guess-my-number tournament (15 min):</strong> one student thinks of 1–1024; class finds it by halving (binary search — 10 guesses guaranteed) then by linear scanning; comparison counts tallied on the board, ending in the log₂ plot.</li><li><strong>The silent wrong answer:</strong> run binary search on an unsorted array — a confident <code>-1</code> for a key that is present: preconditions protect correctness, not memory.</li><li><strong>The trace film:</strong> <code>binary_trace.cpp</code> prints (low, high, mid) per iteration for a present and an absent key; the class predicts each row before revealing it.</li></ol>
+</ol>
+<h2 id="guided-student-activities">Guided student activities</h2>
+<p><strong>Guess-my-number tournament (15 min):</strong> one student thinks of 1–1024; class finds it by halving (binary search — 10 guesses guaranteed) then by linear scanning; comparison counts tallied on the board, ending in the log₂ plot.</p>
+<h2 id="practice-problems">Practice problems</h2>
+<ul><li>Trace binary search (low/high/mid table) for a key present and one absent on a 12-element sorted array.</li><li>Implement both searches + a comparison-counting harness; verify counts match theory for n = 10, 100, 1000 (sorted input).</li><li>Break a deliberately buggy binary search (mid outside loop, <code>&lt;</code> vs <code>&lt;=</code>) — diagnose by trace.</li><li>(🟡 stretch) First-occurrence binary search variant for duplicates.</li></ul>
+<h2 id="summary">Summary</h2>
+<p>Linear search is O(n) and unsorted-proof; binary search is O(log n) and sorted-only — its invariant ("the key, if present, lies in [low, high]") makes the halving logic provable, and the overflow-safe midpoint makes it professional. Measured comparison counts turn the log₂ curve from a formula into an observation. Next (L24): the sorting algorithms that <em>produce</em> the precondition binary search needs.</p>
+<h2 id="exit-ticket-formative-assessment">Exit ticket / formative assessment</h2>
+<ol><li>Max comparisons for binary search on 1,000 sorted elements?</li><li>Which precondition makes binary search correct?</li><li>Why recompute <code>mid</code> inside the loop?</li></ol>
+</ol>
+<h2 id="estimated-time-allocation-120-min">Estimated time allocation (120 min)</h2>
+<table><thead><tr><th>Segment</th><th>Minutes</th></tr></thead><tbody><tr><td>Recall (string algorithms quiz) + search problem</td><td>10</td></tr><tr><td>Linear search formalized + counts</td><td>20</td></tr><tr><td>Break</td><td>10</td></tr><tr><td>Binary search build + traces + precondition</td><td>40</td></tr><tr><td>Guess-my-number tournament</td><td>15</td></tr><tr><td>Exit ticket + L24 preview</td><td>15</td></tr></tbody></table>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

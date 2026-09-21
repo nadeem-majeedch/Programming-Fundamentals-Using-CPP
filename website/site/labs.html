@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Laboratory Manual · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/labs.html">
+<link rel="stylesheet" href="styles.css">
+<script src="site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="index.html">Home</a></li><li><a href="overview.html">Overview</a></li><li><a href="outcomes.html">Outcomes</a></li><li><a href="schedule.html">Schedule</a></li><li><a href="lectures.html">Lectures</a></li><li><a href="labs.html" aria-current="page">Labs</a></li><li><a href="cases.html">Case Studies</a></li><li><a href="exercises.html">Exercises</a></li><li><a href="assignments.html">Assignments</a></li><li><a href="projects.html">Projects</a></li><li><a href="resources.html">Resources</a></li><li><a href="instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="index.html">Home</a> › Laboratory Manual</nav>
+<h1 class="page-title">Laboratory Manual</h1>
+<p><strong>16 graded 2-hour laboratory sessions</strong>, one per week, aligned module-for- module with the 16 modules and 32 lectures (Lab <em>n</em> ↔ Module <em>n</em> ↔ lectures 2n−1, 2n; see <a href="schedule.html">../COURSE_SCHEDULE.md</a>). Labs are the graded practice layer between case studies and assignments: every session moves from <strong>guided work → independent programming → debugging</strong>, ending with check-points and a submission.</p>
+<p>Labs are worth <strong>10 % of the course grade</strong> (checkpoint-based; see <a href="overview.html">COURSE_OVERVIEW.md</a> § 4). TAs follow the "guidance, not solutions" rules in <a href="instructor.html">TEACHING_GUIDE.md</a> § 5.</p>
+<h2 id="lab-plan">Lab plan</h2>
+<table><thead><tr><th>#</th><th>Lab</th><th>Module / Lectures</th><th>Week</th><th>Guided focus → Independent focus</th></tr></thead><tbody><tr><td>1</td><td>First C++ Program</td><td>M1 · L01–L02</td><td>1</td><td>Toolchain → edit-compile-run cycle</td></tr><tr><td>2</td><td>Variables and Calculations</td><td>M2 · L03–L04</td><td>2</td><td>Types &amp; formatted I/O → a unit-price calculator</td></tr><tr><td>3</td><td>Operators</td><td>M3 · L05–L06</td><td>3</td><td>Precedence &amp; conversion → expression workbench</td></tr><tr><td>4</td><td>Decision-Making</td><td>M4 · L07–L08</td><td>4</td><td>if/else &amp; switch → a validated tariff program</td></tr><tr><td>5</td><td>Loops</td><td>M5 · L09–L10</td><td>5</td><td>Loop patterns → accumulation &amp; validation loops</td></tr><tr><td>6</td><td>Algorithm Design</td><td>M6 · L11–L12</td><td>6</td><td>IPO + trace tables → test-case design sprint</td></tr><tr><td>7</td><td>Functions</td><td>M7 · L13–L14</td><td>7</td><td>Decomposition → tested function library</td></tr><tr><td>8</td><td>Recursion and References</td><td>M8 · L15–L16</td><td>8</td><td>Passing modes → recursive function set</td></tr><tr><td>9</td><td>One-Dimensional Arrays</td><td>M9 · L17–L18</td><td>9</td><td>Array loops → statistics toolkit</td></tr><tr><td>10</td><td>Two-Dimensional Arrays</td><td>M10 · L19–L20</td><td>10</td><td>Grid traversal → matrix operations program</td></tr><tr><td>11</td><td>Strings</td><td>M11 · L21–L22</td><td>11</td><td>char/string processing → text-analysis tool</td></tr><tr><td>12</td><td>Searching and Sorting</td><td>M12 · L23–L24</td><td>12</td><td>Traced sorts → benchmarking search cost</td></tr><tr><td>13</td><td>Pointers</td><td>M13 · L25–L26</td><td>13</td><td>Pointer mechanics → safe-pointer toolkit</td></tr><tr><td>14</td><td>Structures and Dynamic Memory</td><td>M14 · L27–L28</td><td>14</td><td>new/delete &amp; structs → records program</td></tr><tr><td>15</td><td>File Handling and Exceptions</td><td>M15 · L29–L30</td><td>15</td><td>Streams → robust file pipeline</td></tr><tr><td>16</td><td>OOP Mini-Project</td><td>M16 · L31–L32</td><td>16</td><td>Class design → graded mini-project demo</td></tr></tbody></table>
+<p>Outcomes for each lab cite the module's <code>PF-m.n</code> codes — see <a href="outcomes.html">LEARNING_OUTCOMES.md</a>.</p>
+<h2 id="layout">Layout</h2>
+<pre><code>labs/
+├── README.md                     ← this file
+├── lab_manuals/
+│   ├── lab_01/                   ← manual (student-facing)
+│   │   ├── manual.md             ← the 13-section lab document
+│   │   ├── starter_code/         ← compilable skeletons (contract applies)
+│   │   └── instructor_notes/     ← TA checklist (restricted)
+│   ├── … lab_16
+│   └── README.md                 ← folder guide
+└── resources/                    ← shared lab resources
+    ├── submission_template.md    ← report skeleton for every lab
+    └── debug_log_template.md     ← five-step debug log (Lab 4 onward)</code></pre>
+<h2 id="manual-template-13-section-authoring-contract">Manual template (13-section authoring contract)</h2>
+<p>Every <code>manual.md</code> contains, in order:</p>
+<ol><li>Header (number, title, week, duration, lecture links)</li><li>Learning objectives</li><li>Required software and compiler (per-OS contract)</li><li>Relevant theory (condensed, linked to lecture notes)</li><li>Pre-lab questions</li><li>Instructor demonstration</li><li>Guided coding tasks (with check-points)</li><li>Independent programming exercises</li><li>Debugging task</li><li>Test cases</li><li>Expected learning outcomes</li><li>Submission requirements</li><li>Assessment rubric</li></ol>
+</ol>
+<h2 id="progression-model">Progression model</h2>
+<ul><li><strong>Labs 1–4:</strong> ~70 % guided / 30 % independent — mechanics first.</li><li><strong>Labs 5–8:</strong> ~50/50 — design decisions start.</li><li><strong>Labs 9–12:</strong> ~30/70 — independent work with guided debugging.</li><li><strong>Labs 13–16:</strong> guided warm-up only; Lab 16 is a full mini-project.</li></ul>
+<h2 id="safety-notes-memory-management">Safety notes (memory management)</h2>
+<p>Labs 13–14 teach pointers and <code>new</code>/<code>delete</code> <strong>with explicit hazard explanations</strong>: every manual that touches dynamic memory names the hazards (leak, use-after-delete, double-delete), demonstrates the guard pattern (null-out after delete), and shows the course-preferred RAII alternative (<code>std::vector</code>) side-by-side. No unexplained unsafe practice appears in any manual or starter file.</p>
+<h2 id="status">Status</h2>
+<p>✅ All 16 manuals, starter code, and TA notes authored; starter programs compile warning-free and were executed (evidence: <code>../docs/LAB_AUDIT.md</code>).</p><h2 id="the-sixteen-labs">The sixteen labs</h2><ol><li><a href="labs/lab_01.html">Lab 1 · First C++ Program</a></li><li><a href="labs/lab_02.html">Lab 2 · Variables and Calculations</a></li><li><a href="labs/lab_03.html">Lab 3 · Operators</a></li><li><a href="labs/lab_04.html">Lab 4 · Decision-Making</a></li><li><a href="labs/lab_05.html">Lab 5 · Loops</a></li><li><a href="labs/lab_06.html">Lab 6 · Algorithm Design</a></li><li><a href="labs/lab_07.html">Lab 7 · Functions</a></li><li><a href="labs/lab_08.html">Lab 8 · Recursion and References</a></li><li><a href="labs/lab_09.html">Lab 9 · One-Dimensional Arrays</a></li><li><a href="labs/lab_10.html">Lab 10 · Two-Dimensional Arrays</a></li><li><a href="labs/lab_11.html">Lab 11 · Strings</a></li><li><a href="labs/lab_12.html">Lab 12 · Searching and Sorting</a></li><li><a href="labs/lab_13.html">Lab 13 · Pointers</a></li><li><a href="labs/lab_14.html">Lab 14 · Structures and Dynamic Memory</a></li><li><a href="labs/lab_15.html">Lab 15 · File Handling and Exceptions</a></li><li><a href="labs/lab_16.html">Lab 16 · OOP Mini-Project</a></li></ol>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

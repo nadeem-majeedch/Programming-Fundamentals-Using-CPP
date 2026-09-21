@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Project 04 · Student Record Management System · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/projects/project-04.html">
+<link rel="stylesheet" href="../styles.css">
+<script src="../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../index.html">Home</a></li><li><a href="../overview.html">Overview</a></li><li><a href="../outcomes.html">Outcomes</a></li><li><a href="../schedule.html">Schedule</a></li><li><a href="../lectures.html">Lectures</a></li><li><a href="../labs.html">Labs</a></li><li><a href="../cases.html">Case Studies</a></li><li><a href="../exercises.html">Exercises</a></li><li><a href="../assignments.html">Assignments</a></li><li><a href="../projects.html" aria-current="page">Projects</a></li><li><a href="../resources.html">Resources</a></li><li><a href="../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="narrow">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../index.html">Home</a> › Project 04 · Student Record Management System</nav>
+<h1 class="page-title">Project 04 · Student Record Management System</h1>
+<p><strong>Modules 14–16 (Weeks 14–16) · the first class with a stated invariant — private state, guarded mutators, file round-trip</strong> Outcomes: CLO-7, CLO-8 (PF-14…PF-16). Difficulty: ★★★★☆ · Builds on P3.</p>
+<h2 id="1-problem-description">1. Problem description</h2>
+<p>A department office keeps student records: id, name, program, and a GPA that must always lie in 0.00..4.00, plus a status that only moves in one direction (active → graduated) — never backward. P3 kept <em>books</em>, which can be anything; a student <em>record</em> carries rules. Those rules must be enforced by the type itself, not by hoping every caller remembers them. Build a small system whose core is <strong>one class with real invariants</strong> and a menu that cannot break them.</p>
+<h2 id="2-learning-objectives">2. Learning objectives</h2>
+<ol><li>Design a class: private data, public interface, stated invariants.</li><li>Write guarded mutators that make invalid states unreachable.</li><li>Use <code>const</code> member functions for observers; keep I/O out of the class.</li><li>Round-trip a class-managed collection through a text file.</li><li>Report from an invariant-safe collection without re-validating.</li></ol>
+</ol>
+<h2 id="3-functional-requirements">3. Functional requirements</h2>
+<ul><li>FR1 — <code>class Student</code>: private <code>id</code> (string, <code>S-</code> + digits), <code>name</code>, <code>program</code> (one of <code>cs</code>, <code>ds</code>, <code>se</code> — lower-case), <code>gpa</code> (0.00..4.00), <code>graduated</code> (bool). Public: constructor-ish <code>load</code>/make function, <code>id()</code>, <code>name()</code>, <code>gpa()</code>, <code>isGraduated()</code> observers (const), <code>setGpa(double)</code> and <code>graduate()</code> mutators.</li><li>FR2 — Invariants (stated in a class comment, enforced by the mutators):</li><li><code>0.00 ≤ gpa ≤ 4.00</code> — <code>setGpa</code> rejects out-of-range (returns bool);</li><li><code>graduated</code> never reverts; <code>graduate()</code> on a graduated student fails;</li><li><code>program</code> is fixed at construction; no mutator exists for it (absence of a setter <em>is</em> the design — say so in your report).</li><li>FR3 — <code>class Roster</code>: owns <code>std::vector&lt;Student&gt;</code>; <code>add</code>, <code>findById</code>, <code>count</code>, <code>report</code> — the only door to the records.</li><li>FR4 — Menu: <code>add / gpa / graduate / find / report / quit</code> (exact words).</li><li><code>add &lt;id&gt; &lt;name&gt; &lt;program&gt;</code>: adds with gpa 0.00; duplicate id → <code>duplicate id</code>, state unchanged.</li><li><code>gpa &lt;id&gt; &lt;value&gt;</code>: calls setGpa; <code>ok</code> or <code>rejected</code> (invariant), never a crash, never a partial write.</li><li><code>graduate &lt;id&gt;</code>: <code>ok</code> or <code>already graduated</code>.</li><li><code>report</code>: <code>students: &lt;n&gt; graduated: &lt;k&gt; gpa-mean: &lt;x.xx&gt;</code> over ACTIVE students only, then per-program counts <code>cs: &lt;n&gt; ds: &lt;n&gt; se: &lt;n&gt;</code>.</li><li>FR5 — File round-trip on start/quit (<code>roster.txt</code>, line grammar of your design — document it). Round-trip must lose nothing.</li></ul>
+<h2 id="4-non-functional-requirements">4. Non-functional requirements</h2>
+<ul><li>NFR1 — The menu can print but can never write a field directly: all writes go through mutators that enforce the invariants. A <code>gpa</code> of 9.0 must be <em>impossible</em> to store, not merely discouraged.</li><li>NFR2 — <code>Student</code> has no cin/cout; <code>Roster</code> has no cin/cout; the menu function does I/O and nothing else.</li><li>NFR3 — Compiles with the course contract, zero warnings.</li><li>NFR4 — No raw <code>new</code>/<code>delete</code>; vector ownership only (RAII default).</li><li>NFR5 — Every mutator returns a success bool; every caller checks it.</li></ul>
+<h2 id="5-suggested-data-structures">5. Suggested data structures</h2>
+<ul><li><code>class Roster { std::vector&lt;Student&gt; students; ... };</code> — composition (has-a), the M16 pattern. The roster's own invariant: ids unique — enforced by <code>add</code> checking <code>findById</code> first.</li><li>File line grammar suggestion: <code>id;name;program;gpa;graduated</code> — same trade-offs as P3 (reject titles/fields containing <code>;</code> at the door).</li><li>The mean over active students: double sum, single-cast division, graduated excluded — a policy, documented.</li></ul>
+<h2 id="6-user-interaction-design">6. User interaction design</h2>
+<pre><code class="language-text">loaded: 3 skipped: 0
+menu (add|gpa|graduate|find|report|quit): gpa S-1001 9.0
+rejected
+menu (add|gpa|graduate|find|report|quit): gpa S-1001 3.4
+ok
+menu (add|gpa|graduate|find|report|quit): graduate S-1001
+ok
+menu (add|gpa|graduate|find|report|quit): graduate S-1001
+already graduated
+menu (add|gpa|graduate|find|report|quit): report
+students: 3 graduated: 1 gpa-mean: 2.93
+cs: 1 ds: 1 se: 1
+menu (add|gpa|graduate|find|report|quit): quit
+saved: 3</code></pre>
+<h2 id="7-input-validation-requirements">7. Input validation requirements</h2>
+<ul><li>VR1 — <code>add</code> with unknown program word → <code>bad program</code>, nothing added.</li><li>VR2 — <code>add</code> with duplicate id → <code>duplicate id</code>, nothing added (roster invariant).</li><li>VR3 — <code>gpa</code> value 9.0, −0.5, <code>abc</code> → <code>rejected</code> / <code>bad input</code> respectively; state unchanged; the rejected value appears nowhere on disk after quit.</li><li>VR4 — Load-time: bad gpa, bad program, or bad flag lines are skipped and counted — an invariant-breaking line must never enter the roster.</li><li>VR5 — File write failure → <code>cannot save</code>, exit 2.</li></ul>
+<h2 id="8-testing-plan">8. Testing plan</h2>
+<table><thead><tr><th>#</th><th>Class</th><th>Scenario</th><th>Expected</th></tr></thead><tbody><tr><td>T1</td><td>invariant</td><td>gpa 4.00 then 4.01</td><td>first <code>ok</code>, second <code>rejected</code></td></tr><tr><td>T2</td><td>invariant</td><td>gpa 0.00 accepted</td><td><code>ok</code> (boundary is inclusive)</td></tr><tr><td>T3</td><td>invariant</td><td>graduate twice</td><td><code>ok</code> then <code>already graduated</code></td></tr><tr><td>T4</td><td>invariant</td><td>duplicate id</td><td><code>duplicate id</code>, count unchanged</td></tr><tr><td>T5</td><td>round-trip</td><td>3 records, quit, restart</td><td><code>loaded: 3 skipped: 0</code></td></tr><tr><td>T6</td><td>poisoned file</td><td>file with gpa 9.0 line</td><td><code>skipped: 1</code> — invariant holds from birth</td></tr><tr><td>T7</td><td>report policy</td><td>1 graduated (gpa 4.0) + 2 active (3.0, 3.5)</td><td>mean 3.25 over ACTIVE only; graduated count 1</td></tr><tr><td>T8</td><td>bad program</td><td><code>add S-1010 Xx math</code></td><td><code>bad program</code></td></tr><tr><td>T9</td><td>observer-only</td><td>attempt: does any public path write name/gpa directly?</td><td>code review: none exists</td></tr><tr><td>T10</td><td>write-protect</td><td>read-only dir on quit</td><td><code>cannot save</code>, exit 2</td></tr></tbody></table>
+<h2 id="9-milestones">9. Milestones</h2>
+<ol><li><strong>M1:</strong> <code>Student</code> class + invariants + unit-style demo main (no menu, no file) exercising T1–T3.</li><li><strong>M2:</strong> <code>Roster</code> + menu add/gpa/graduate + T4, T8.</li><li><strong>M3:</strong> file round-trip + poisoned-file rejection + T5, T6, T10.</li><li><strong>M4:</strong> report (per-program counts, active-only mean) + T7 + rubric pass.</li></ol>
+</ol>
+<h2 id="10-extension-ideas">10. Extension ideas ⚙</h2>
+<ul><li>⚙ Dean's-list report (active, gpa ≥ 3.5, sorted by gpa desc — your own sort).</li><li>⚙ Probation flag as a <em>derived</em> property (gpa &lt; 2.0 &amp;&amp; !graduated) — an observer, never stored (stored derived state is the classic corruption).</li><li>⚙ <code>remove</code> for records — and the design argument about whether records should ever disappear (audit trails).</li></ul>
+<h2 id="11-assessment-rubric-10-points-when-graded-as-homework">11. Assessment rubric (10 points when graded as homework)</h2>
+<table><thead><tr><th>Points</th><th>Line</th></tr></thead><tbody><tr><td>0–3</td><td>Class design: private state, guarded mutators, const observers, invariants stated (T1–T3, T9)</td></tr><tr><td>0–2</td><td>Roster invariants: unique ids, program whitelist (T4, T8)</td></tr><tr><td>0–2</td><td>File round-trip + poisoned-line rejection (T5, T6)</td></tr><tr><td>0–2</td><td>Report policies exact (active-only mean, counts) (T7)</td></tr><tr><td>0–1</td><td>I/O out of the classes (NFR2) + test table</td></tr></tbody></table>
+<p>Course-gate: does not compile with the contract → 0.</p>
+<h2 id="12-student-instructions">12. Student instructions</h2>
+<p>Work individually (pair by arrangement). Write the invariant comment FIRST — the rubric grades whether the code makes the invariant unbreakable, not whether the menu "mostly works". Deliberate attack pass: try to break your own invariant through every public path; document each attempt in <code>postmortem.md</code> (successful defenses count as your defect narrative). Deliverables: <code>records.cpp</code>, <code>test_table.md</code> (T1–T10), <code>postmortem.md</code> (≥ 1 defect narrative + the attack log), sample <code>roster.txt</code>. Zip as <code>p04_&lt;yourid&gt;.zip</code>.</p>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L22 · String Algorithms: Reverse, Palindrome, Counting, Word Processing · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/lectures/week_11/lecture_22.html">
+<link rel="stylesheet" href="../../styles.css">
+<script src="../../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../../index.html">Home</a></li><li><a href="../../overview.html">Overview</a></li><li><a href="../../outcomes.html">Outcomes</a></li><li><a href="../../schedule.html">Schedule</a></li><li><a href="../../lectures.html" aria-current="page">Lectures</a></li><li><a href="../../labs.html">Labs</a></li><li><a href="../../cases.html">Case Studies</a></li><li><a href="../../exercises.html">Exercises</a></li><li><a href="../../assignments.html">Assignments</a></li><li><a href="../../projects.html">Projects</a></li><li><a href="../../resources.html">Resources</a></li><li><a href="../../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="narrow">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../../index.html">Home</a> › L22 · String Algorithms: Reverse, Palindrome, Counting, Word Processing</nav>
+<h1 class="page-title">L22 · String Algorithms: Reverse, Palindrome, Counting, Word Processing</h1>
+<p><strong>Module 11 — Strings and Character Processing · Week 11 · Lecture 22 of 32 · 120 minutes</strong> <strong>Outcomes:</strong> CLO-6 · PF-11.3, PF-11.4 · <a href="../../outcomes.html">LEARNING_OUTCOMES.md</a> · <strong>Quiz 3 (Modules 9–10)</strong></p>
+<h2 id="learning-objectives">Learning objectives</h2>
+<ol><li>Implement per-character string algorithms — reverse (in place), palindrome check (two-pointer), vowel/word counting, case-normalization — with correct index bounds (PF-11.3).</li><li>Implement word-level processing: splitting on single spaces, longest-word scan, initials extraction, and search-and-replace of a whole word (PF-11.4).</li><li>Select character-level vs word-level strategies for a text task and justify via the structure of the data (PF-11.4).</li></ol>
+</ol>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>L21 (<code>std::string</code> operations, <code>&lt;cctype&gt;</code>); M9–M10 (two-pointer idea seeded by anti-diagonal traversal); L15 (functions with <code>const std::string&amp;</code> parameters).</p>
+<h2 id="concept-sequence">Concept sequence</h2>
+<ol><li>From operations to <em>algorithms over text</em> (naming the reusable shapes)</li><li>Reverse in place: swap symmetry (<code>i</code> vs <code>len-1-i</code>) — transpose echo</li><li>Palindrome via two pointers converging</li><li>Counting patterns: vowels, digits, words (state machines light)</li><li>Word-level processing: token scan, longest word, initials</li><li>Character-level vs word-level decision criteria</li></ol>
+</ol>
+<h2 id="teaching-topics-detailed">Teaching topics (detailed)</h2>
+<ul><li><strong>Reverse in place:</strong> <code>for i in 0..len/2: swap(s[i], s[len-1-i])</code> — direct analogy to L20's <code>j &gt; i</code> transpose argument; trace table for <code>"abcde"</code> (3 swaps) and <code>"abcd"</code> (2 swaps — middle untouched).</li><li><strong>Palindrome two-pointer:</strong> <code>is_pal(s)</code>: <code>i=0, j=len-1</code>; advance while <code>s[i]==s[j]</code>; early <code>false</code>; case-insensitive variant with <code>tolower</code> on both ends; empty and 1-char strings are palindromes (boundary cases from L12).</li><li><strong>Counting:</strong> vowels via <code>switch</code> group or <code>find</code> on <code>"aeiou"</code>; digits via <code>isdigit</code>; <strong>word count as space-transitions:</strong> count when <code>s[i] != ' ' &amp;&amp; (i == 0 || s[i-1] == ' ')</code> — the word-boundary pattern (robust against double spaces; contrast with naive <code>count ' '</code> + 1).</li><li><strong>Word-level scan:</strong> index-walking tokenizer (find space → extract token → jump index) producing longest word + initials; naming each token loop; <code>substr</code> + <code>find(' ', pos)</code> as the two-step token extraction.</li><li><strong>Strategy selection:</strong> character-level when the answer depends on individual chars (counting, case); word-level when it depends on <em>sequences</em> (longest word, search-replace); hybrid for initials (word-level structure, char-level ops).</li></ul>
+<h2 id="c-examples-required">C++ examples required</h2>
+<table><thead><tr><th>File</th><th>Role</th></tr></thead><tbody><tr><td><code>string_algorithms.cpp</code> ✅</td><td>reverse, palindrome (case-insensitive), vowel count, word count (boundary pattern), longest word — five labeled functions</td></tr><tr><td>(live) <code>initials_and_replace.cpp</code></td><td>initials extractor finished from L21 + whole-word replace</td></tr></tbody></table>
+<h2 id="common-student-misconceptions">Common student misconceptions</h2>
+<ul><li>"Palindrome needs a reversed copy to compare." (Two pointers avoid the copy — and the comparison logic is the same.)</li><li>"Words are separated by exactly one space." (Real text has doubles/tabs — the boundary pattern handles it; naive split fails L12's invalid-class tests.)</li><li>"<code>s.length()</code> inside the loop condition is recomputed and wrong." (It is recomputed but <em>correct</em>; the trap is mutating length mid-loop.)</li><li>"Case-insensitive compare means <code>toupper</code> one side." (Both sides.)</li></ul>
+<h2 id="conceptual-explanation-beginner-first">Conceptual explanation (beginner-first)</h2>
+<p>L21 gave you the string <em>vocabulary</em>; today we write string <em>algorithms</em> — small functions that transform or analyze text. Two new ideas do the heavy lifting.</p>
+<p>The first is the <strong>two-pointer walk</strong>. To reverse a string you don't need a second string: put one finger at each end, swap the characters your fingers touch, move the fingers toward each other, stop when they meet or cross. The same walk <em>is</em> the palindrome test: compare the characters at the two fingers as they advance; any mismatch disqualifies the string. One pattern, two classic algorithms — and no copying.</p>
+<p>The second is the <strong>boundary event</strong>. To count words correctly, don't count spaces — count <em>transitions</em> from "outside a word" to "inside one." A single boolean (<code>inWord</code>) tracks which side you're on; every space→letter crossing increments the counter. This state-machine idea correctly handles double spaces, tabs, and leading/trailing spaces — the cases where naive splitting fails (L12's invalid-class tests made concrete).</p>
+<p>Both are char-level scans — the same accumulate/count skeletons from Module 9, with a character predicate instead of a numeric one.</p>
+<h2 id="terminology-and-definitions">Terminology and definitions</h2>
+<table><thead><tr><th>Term</th><th>Definition</th></tr></thead><tbody><tr><td>Two-pointer walk</td><td>Index pair converging from both ends; swap or compare as they go</td></tr><tr><td>In-place reversal</td><td>Swapping within the same string — no second buffer</td></tr><tr><td>Palindrome</td><td>Reads the same both directions (test: two-pointer mismatch check)</td></tr><tr><td>Case-insensitive compare</td><td>Map both sides with <code>tolower</code> before comparing</td></tr><tr><td>Word boundary</td><td>A space→letter transition (start) or letter→space transition (end)</td></tr><tr><td>State machine</td><td>A variable (<code>inWord</code>) remembering which region you're scanning</td></tr><tr><td>Vowel count</td><td>COUNT-IF over characters with a predicate set</td></tr><tr><td>Longest word</td><td>FIND-FIRST/EXTREMES hybrid over boundary-delimited tokens</td></tr><tr><td>Character predicate</td><td>A bool-valued test applied per character</td></tr></tbody></table>
+<h2 id="syntax-and-c-examples">Syntax and C++ examples</h2>
+<pre><code class="language-cpp">// reverse in place — two pointers converge
+void reverse_in_place(std::string&amp; s)
+{
+    int left{0};
+    int right{static_cast&lt;int&gt;(s.size()) - 1};
+    while (left &lt; right)
+    {
+        char tmp{s[left]};
+        s[left]  = s[right];
+        s[right] = tmp;
+        ++left;
+        --right;
+    }
+}
+
+// palindrome, case-insensitive — same walk, comparing instead of swapping
+bool is_palindrome(const std::string&amp; s)
+{
+    int left{0};
+    int right{static_cast&lt;int&gt;(s.size()) - 1};
+    while (left &lt; right)
+    {
+        char a{static_cast&lt;char&gt;(std::tolower(static_cast&lt;unsigned char&gt;(s[left])))};
+        char b{static_cast&lt;char&gt;(std::tolower(static_cast&lt;unsigned char&gt;(s[right])))};
+        if (a != b)
+            return false;                // early exit: any mismatch ends it
+        ++left;
+        --right;
+    }
+    return true;
+}
+
+// word count — the boundary-event state machine
+int count_words(const std::string&amp; s)
+{
+    int words{0};
+    bool inWord{false};
+    for (char ch : s)
+    {
+        bool isSpace{std::isspace(static_cast&lt;unsigned char&gt;(ch)) != 0};
+        if (!isSpace &amp;&amp; !inWord)         // space→letter crossing
+            ++words;                     // a word begins
+        inWord = !isSpace;
+    }
+    return words;
+}
+
+// vowel count — COUNT-IF with a character predicate
+int count_vowels(const std::string&amp; s)
+{
+    int count{0};
+    for (char ch : s)
+    {
+        char lower{static_cast&lt;char&gt;(std::tolower(static_cast&lt;unsigned char&gt;(ch)))};
+        if (lower == &#x27;a&#x27; || lower == &#x27;e&#x27; || lower == &#x27;i&#x27; ||
+            lower == &#x27;o&#x27; || lower == &#x27;u&#x27;)
+            ++count;
+    }
+    return count;
+}</code></pre>
+<h2 id="line-by-line-code-explanation">Line-by-line code explanation</h2>
+<p><code>examples/string_algorithms.cpp</code> (five labeled functions):</p>
+<ol><li><code>reverse_in_place</code> — takes the string <strong>by reference</strong> (<code>std::string&amp;</code>): the caller's string is mutated, exactly like the in-place array functions of Module 9. The <code>left &lt; right</code> condition handles both even and odd lengths (middle char stays put in odd).</li><li><code>is_palindrome</code> — same two pointers, but it <em>compares</em> mapped copies (<code>tolower</code> on both sides) rather than mutating; <code>return false</code> inside the loop is the early-exit discipline from linear search.</li><li><code>count_words</code> — the state machine: <code>inWord</code> flips only on space/ non-space transitions; the counter increments only when entering a word, so <code>"a  b"</code> (two spaces) counts 2, never 3.</li><li><code>longest_word</code> — walks tokens between boundaries, tracking the best length (and its substring) so far: EXTREMES applied to text.</li><li><code>main</code> runs all five on a fixed suite including <code>""</code>, <code>"a"</code>, <code>"Racecar"</code>, and <code>"  one  two  "</code> — the boundary inputs from L12's test-plan discipline, now part of the example's own evidence table.</li></ol>
+</ol>
+<h2 id="output-prediction-questions-with-answers">Output prediction questions (with answers)</h2>
+<ol><li><code>reverse("abcd")</code> — which pairs swap? — (a,d) and (b,c); result <code>"dcba"</code>.</li><li><code>is_palindrome("Racecar")</code> — ? — true (r↔r, a↔a, c↔c; middle 'e' ignored); <code>is_palindrome("Race car")</code> — false (the space mismatches).</li><li><code>count_words("  hi   there ")</code> — ? — 2 (naive space-counting would say 6).</li><li><code>count_vowels("Programming Fundamentals")</code> — ? — 6 (o, a, i, u, a, a).</li><li><code>reverse("a")</code> and <code>reverse("")</code> — ? — unchanged; the loop body never runs (<code>left &lt; right</code> is immediately false) — the empty/one- element boundary case handled by the condition, not special code.</li></ol>
+</ol>
+<h2 id="common-errors-and-debugging-examples">Common errors and debugging examples</h2>
+<table><thead><tr><th>Error</th><th>Symptom</th><th>Fix</th></tr></thead><tbody><tr><td><code>right = s.size()</code> (not − 1)</td><td>First swap touches <code>s[size()]</code> — UB</td><td><code>static_cast&lt;int&gt;(s.size()) - 1</code></td></tr><tr><td><code>while (left &lt;= right)</code> in reverse</td><td>Middle char swapped with itself — harmless here, wrong habit</td><td><code>left &lt; right</code></td></tr><tr><td>Case-sensitive palindrome</td><td>"Racecar" fails</td><td><code>tolower</code> both characters</td></tr><tr><td>Counting spaces instead of words</td><td>Double spaces inflate the count</td><td>Boundary-event state machine</td></tr><tr><td>Forgetting <code>&amp;</code> in the parameter</td><td>Reverse works on a <em>copy</em> — caller sees no change</td><td><code>std::string&amp;</code> for in-place; <code>const std::string&amp;</code> for read-only</td></tr><tr><td>Mutating <code>s</code> while iterating over it</td><td>Iterator/index invalidation surprises</td><td>Trace first; know when you mutate</td></tr></tbody></table>
+<h2 id="classroom-demonstrations">Classroom demonstrations</h2>
+<ol><li><strong>Fingers on paper:</strong> two student volunteers are <code>left</code>/<code>right</code> on a wall-sized string; three swap rounds walk the reversal physically.</li><li><strong>The naive counter fails:</strong> run a space-counting <code>count_words</code> on <code>"one  two"</code> (answer 3), then the boundary version (answer 2) — the state machine earns its keep.</li><li><strong>Early exit on film:</strong> add a print inside <code>is_palindrome</code>'s mismatch branch — the class sees the algorithm bail at the first difference.</li></ol>
+</ol>
+<h2 id="guided-student-activities">Guided student activities</h2>
+<p><strong>Algorithm relay (20 min):</strong> four stations (reverse, palindrome, word count, longest word); each team writes the function at station 1, traces it on a given input at station 2, adversarially tests another team's at station 3; boundary inputs (<code>""</code>, <code>"a"</code>, <code>"  a  "</code>) are the ammo.</p>
+<h2 id="practice-problems">Practice problems</h2>
+<ul><li>Implement <code>reverse_in_place</code>, <code>is_palindrome</code> (case-insensitive), <code>count_words</code> (double-space-proof), <code>longest_word</code>.</li><li>Trace <code>is_palindrome("Racecar")</code> — show pointer positions per iteration.</li><li>Fix a naive word counter on <code>"one  two"</code> (two spaces).</li><li>(🟡 stretch) Sentence capitalizer: capitalize the first letter of every word — hybrid strategy justification required.</li></ul>
+<h2 id="summary">Summary</h2>
+<p>Two new patterns unlock text algorithms: the two-pointer walk (reversal and palindrome testing without copies) and the boundary-event state machine (word counting that survives messy spacing). Both are the Module 5/9 skeletons with character predicates — and in-place string functions need <code>std::string&amp;</code>, the reference parameter previewing Module 13. Next (L23): searching arrays properly — linear vs binary.</p>
+<h2 id="exit-ticket-formative-assessment">Exit ticket / formative assessment</h2>
+<ol><li>Trace: <code>reverse("abcd")</code> — which pairs swap?</li><li><code>count_words("  hi   there ")</code> — naive vs boundary-pattern answers?</li><li>Which strategy for "count two-letter words"? (Word-level — justify in a clause.)</li></ol>
+</ol>
+<h2 id="estimated-time-allocation-120-min">Estimated time allocation (120 min)</h2>
+<table><thead><tr><th>Segment</th><th>Minutes</th></tr></thead><tbody><tr><td>Recall (string ops quiz)</td><td>10</td></tr><tr><td><strong>Quiz 3 (Modules 9–10, 15 min)</strong></td><td>15</td></tr><tr><td>Reverse + palindrome (two-pointer)</td><td>30</td></tr><tr><td>Break</td><td>10</td></tr><tr><td>Counting + word-level processing + strategy selection</td><td>30</td></tr><tr><td>Algorithm relay</td><td>15</td></tr><tr><td>Exit ticket + Module 12 preview</td><td>10</td></tr></tbody></table>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

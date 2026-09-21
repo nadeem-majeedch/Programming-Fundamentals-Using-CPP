@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Assignment 1 · Course Record Card — Variables, I/O, Arithmetic · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/assignments/assignment_01.html">
+<link rel="stylesheet" href="../styles.css">
+<script src="../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../index.html">Home</a></li><li><a href="../overview.html">Overview</a></li><li><a href="../outcomes.html">Outcomes</a></li><li><a href="../schedule.html">Schedule</a></li><li><a href="../lectures.html">Lectures</a></li><li><a href="../labs.html">Labs</a></li><li><a href="../cases.html">Case Studies</a></li><li><a href="../exercises.html">Exercises</a></li><li><a href="../assignments.html" aria-current="page">Assignments</a></li><li><a href="../projects.html">Projects</a></li><li><a href="../resources.html">Resources</a></li><li><a href="../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="narrow">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../index.html">Home</a> › Assignment 1 · Course Record Card — Variables, I/O, Arithmetic</nav>
+<h1 class="page-title">Assignment 1 · Course Record Card — Variables, I/O, Arithmetic</h1>
+<p><strong>Modules 1–2 (L01–L04) · 40 marks · due end of Week 3</strong> Outcomes: CLO-1, CLO-2 (PF-1.x, PF-2.x)</p>
+<p>A department office prints student record cards. You will produce one card from keyboard input, with correctly typed and formatted numbers.</p>
+<h2 id="requirements">Requirements</h2>
+<ol><li>Read, in this order: student name (single word), age (int), lab grade, midterm grade, final grade (doubles, 0–100).</li><li>Print a card exactly in this shape (example values <code>Ayesha 20 88 79 91</code>):</li></ol>
+</ol>
+<pre><code>=== COURSE RECORD ===
+name   : Ayesha
+age    : 20
+lab    : 88.00
+midterm: 79.00
+final  : 91.00
+average: 86.00 (weighted: lab 25% / midterm 35% / final 40%)</code></pre>
+<ol><li>The weighted average must use the stated percentages and print with exactly 2 decimals (<code>std::fixed</code>, <code>std::setprecision(2)</code>).</li><li>If any read fails (EOF or non-numeric), print <code>bad input</code> and exit with code 1.</li><li>Grades outside 0–100: print <code>bad input</code> and exit with code 1 (no card).</li></ol>
+</ol>
+<h2 id="constraints">Constraints</h2>
+<ul><li>Use <code>int</code> for age only; grades are <code>double</code>.</li><li>The weighted average must be computed in one expression with a <code>static_cast&lt;double&gt;</code> somewhere it is needed.</li><li>No functions beyond <code>main</code> are required yet (decomposition is graded from A3 onward).</li></ul>
+<h2 id="sample-runs">Sample runs</h2>
+<pre><code class="language-text">input:  Ayesha 20 88 79 91
+output: (card above; average: 86.00)</code></pre>
+<p>Check: 88·0.25 + 79·0.35 + 91·0.40 = 22 + 27.65 + 36.4 = 86.05 → the sample card should print <code>86.05</code>; if your program prints <code>86.00</code> you have an integer-division or precedence defect.</p>
+<h2 id="deliverables">Deliverables</h2>
+<ol><li><code>record_card.cpp</code> — compiles with the course contract, zero warnings.</li><li><code>test_table.md</code> — at least: two typical runs, one boundary (grade 0 and 100), one invalid grade, one failed read (EOF). Pre-compute expected values <em>before</em> running (<code>testing.md</code> rubric).</li><li><code>postmortem.md</code> — one real defect you hit: symptom → hypothesis → test → fix (<code>explanation.md</code> rubric, 10 of the 40 marks).</li></ol>
+</ol>
+<h2 id="submission">Submission</h2>
+<p>Zip <code>record_card.cpp</code>, <code>test_table.md</code>, <code>postmortem.md</code>. Naming per <code>../../labs/resources/submission_template.md</code>. Late policy per syllabus.</p>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DS Exercises · DS_part2 · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/exercises/ds/DS_part2.html">
+<link rel="stylesheet" href="../../styles.css">
+<script src="../../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../../index.html">Home</a></li><li><a href="../../overview.html">Overview</a></li><li><a href="../../outcomes.html">Outcomes</a></li><li><a href="../../schedule.html">Schedule</a></li><li><a href="../../lectures.html">Lectures</a></li><li><a href="../../labs.html">Labs</a></li><li><a href="../../cases.html">Case Studies</a></li><li><a href="../../exercises.html" aria-current="page">Exercises</a></li><li><a href="../../assignments.html">Assignments</a></li><li><a href="../../projects.html">Projects</a></li><li><a href="../../resources.html">Resources</a></li><li><a href="../../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../../index.html">Home</a> › DS Exercises · DS_part2</nav>
+<h1 class="page-title">DS Exercises · DS_part2</h1>
+<p>The intermediate band: data with defects, statistics derived from other statistics, and honest tie handling.</p>
+<hr>
+<h3 id="pf-ds-07-range-check-filter">PF-DS-07 · Range-Check Filter</h3>
+<p><strong>Level:</strong> Foundational · <strong>Lectures:</strong> L07/L09 · <strong>Prerequisites:</strong> DS-02 <strong>Problem:</strong> Read n, then n integers (sensor values). Print the <em>kept</em> values on one line (those in −50..60 inclusive), then <code>dropped: &lt;k&gt;</code>. <strong>Formula first:</strong> predicate <code>keep(v) ⇔ −50 ≤ v ≤ 60</code>; kept values compact left-to-right into the same array (no second array). <strong>Edge cases:</strong> nothing kept (print an empty line, then <code>dropped: n</code>); all kept (<code>dropped: 0</code>); n = 0. <strong>Sample:</strong> <code>6 21 999 -7 60 61 0</code> → kept line <code>21 -7 60 0</code> / <code>dropped: 2</code> <strong>Hints:</strong> this is the <em>filter-compact</em> half of PF-E-072's remove — here the rule is physical plausibility, not an exact value.</p>
+<hr>
+<h3 id="pf-ds-08-variance-and-standard-deviation">PF-DS-08 · Variance and Standard Deviation</h3>
+<p><strong>Level:</strong> Intermediate · <strong>Lecture:</strong> L17 · <strong>Prerequisites:</strong> DS-05 <strong>Problem:</strong> Read n then n doubles. Print <code>mean</code> (2 dp), <code>variance</code> (2 dp, population form), <code>stddev</code> (2 dp). <strong>Formula first:</strong> <code>var = Σ(xi − mean)² / n</code>, <code>std = √var</code>. Use the two-pass form (compute mean first, then the squared deviations). State in a comment why the one-pass "sum of squares" shortcut (<code>Σx²/n − mean²</code>) is numerically riskier for large values. <strong>Edge cases:</strong> n = 1 → variance 0.00, stddev 0.00 (define it, print it, do not crash); constant data. <strong>Sample:</strong> <code>6 2 4 4 4 9 4</code> → mean 4.50, variance <strong>4.58</strong>, stddev <strong>2.14</strong> (population form; verify the mean by hand first: 27/6 = 4.5). <strong>Hints:</strong> <code>&lt;cmath&gt;</code> <code>sqrt</code> is allowed (taught with <code>isPrime</code>'s √n bound); sums of squares of doubles stay double; no integer casts here.</p>
+<hr>
+<h3 id="pf-ds-09-missing-data-report-file-na-field">PF-DS-09 · Missing-Data Report (file, NA field)</h3>
+<p><strong>Level:</strong> Intermediate · <strong>Lecture:</strong> L29 · <strong>Prerequisites:</strong> DS-06 <strong>Problem:</strong> File <code>readings_na.txt</code> holds lines <code>station value</code>, where value may be a number or the token <code>NA</code>. Print <code>loaded</code>, <code>missing</code>, <code>invalid</code> (non-numeric or wrong field count), then mean of loaded values (1 dp). NA is a <em>recorded gap</em> (its own class) — never mean it, never call it invalid. <strong>Formula first:</strong> mean over loaded only; class counts must sum to line count (<code>loaded + missing + invalid = lines</code>) — assert it in a comment and check by hand in the test table. <strong>Edge cases:</strong> empty file (<code>all zeros, mean n/a</code>, exit 0); missing file → exit 2; blank lines ignored (not counted in any class). <strong>Dataset:</strong> <a href="datasets/readings_na.txt">datasets/readings_na.txt</a> (15 non-blank lines: 11 loaded, 2 missing, 2 invalid; mean 21.05 — and the class identity <code>11 + 2 + 2 = 15</code> holds, which your test table must confirm). <strong>Hints:</strong> getline + istringstream; <code>token == "NA"</code> before numeric parse.</p>
+<hr>
+<h3 id="pf-ds-10-weighted-mean">PF-DS-10 · Weighted Mean</h3>
+<p><strong>Level:</strong> Intermediate · <strong>Lectures:</strong> L13–L17 · <strong>Prerequisites:</strong> DS-03 <strong>Problem:</strong> Read n, then n pairs <code>score weight</code> (weights ≥ 0, at least one positive). Print the weighted mean (2 dp). <strong>Formula first:</strong> <code>weighted mean = Σ(xi·wi) / Σwi</code> — NOT <code>Σxi/n</code>. The denominator is the <em>weight total</em>, not the count; getting this wrong is the whole point of the exercise. <strong>Edge cases:</strong> all weights zero → <code>no weights</code> (exit 0, no division!); a weight of exactly 0 (legal: the score is ignored by the math — verify it is). <strong>Sample:</strong> <code>3 90 2 80 1 70 1</code> → <code>82.50</code> (not 82.75, and not the unweighted 80!); with a zero weight <code>3 90 0 80 1 70 1</code> → <code>82.50</code> still (the zero-weight pair contributes to neither numerator nor denominator). <strong>Hints:</strong> accumulate <code>sumXW</code> and <code>sumW</code> in one loop; both double (scores may be non-integer later).</p>
+<hr>
+<h3 id="pf-ds-11-sort-and-rank">PF-DS-11 · Sort and Rank</h3>
+<p><strong>Level:</strong> Intermediate · <strong>Lecture:</strong> L24 · <strong>Prerequisites:</strong> DS-05 <strong>Problem:</strong> Read n then n scores. After sorting ascending, print <code>rank of &lt;value&gt;</code> queries? No — print, for the ORIGINAL order, each score's rank band (1-based position in the sorted list, smallest rank on ties). <strong>Formula first:</strong> <code>rank(x) = 1 + |{y : y &lt; x}|</code> (competition ranking: <code>2 2 4</code> → ranks <code>1 1 3</code>). <strong>Edge cases:</strong> all equal (every rank 1); single element (rank 1). <strong>Input:</strong> n, n values, then queries? Keep it programmatic: after sorting, print two lines: sorted values and their rank bands, space-separated. <strong>Sample:</strong> input <code>5 70 85 85 60 90</code> → sorted <code>60 70 85 85 90</code> / ranks <code>1 2 3 3 5</code> <strong>Hints:</strong> ranks come from <em>positions</em>; a value's rank can be found while sorting or by counting smaller elements — either, stated in a comment. <strong>Avoid duplicating:</strong> PF-CS-059 (stable ranking with ties) was a design study; this is a concrete implementation with a precise rank formula.</p>
+<hr>
+<h3 id="pf-ds-12-mode-with-honest-ties">PF-DS-12 · Mode with Honest Ties</h3>
+<p><strong>Level:</strong> Intermediate · <strong>Lecture:</strong> L18 · <strong>Prerequisites:</strong> DS-06 <strong>Problem:</strong> Read n then n integers in 1..100. Print <code>mode: &lt;v&gt;</code> and, if several values share the maximum frequency, print ALL of them ascending on a second line <code>tied: ...</code> (omit the line if unique). Also print <code>freq: &lt;k&gt;</code>. <strong>Formula first:</strong> <code>mode = argmax_c f(c)</code>; ties are reported, not hidden — an honest report lists every maximizer. <strong>Edge cases:</strong> every value distinct (max frequency 1 — a weak claim; print it anyway with <code>tied:</code> listing all n values? No: if all frequencies are 1, print <code>mode: none</code> — say why in a comment); n = 0. <strong>Sample:</strong> <code>9 4 6 4 7 6 4 7 7 9</code> → counts 4:3, 6:2, 7:3, 9:1 → <code>mode: 4</code> / <code>tied: 4 7</code> / <code>freq: 3</code> <strong>Hints:</strong> counts array of 100 slots with index shift; two scans: find max frequency, then list maximizers ascending.</p>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

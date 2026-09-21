@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L29 · Text Files with `ifstream`/`ofstream`: Reading, Writing, Appending, EOF · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/lectures/week_15/lecture_29.html">
+<link rel="stylesheet" href="../../styles.css">
+<script src="../../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../../index.html">Home</a></li><li><a href="../../overview.html">Overview</a></li><li><a href="../../outcomes.html">Outcomes</a></li><li><a href="../../schedule.html">Schedule</a></li><li><a href="../../lectures.html" aria-current="page">Lectures</a></li><li><a href="../../labs.html">Labs</a></li><li><a href="../../cases.html">Case Studies</a></li><li><a href="../../exercises.html">Exercises</a></li><li><a href="../../assignments.html">Assignments</a></li><li><a href="../../projects.html">Projects</a></li><li><a href="../../resources.html">Resources</a></li><li><a href="../../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="narrow">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../../index.html">Home</a> › L29 · Text Files with `ifstream`/`ofstream`: Reading, Writing, Appending, EOF</nav>
+<h1 class="page-title">L29 · Text Files with `ifstream`/`ofstream`: Reading, Writing, Appending, EOF</h1>
+<p><strong>Module 15 — File Handling and Error Management · Week 15 · Lecture 29 of 32 · 120 minutes</strong> <strong>Outcomes:</strong> CLO-8 · PF-15.1, PF-15.2 · <a href="../../outcomes.html">LEARNING_OUTCOMES.md</a></p>
+<h2 id="learning-objectives">Learning objectives</h2>
+<ol><li>Open text files for reading (<code>std::ifstream</code>) and writing/appending (<code>std::ofstream</code> with <code>std::ios::app</code>), always checking open success before use (PF-15.1).</li><li>Read files in all three canonical ways — token (<code>&gt;&gt;</code>), full line (<code>getline</code>), and record (token + getline combination) — and write formatted records that round-trip (PF-15.1, PF-15.2).</li><li>Implement the two correct EOF-loop idioms and explain why <code>while (!in.eof())</code> with an in-body read is wrong (PF-15.2).</li></ol>
+</ol>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>L04 (stream state, <code>clear</code>/<code>ignore</code>); L21 (<code>getline</code>, the leftover-newline trap — now solved systematically); L28 (struct records — the data being persisted); M9 (arrays for loaded data).</p>
+<h2 id="concept-sequence">Concept sequence</h2>
+<ol><li>Why files: persistence beyond <code>main</code>'s lifetime (capstone requirement)</li><li><code>&lt;fstream&gt;</code>: ifstream/ofstream; open modes; open-check discipline</li><li>Reading: token loops, line loops, record parsing</li><li>Writing &amp; appending: <code>ofstream</code>, <code>std::ios::app</code>; round-trip thinking</li><li>EOF: the two correct idioms and the one classic bug</li><li>Connecting to the capstone: load/save functions for records</li></ol>
+</ol>
+<h2 id="teaching-topics-detailed">Teaching topics (detailed)</h2>
+<ul><li><strong>Open/check discipline:</strong> <code>std::ifstream in{"data.txt"}; if (!in) { ... error path; }</code> — the missing-open check is <em>the</em> Module 15 style crime; output side: <code>std::ofstream out{"report.txt"};</code> (truncates!) vs <code>std::ofstream log{"log.txt", std::ios::app};</code> (appends) — the truncation surprise demonstrated on a file the class cares about.</li><li><strong>Token reading:</strong> <code>while (in &gt;&gt; word)</code> — whitespace-delimited, same semantics as <code>cin &gt;&gt;</code> (L04); counting words/numbers; numeric files (scores) aggregated with M18 accumulator patterns.</li><li><strong>Line reading:</strong> <code>while (std::getline(in, line))</code> — full lines with spaces; line counting, longest line, substring search per line (L21 skills at file scale).</li><li><strong>Record parsing:</strong> fixed-format lines (<code>name,score</code>) — extract with <code>getline(in, name, ',')</code> then <code>in &gt;&gt; score</code> + <code>in.ignore()</code> — the delimiter-getline pattern; building a <code>std::vector&lt;Student&gt;</code> from a file (L28's roster becomes persistent).</li><li><strong>EOF idioms:</strong> correct: <code>while (in &gt;&gt; x)</code> / <code>while (getline(in, line))</code> — the read <em>is</em> the test; wrong: <code>while (!in.eof()) { in &gt;&gt; x; ... }</code> — reads the last value twice (the classic bug, demonstrated); why: eof sets only <em>after</em> a failed read.</li><li><strong>Round-trip rule:</strong> whatever <code>save</code> writes, <code>load</code> must parse — demonstrated with a save format that breaks its own loader (delimiter inside a name), then fixed (documented format contract).</li></ul>
+<h2 id="c-examples-required">C++ examples required</h2>
+<table><thead><tr><th>File</th><th>Role</th></tr></thead><tbody><tr><td><code>file_read_write.cpp</code> ✅</td><td>token read, line read, append log, record save/load round-trip with open checks throughout</td></tr><tr><td>(live) <code>roster_persist.cpp</code></td><td>L28's roster gains <code>save_roster</code>/<code>load_roster</code> — the capstone skeleton completes</td></tr></tbody></table>
+<h2 id="common-student-misconceptions">Common student misconceptions</h2>
+<ul><li>"Opening for output is safe." (It truncates an existing file — data loss shown live; append mode exists for a reason.)</li><li>"<code>eof()</code> predicts the next read." (It reports the <em>last</em> one; the read-as-test idiom is the fix.)</li><li>"Files are checked by <code>if (file == NULL)</code>." (Stream truthiness / <code>is_open()</code> — and the check happens <em>right after open</em>, every time.)</li><li>"Reading numbers from text requires parsing bytes." (Streams convert text→numbers automatically; bad tokens fail the stream — L04 recovery applies at file scale.)</li></ul>
+<h2 id="conceptual-explanation-beginner-first">Conceptual explanation (beginner-first)</h2>
+<p>Variables live and die with the program. Close the terminal and the roster, the scores, the diary — all gone. <strong>Files</strong> make data outlive the program: same streams you already know (<code>cin</code>/<code>cout</code> are streams; a file is just another stream connected to disk), so the reading and writing skills transfer directly.</p>
+<p>The workflow has four stations, each with a check: <strong>open</strong> (does the file exist / is it writable?), <strong>read or write</strong> (same <code>&gt;&gt;</code>, <code>getline</code>, and <code>&lt;&lt;</code> you've used all semester), <strong>close</strong> (or let the stream object die at scope exit — its destructor closes, another RAII echo from L27), and <strong>verify</strong> (stream state tells you whether the last operation worked).</p>
+<p>Two traps deserve their fame. Opening a file for output <strong>truncates</strong> it instantly — open for append (<code>std::ios::app</code>) if you mean to add. And the <strong>eof trap</strong>: testing <code>while (!in.eof())</code> reads one line too far, because eof becomes true only <em>after</em> a read fails. The course idiom — reading as the loop condition (<code>while (std::getline(in, line))</code>) — sidesteps the whole trap: the read both attempts and reports.</p>
+<h2 id="terminology-and-definitions">Terminology and definitions</h2>
+<table><thead><tr><th>Term</th><th>Definition</th></tr></thead><tbody><tr><td><code>ifstream</code></td><td>Input file stream — reads a file</td></tr><tr><td><code>ofstream</code></td><td>Output file stream — writes (truncates by default!)</td></tr><tr><td><code>fstream</code></td><td>Both directions; modes selected by flags</td></tr><tr><td>Open modes</td><td><code>std::ios::app</code> (append), <code>std::ios::trunc</code> (default for output)</td></tr><tr><td><code>is_open()</code> / stream-as-bool</td><td>The two accepted ways to check an open succeeded</td></tr><tr><td>Read-as-test idiom</td><td><code>while (getline(in, line))</code> — attempt and check in one</td></tr><tr><td>eof trap</td><td>eof() reflects the <em>previous</em> read; testing it first over-reads</td></tr><tr><td>Record round-trip</td><td>Save structured records, load them back identically</td></tr><tr><td>Text format contract</td><td>The exact delimiter/order rule a loader can parse</td></tr><tr><td>RAII close</td><td>The stream's destructor closes the file at scope exit</td></tr></tbody></table>
+<h2 id="syntax-and-c-examples">Syntax and C++ examples</h2>
+<pre><code class="language-cpp">#include &lt;fstream&gt;
+
+// writing: output mode TRUNCATES an existing file
+std::ofstream out{&quot;scores.txt&quot;};
+if (!out)                          // check immediately, every time
+{
+    std::cerr &lt;&lt; &quot;cannot open scores.txt for writing\n&quot;;
+    return 1;
+}
+out &lt;&lt; 92 &lt;&lt; &#x27; &#x27; &lt;&lt; 87 &lt;&lt; &#x27; &#x27; &lt;&lt; 74 &lt;&lt; &#x27;\n&#x27;;
+// out closes automatically at scope exit (RAII)
+
+// appending: keeps existing content
+std::ofstream logFile{&quot;diary.txt&quot;, std::ios::app};
+logFile &lt;&lt; &quot;new entry\n&quot;;
+
+// reading token-by-token — read-as-test, no eof() in sight
+std::ifstream in{&quot;scores.txt&quot;};
+if (!in) { std::cerr &lt;&lt; &quot;missing scores.txt\n&quot;; return 1; }
+int score{};
+while (in &gt;&gt; score)                // attempt+check in one condition
+    std::cout &lt;&lt; score &lt;&lt; &#x27; &#x27;;
+
+// reading line-by-line
+std::ifstream lines{&quot;diary.txt&quot;};
+std::string line;
+while (std::getline(lines, line))
+    std::cout &lt;&lt; line &lt;&lt; &#x27;\n&#x27;;</code></pre>
+<h2 id="line-by-line-code-explanation">Line-by-line code explanation</h2>
+<p><code>examples/file_read_write.cpp</code> (four sections, open checks throughout):</p>
+<ol><li><strong>Token write/read:</strong> writes three ints, closes, reopens, reads with <code>while (in &gt;&gt; score)</code> — the stream converts text back to numbers automatically; a non-numeric token fails the stream and ends the loop (the L04 input-state story, at file scale).</li><li><strong>Line read:</strong> <code>getline</code> loop preserves spaces — for record-ish text; demonstrates the while-condition idiom and prints a numbered report.</li><li><strong>Append log:</strong> opens twice — once in default (truncating) mode, once in append — and the file's before/after contents are printed: truncation shown, not asserted.</li><li><strong>Record round-trip:</strong> saves a mini-roster as <code>name,score</code> lines, then loads it back into a <code>vector&lt;Student&gt;</code>-style structure and prints it — the format contract (comma delimiter, one record per line, name has no commas) stated in a comment both functions reference.</li></ol>
+</ol>
+<h2 id="output-prediction-questions-with-answers">Output prediction questions (with answers)</h2>
+<ol><li>Open <code>diary.txt</code> (5 entries) for <em>output</em> and write 1 line — how many entries remain? — 1: output mode truncated the file.</li><li><code>while (!in.eof()) in &gt;&gt; x;</code> with trailing newline — ? — The last value is processed twice: eof is checked before the failing read.</li><li>Reading <code>92 87 abc 74</code> with <code>while (in &gt;&gt; x)</code> — which scores print? — 92, 87; the <code>abc</code> fails the stream, so 74 is never reached.</li><li>Two runs of the append program — how many <code>new entry</code> lines? — 2: append preserves.</li><li>What if the load function's contract expects <code>,</code> but the file used spaces? — Every record parses wrong (name absorbs the digits) — format contracts must match exactly.</li></ol>
+</ol>
+<h2 id="common-errors-and-debugging-examples">Common errors and debugging examples</h2>
+<table><thead><tr><th>Error</th><th>Symptom</th><th>Fix</th></tr></thead><tbody><tr><td>No open check</td><td>Reads fail silently — empty results</td><td><code>if (!in)</code> right after construction</td></tr><tr><td>Output-mode data loss</td><td>An existing file's contents vanish</td><td>Append mode (<code>std::ios::app</code>) for adding</td></tr><tr><td>eof() as the loop condition</td><td>Last record double-processed</td><td>Read-as-test: <code>while (getline(in, line))</code></td></tr><tr><td>Mixed <code>&gt;&gt;</code> and <code>getline</code> on files</td><td>getline gets leftover newline</td><td><code>in.ignore(...)</code> after token reads (L04 rule)</td></tr><tr><td>Format contract drift</td><td>Loader mis-parses every record</td><td>Comment the contract at both ends; round-trip test</td></tr><tr><td>Hardcoded absolute paths</td><td>Works on one machine only</td><td>Relative paths / project directory</td></tr></tbody></table>
+<h2 id="classroom-demonstrations">Classroom demonstrations</h2>
+<ol><li><strong>Truncation horror:</strong> create a 5-line diary, run the output-mode writer, <code>type</code>/<code>cat</code> the file — one line remains. Append mode rerun: six lines. Never forgotten afterwards.</li><li><strong>The eof double-read:</strong> run the eof-bug loop with a printed counter — the phantom extra iteration appears; replace with the read-as-test idiom and it vanishes.</li><li><strong>Round-trip ceremony:</strong> save the roster, show the raw text file, load it in a fresh run — data outlives the program, visibly.</li></ol>
+</ol>
+<h2 id="guided-student-activities">Guided student activities</h2>
+<p><strong>Round-trip sabotage (20 min):</strong> pairs receive a save function and a load function with a mismatched format contract (delimiter clash, missing ignore, wrong order); they must (1) break a supplied data file, (2) fix the contract, (3) prove the round-trip with before/after file dumps.</p>
+<h2 id="practice-problems">Practice problems</h2>
+<ul><li>Write <code>count_numbers(in_file)</code> and <code>longest_line(in_file)</code> with open checks.</li><li>Record loader: <code>students.txt</code> (name,score lines) → vector → average (full pipeline).</li><li>Append-mode diary program; verify truncation vs append on the same file.</li><li>(🟡 stretch) Explain exactly why the eof-bug double-reads, with a trace of stream states per iteration.</li></ul>
+<h2 id="summary">Summary</h2>
+<p>Files are streams to disk: open (and check!), read/write with the familiar operators, close by RAII. The two famous traps — truncating output mode and the eof double-read — both have one-line course idioms (<code>std::ios::app</code>; read-as-test). Record round-trips make data outlive the program and complete the capstone's persistence piece. Next (L30): the full input-validation and error-handling toolkit.</p>
+<h2 id="exit-ticket-formative-assessment">Exit ticket / formative assessment</h2>
+<ol><li>Write the open-and-check idiom for reading <code>data.txt</code>.</li><li>Which idiom counts lines correctly — <code>while (getline(...))</code> or <code>while (!eof())</code>? Why in one clause?</li><li>What flag appends instead of truncates?</li></ol>
+</ol>
+<h2 id="estimated-time-allocation-120-min">Estimated time allocation (120 min)</h2>
+<table><thead><tr><th>Segment</th><th>Minutes</th></tr></thead><tbody><tr><td>Recall (structs quiz) + persistence motivation</td><td>10</td></tr><tr><td>Open/check + modes + reading trio</td><td>40</td></tr><tr><td>Break</td><td>10</td></tr><tr><td>EOF idioms + record round-trip + capstone persistence</td><td>35</td></tr><tr><td>Round-trip sabotage activity</td><td>20</td></tr><tr><td>Exit ticket + L30 preview</td><td>5</td></tr></tbody></table>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

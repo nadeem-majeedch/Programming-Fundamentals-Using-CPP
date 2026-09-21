@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Problem-Solving Case Studies · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/cases.html">
+<link rel="stylesheet" href="styles.css">
+<script src="site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="index.html">Home</a></li><li><a href="overview.html">Overview</a></li><li><a href="outcomes.html">Outcomes</a></li><li><a href="schedule.html">Schedule</a></li><li><a href="lectures.html">Lectures</a></li><li><a href="labs.html">Labs</a></li><li><a href="cases.html" aria-current="page">Case Studies</a></li><li><a href="exercises.html">Exercises</a></li><li><a href="assignments.html">Assignments</a></li><li><a href="projects.html">Projects</a></li><li><a href="resources.html">Resources</a></li><li><a href="instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="index.html">Home</a> › Problem-Solving Case Studies</nav>
+<h1 class="page-title">Problem-Solving Case Studies</h1>
+<p><strong>108 case studies</strong> for the course's signature teaching activity: the case method for programming. The instructor projects one case, students think for ~5 minutes, the class discusses approaches, and only then is the worked solution revealed.</p>
+<p><strong>108 cases · 5 difficulty tiers · every case tied to a lecture (L01–L32) · projector files contain NO solutions.</strong></p>
+<p>Worked solutions, discussion points, and grading notes live in the instructor-only area — see <code>instructor/case_studies/README.md</code> (restricted content; students should not open it).</p>
+<h2 id="how-a-case-runs-in-class-15-minutes">How a case runs in class (≈15 minutes)</h2>
+<table><thead><tr><th>Phase</th><th>Time</th><th>What happens</th></tr></thead><tbody><tr><td>Project</td><td>0:00</td><td>Instructor shows the case from the projector file</td></tr><tr><td>Think</td><td>5 min</td><td>Students work <strong>on paper</strong> — no keyboards, no compiler</td></tr><tr><td>Discuss</td><td>5–7 min</td><td>Students propose approaches; instructor routes, does not correct</td></tr><tr><td>Reveal</td><td>2–3 min</td><td>Worked solution + discussion points from the instructor file</td></tr><tr><td>Extend</td><td>homework</td><td>The extension challenge becomes an optional task</td></tr></tbody></table>
+<p>The paper-only rule is the point: it forces <em>planning before typing</em> — the single most valuable habit this activity trains.</p>
+<h2 id="case-anatomy">Case anatomy</h2>
+<p>Every projector case contains exactly these fields:</p>
+<ul><li><strong>Case ID</strong> (<code>PF-CS-NNN</code>) and <strong>title</strong></li><li><strong>Difficulty tier</strong> (1–5, see below)</li><li><strong>Related lecture / module</strong> (<code>L07</code> · Module 4)</li><li><strong>Context</strong> — a real-world or computational scenario</li><li><strong>Problem statement</strong> — unambiguous, no hidden requirements</li><li><strong>Input / Output</strong> — exact formats</li><li><strong>Constraints</strong> — explicit ranges so edge cases are fair game</li><li><strong>Thinking questions</strong> — 3–4 prompts that scaffold the discussion</li><li><strong>Hints (progressive)</strong> — three escalating nudges, shown on request</li></ul>
+<p>The instructor's parallel file adds: expected concepts, common incorrect approaches, instructor discussion points, solution outline, worked C++ solution, test cases, and the extension challenge. The <strong>extension challenge</strong> is <em>public</em> (it appears on the projector after the reveal); worked extensions stay in the instructor area.</p>
+<h2 id="tiers">Tiers</h2>
+<table><thead><tr><th>Tier</th><th>Name</th><th>Cases</th><th>Lectures</th><th>Character</th></tr></thead><tbody><tr><td>1</td><td>Beginner</td><td>CS-001–020</td><td>L01–L12</td><td>Trace, predict, read I/O, first decisions/loops</td></tr><tr><td>2</td><td>Foundational</td><td>CS-021–040</td><td>L13–L16</td><td>Number algorithms, function design, decomposition</td></tr><tr><td>3</td><td>Intermediate</td><td>CS-041–060</td><td>L17–L24</td><td>Arrays, strings, searching, sorting, counting</td></tr><tr><td>4</td><td>Advanced</td><td>CS-061–080</td><td>L23–L30</td><td>Complexity, pointers, dynamic memory, records</td></tr><tr><td>5</td><td>Expert introductory</td><td>CS-081–108</td><td>L29–L32</td><td>Files, validation pipelines, classes, synthesis</td></tr></tbody></table>
+<p>Tiers are difficulty <em>bands</em>, not a strict lecture gate — Tier 2 cases may appear in week 9 for revision. Within each file, cases ascend in difficulty.</p>
+<h2 id="files">Files</h2>
+<pre><code>case-studies/
+├── README.md            ← this file
+├── by_tier/             ← PROJECTOR files (questions + hints only)
+│   ├── tier1_beginner.md
+│   ├── tier2_foundational.md
+│   ├── tier3_intermediate.md
+│   ├── tier4_advanced.md
+│   └── tier5_expert_introductory.md
+└── index.md             ← ID → lecture → tier → concept map</code></pre>
+<table><thead><tr><th>Instructor copy</th><th>Content</th></tr></thead><tbody><tr><td><code>instructor/case_studies/solutions_tier1.md</code> … <code>solutions_tier5.md</code></td><td>Solution outline, worked code, test cases, discussion points, misconceptions</td></tr><tr><td><code>instructor/case_studies/README.md</code></td><td>How to run the activity, pacing, rubric</td></tr></tbody></table>
+<h2 id="policies">Policies</h2>
+<ul><li><strong>No solutions in projector files.</strong> Hints stop at nudge level; nothing that reveals an algorithm.</li><li><strong>Compilation status:</strong> worked solutions in the instructor area were compiled and executed with the case's test cases (see <code>../docs/CASE_STUDY_AUDIT.md</code> for evidence). Projector files contain no code to compile.</li><li><strong>Standards:</strong> C++17 per <a href="resources.html#cpp-standard">../docs/CPP_STANDARD.md</a>; code style per <code>../docs/CODE_STYLE.md</code>.</li><li>Case IDs are permanent: retired cases are marked <em>retired</em>, never renumbered.</li></ul><h2 id="the-five-tiers">The five tiers</h2><ul><li><a href="cases/tier1_beginner.html">Tier 1 · Beginner</a></li><li><a href="cases/tier2_foundational.html">Tier 2 · Foundational</a></li><li><a href="cases/tier3_intermediate.html">Tier 3 · Intermediate</a></li><li><a href="cases/tier4_advanced.html">Tier 4 · Advanced</a></li><li><a href="cases/tier5_expert_introductory.html">Tier 5 · Expert Introductory</a></li></ul><p>The data-science section supplements the main bank: <a href="cases/ds-cases.html">DS case studies (PF-DS-CS-1…8)</a>.</p>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Project 05 · Integrated C++ Management Application · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/projects/project-05.html">
+<link rel="stylesheet" href="../styles.css">
+<script src="../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../index.html">Home</a></li><li><a href="../overview.html">Overview</a></li><li><a href="../outcomes.html">Outcomes</a></li><li><a href="../schedule.html">Schedule</a></li><li><a href="../lectures.html">Lectures</a></li><li><a href="../labs.html">Labs</a></li><li><a href="../cases.html">Case Studies</a></li><li><a href="../exercises.html">Exercises</a></li><li><a href="../assignments.html">Assignments</a></li><li><a href="../projects.html" aria-current="page">Projects</a></li><li><a href="../resources.html">Resources</a></li><li><a href="../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="narrow">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../index.html">Home</a> › Project 05 · Integrated C++ Management Application</nav>
+<h1 class="page-title">Project 05 · Integrated C++ Management Application</h1>
+<p><strong>Capstone · all 16 modules · the graded course project (10 %, Weeks 14–16)</strong> Outcomes: CLO-1…CLO-8. Difficulty: ★★★★★ · Subsumes P1–P4 bands.</p>
+<h2 id="1-problem-description">1. Problem description</h2>
+<p>A small institute runs three desks that currently use three separate paper registers: <strong>course grades</strong> (per-student weighted averages and letters, the P1 domain), <strong>petty cash</strong> (expenses and category totals, the P2 domain), and the <strong>reading-room shelf</strong> (a mini catalog with lend/return, the P3 domain). You will build ONE console application that integrates these three desks into a single coherent program with persistent state — the P4 class-design discipline applied across all three domains — and demonstrate it live.</p>
+<p>Integration is the point: one shared main menu, one consistent validation vocabulary, one save/load discipline, reports that span desks (e.g., a "session summary" quoting all three).</p>
+<h2 id="2-learning-objectives">2. Learning objectives</h2>
+<ol><li>Integrate three sub-systems behind one menu without entangling their data.</li><li>Apply class design with invariants to a domain that needs it (records) and honestly choose structs where they suffice (expenses).</li><li>Manage multi-file persistence with one uniform loader discipline.</li><li>Search and sort across a collection for a ranked report.</li><li>Produce a test table, a design narrative, and a live demonstration that together evidence understanding.</li></ol>
+</ol>
+<h2 id="3-functional-requirements">3. Functional requirements</h2>
+<ul><li>FR1 — Three sub-systems, one menu:</li><li><code>grades</code>: add student name + lab/midterm/final (P1 weights &amp; letter ladder); list all; summary (count, best, mean).</li><li><code>cash</code>: add expense category+amount; category totals with shares; largest.</li><li><code>shelf</code>: add book title/author; lend/return by id; report out-list.</li><li><code>summary</code>: one line per desk (<code>grades: &lt;n&gt; students</code>, <code>cash: &lt;total&gt;</code>, <code>shelf: &lt;k&gt; out</code>) plus the session's total entries handled.</li><li><code>quit</code> (also EOF): saves everything, prints <code>saved</code>.</li><li>FR2 — Persistence: <code>grades.txt</code>, <code>cash.txt</code>, <code>shelf.txt</code> — loaded on start (with skip-and-report counts per file), saved on quit. A corrupted line in one file must not prevent the other two from loading.</li><li>FR3 — <code>grades</code> and <code>shelf</code> domains use a class with stated invariants (grade components 0..100, weighted average recomputed-not-stored; shelf book ids unique, lend/return state machine). <code>cash</code> uses a struct + vector — and your report must defend that choice in one sentence.</li><li>FR4 — One ranked report anywhere in the program: top-3 students by average (ties: alphabetical by name) using your own sort — not <code>std::sort</code>.</li><li>FR5 — Validation vocabulary is consistent program-wide: <code>bad input</code> (read failure) · <code>bad value</code> (out of range) · <code>no such id</code> · <code>not available</code> / <code>nothing to undo</code>-style state messages per domain. Rejected entries change no state, in any desk.</li></ul>
+<h2 id="4-non-functional-requirements">4. Non-functional requirements</h2>
+<ul><li>NFR1 — Architecture: each sub-system is a translation unit's worth of functions/classes with contracts; the menu dispatches, it does not compute.</li><li>NFR2 — The weighted average is never stored — always recomputed from components (stored derived state is banned; the report explains why).</li><li>NFR3 — Compiles with the course contract, zero warnings; no raw new/delete; vector ownership everywhere.</li><li>NFR4 — Capacity is effectively unbounded (vectors); no magic numbers without named constants.</li><li>NFR5 — The program survives a poisoned file: skips it, counts it, runs the other desks, and says so in the startup line.</li></ul>
+<h2 id="5-suggested-data-structures">5. Suggested data structures</h2>
+<ul><li><code>class GradeRecord { ... };</code> — private components + observers; <code>average()</code> recomputes; letter mapping stays a free function (pure).</li><li><code>struct Expense { std::string category; double amount; };</code> + <code>std::vector&lt;Expense&gt;</code> — money has no invariant beyond range checks at the door; say why a class would be ceremony here.</li><li><code>class ShelfBook { ... };</code> mirroring P3's Book with lend/return guards.</li><li><code>class Desk</code> per domain OR plain namespaces with vectors + functions — either is acceptable; the report defends the choice with the coupling argument.</li></ul>
+<h2 id="6-user-interaction-design">6. User interaction design</h2>
+<pre><code class="language-text">grades: loaded 2 skipped 0 | cash: loaded 5 skipped 1 | shelf: loaded 3 skipped 0
+main (grades|cash|shelf|summary|quit): grades
+grades (add|list|top|back): add
+name lab midterm final: Zara 88 79 91
+Zara: 86.05 -&gt; C+
+grades (add|list|top|back): back
+main (grades|cash|shelf|summary|quit): summary
+grades: 3 students | cash: 214.50 | shelf: 2 out
+session entries: 4
+main (grades|cash|shelf|summary|quit): quit
+saved.</code></pre>
+<h2 id="7-input-validation-requirements">7. Input validation requirements</h2>
+<ul><li>VR1 — Domain range rules enforced at each desk's door (marks 0..100, amounts 0.01..5000, shelf ids unknown/absent) with the FR5 vocabulary.</li><li>VR2 — Load-time skip-and-report per file, classified (bad field count vs bad value vs bad flag); a skipped line never enters a desk's state.</li><li>VR3 — Cross-desk contamination impossible: a <code>cash</code> command inside the <code>grades</code> submenu is a <code>bad input</code>, and no desk's function mutates another's state.</li><li>VR4 — <code>summary</code> works identically on empty desks (<code>grades: 0 students</code>).</li><li>VR5 — Save failure on any file → <code>cannot save &lt;file&gt;</code>, exit 2, after an attempt to save the other two (partial-persistence honesty).</li></ul>
+<h2 id="8-testing-plan">8. Testing plan</h2>
+<table><thead><tr><th>#</th><th>Class</th><th>Scenario</th><th>Expected</th></tr></thead><tbody><tr><td>T1</td><td>integration</td><td>all three desks populated, summary</td><td>three correct lines + entry count</td></tr><tr><td>T2</td><td>round-trip</td><td>populate all, quit, restart</td><td>per-file <code>loaded N skipped 0</code></td></tr><tr><td>T3</td><td>poisoned file</td><td>corrupt line in cash.txt only</td><td>cash <code>skipped 1</code>; other desks load clean</td></tr><tr><td>T4</td><td>invariant</td><td>grade mark 101; shelf lend of out book</td><td><code>bad value</code> / <code>not available</code>; state unchanged</td></tr><tr><td>T5</td><td>derived state</td><td>student's average after gpa-style edit of a component</td><td>recomputed value in list/top — never a stale stored one</td></tr><tr><td>T6</td><td>ranking</td><td>averages 86.05, 92.5, 86.05</td><td>top-3 order: 92.5, then the two 86.05 alphabetical by name</td></tr><tr><td>T7</td><td>cross-desk</td><td><code>cash</code> typed at grades submenu</td><td><code>bad input</code>, desks unaffected</td></tr><tr><td>T8</td><td>empty desks</td><td>fresh files, <code>summary</code> then <code>quit</code></td><td>zeros; <code>saved.</code>; restart loads zeros</td></tr><tr><td>T9</td><td>save failure</td><td>read-only directory</td><td><code>cannot save &lt;file&gt;</code> per file, exit 2</td></tr><tr><td>T10</td><td>vocabulary</td><td>one rejected entry per desk</td><td>same message grammar, no state change anywhere</td></tr></tbody></table>
+<p>Plus a demonstration script: a printed 8–10 command sequence you will run live at the demo (submit it; the demonstrator follows it).</p>
+<h2 id="9-milestones-map-to-weeks-14-16">9. Milestones (map to Weeks 14–16)</h2>
+<table><thead><tr><th>Week</th><th>Milestone</th><th>Evidence at checkpoint</th></tr></thead><tbody><tr><td>14</td><td>Proposal + skeletons</td><td>one-pager: data model per desk, file grammar, test-table plan</td></tr><tr><td>15</td><td>Checkpoint: desks work standalone</td><td>compiling program: all three menus function in-memory; debug log</td></tr><tr><td>15</td><td>Integration + persistence</td><td>one menu, three desks, round-trip (T2)</td></tr><tr><td>16</td><td>Polish + demo + report</td><td>T1–T10 tables, top-3 ranking, demonstration script</td></tr></tbody></table>
+<h2 id="10-extension-ideas-optional-graded-only-as-scope-calibration-evidence">10. Extension ideas ⚙ (optional; graded only as scope-calibration evidence)</h2>
+<ul><li>⚙ <code>audit</code> command: per-desk counters of rejected entries this session.</li><li>⚙ A fourth desk (inventory) reusing the ShelfBook pattern — reuse as evidence, not novelty.</li><li>⚙ Export <code>summary</code> to a text report file with the audit footer.</li></ul>
+<h2 id="11-assessment-rubric">11. Assessment rubric</h2>
+<p>Graded out of <strong>100 points</strong> with the shared project rubric (<a href="../projects.html">../../instructor/assessment-rubrics/project.md</a>): correctness 30 · design &amp; quality 25 · testing 15 · explanation 15 · process 10 · scope 5. The demonstration maps to correctness + explanation; the debug logs and milestones map to process. NFR2 (no stored derived state) and FR4 (own sort) are named quality lines — violating either caps quality at 15/25.</p>
+<h2 id="12-student-instructions">12. Student instructions</h2>
+<p>Individual by default; pairs allowed with a written split and both partners answering live questions at the demonstration. Sequence: proposal → desk skeletons → integration → persistence → ranking → polish. Keep every desk working at each milestone (compile after every change; the debug log is process evidence). Deliverables at Week 16: source file(s), the three sample data files, <code>test_table.md</code> (T1–T10 + your own), <code>postmortem.md</code> (design narration + ≥ 2 defect narratives + honest limits), demonstration script, and a 5-minute live demo. Zip as <code>p05_&lt;yourid&gt;.zip</code>. Late policy per syllabus; the demonstration is scheduled in Week 16's lab slot.</p>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

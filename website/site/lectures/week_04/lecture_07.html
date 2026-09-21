@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L07 · `if`, `if/else`, and Nested Selection · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/lectures/week_04/lecture_07.html">
+<link rel="stylesheet" href="../../styles.css">
+<script src="../../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../../index.html">Home</a></li><li><a href="../../overview.html">Overview</a></li><li><a href="../../outcomes.html">Outcomes</a></li><li><a href="../../schedule.html">Schedule</a></li><li><a href="../../lectures.html" aria-current="page">Lectures</a></li><li><a href="../../labs.html">Labs</a></li><li><a href="../../cases.html">Case Studies</a></li><li><a href="../../exercises.html">Exercises</a></li><li><a href="../../assignments.html">Assignments</a></li><li><a href="../../projects.html">Projects</a></li><li><a href="../../resources.html">Resources</a></li><li><a href="../../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="narrow">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../../index.html">Home</a> › L07 · `if`, `if/else`, and Nested Selection</nav>
+<h1 class="page-title">L07 · `if`, `if/else`, and Nested Selection</h1>
+<p><strong>Module 4 — Decision-Making Statements · Week 4 · Lecture 7 of 32 · 120 minutes</strong> <strong>Outcomes:</strong> CLO-3 · PF-4.1, PF-4.2 · <a href="../../outcomes.html">LEARNING_OUTCOMES.md</a></p>
+<h2 id="learning-objectives">Learning objectives</h2>
+<ol><li>Evaluate relational (<code>&lt; &lt;= &gt; &gt;= == !=</code>) and logical (<code>&amp;&amp; || !</code>) expressions, including short-circuit behavior and the <code>!</code>-of-comparison form (PF-4.1).</li><li>Implement <code>if</code>, <code>if/else</code>, and <code>if/else if/else</code> chains whose branches jointly cover every case of a specification, with no unreachable or contradictory conditions (PF-4.2).</li><li>Rewrite nested selections as guard clauses (early exit) and justify which form is clearer for a given rule set (PF-4.2).</li></ol>
+</ol>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>L06 (bool conversion rule: nonzero → true); L03 (<code>const</code>, comparisons of computed values).</p>
+<h2 id="concept-sequence">Concept sequence</h2>
+<ol><li>From straight-line to branching programs</li><li>Conditions as bool-producing expressions</li><li><code>==</code> vs <code>=</code> — the assignment-in-condition trap</li><li><code>&amp;&amp;</code>, <code>||</code>, <code>!</code> + short-circuit evaluation with side-effect-free demos</li><li><code>if / else if / else</code> as ordered rule sets</li><li>Nesting vs guard clauses</li></ol>
+</ol>
+<h2 id="teaching-topics-detailed">Teaching topics (detailed)</h2>
+<ul><li><strong>Comparison operators</strong> on numbers and chars; <code>bool</code> output prints as <code>1/0</code> (tie back to L06's conversion rule).</li><li><strong><code>==</code> vs <code>=</code>:</strong> <code>if (x = 5)</code> compiles (assign, nonzero → true) — live demo with the warning the course's <code>-Wall</code> contract catches; braces always (dangling-else shown as a "why braces" argument).</li><li><strong>Short-circuit:</strong> <code>(n != 0) &amp;&amp; (total / n &gt; 10)</code> — the guard idiom; division-by-zero avoided <em>by order</em>; <code>||</code> stops on first true.</li><li><strong>Range checks done right:</strong> <code>0 &lt;= score &amp;&amp; score &lt;= 100</code> (not math notation <code>0 &lt;= score &lt;= 100</code>, which is a silent logic bug — predict-then-run demo).</li><li><strong>Branch design:</strong> mutually exclusive, collectively exhaustive; ordered <code>else if</code> from most-specific to most-general; grade-scale worked example with deliberate first-version bug (descending order mistake) fixed live.</li><li><strong>Guard clauses:</strong> validate-and-return style previewed (functions arrive in Module 7; here it stays within <code>main</code>).</li></ul>
+<h2 id="c-examples-required">C++ examples required</h2>
+<table><thead><tr><th>File</th><th>Role</th></tr></thead><tbody><tr><td><code>decisions_grade.cpp</code> ✅</td><td>grade classifier: naive → corrected → guard-clause refactor, all three kept in the file for comparison</td></tr><tr><td>(live) <code>short_circuit_demo.cpp</code></td><td>printed evaluation trace showing which side of <code>&amp;&amp;</code>/`</td><td></td><td>` ran</td></tr></tbody></table>
+<h2 id="conceptual-explanation-beginner-first">Conceptual explanation (beginner-first)</h2>
+<p>Everything so far ran top to bottom, unconditionally. Real decisions need the program to ask yes/no questions and take different paths. In C++, a "yes/no question" is an <strong>expression whose value is <code>true</code> or <code>false</code></strong> — built from comparisons (<code>&gt;=</code>, <code>==</code>) and combined with <strong>and/or/not</strong> (<code>&amp;&amp;</code>, <code>||</code>, <code>!</code>). The <code>if</code> statement then runs (or skips) a block based on that answer.</p>
+<p>Two ideas make branch-writing safe. First, <strong>short-circuit evaluation</strong>: in <code>A &amp;&amp; B</code>, if <code>A</code> is false, <code>B</code> is never evaluated — C++ promises this. That turns <code>(n != 0) &amp;&amp; (total / n &gt; 10)</code> into a <em>safety pattern</em>: the guard <code>n != 0</code> protects the division behind it. Second, <strong>branch order matters</strong> in <code>if / else if</code> chains: the first matching branch wins, so ranges must run from most specific (highest) to least, with the <code>else</code> catching everything left. A chain whose branches are mutually exclusive and collectively exhaustive covers every case — the property the branch- coverage workshop drills.</p>
+<h2 id="terminology-and-definitions">Terminology and definitions</h2>
+<table><thead><tr><th>Term</th><th>Definition</th></tr></thead><tbody><tr><td>Condition</td><td>An expression of type bool controlling a branch</td></tr><tr><td>Relational operators</td><td><code>&lt; &lt;= &gt; &gt;= == !=</code> — produce bool</td></tr><tr><td>Logical operators</td><td><code>&amp;&amp;</code> (and), `</td><td></td><td><code> (or), </code>!` (not)</td></tr><tr><td>Short-circuit evaluation</td><td><code>&amp;&amp;</code>/`</td><td></td><td>` skip the right side when the left decides</td></tr><tr><td>Guard</td><td>A check placed <em>before</em> a risky operation, enabled by short-circuiting</td></tr><tr><td><code>else if</code> chain</td><td>Ordered multi-way selection; first match wins</td></tr><tr><td>Guard clause</td><td>Early return/branch for invalid cases, flattening nesting</td></tr><tr><td>Mutually exclusive</td><td>Conditions that cannot both be true</td></tr><tr><td>Collectively exhaustive</td><td>Some branch matches for every possible input</td></tr><tr><td>Range check</td><td><code>lo &lt;= x &amp;&amp; x &lt;= hi</code> — never math-style <code>lo &lt;= x &lt;= hi</code></td></tr></tbody></table>
+<h2 id="syntax-and-c-examples">Syntax and C++ examples</h2>
+<pre><code class="language-cpp">if (score &gt;= 90)                  // condition in parentheses, ALWAYS
+{
+    std::cout &lt;&lt; &quot;A\n&quot;;           // runs when condition is true
+}
+else if (score &gt;= 80)             // checked only if the first was false
+{
+    std::cout &lt;&lt; &quot;B\n&quot;;
+}
+else                              // everything left lands here
+{
+    std::cout &lt;&lt; &quot;keep going\n&quot;;
+}
+
+// combining conditions
+if (age &gt;= 13 &amp;&amp; age &lt;= 19) { }            // teenager
+if (day == &quot;Sat&quot; || day == &quot;Sun&quot;) { }      // weekend
+if (!(score &gt;= 60)) { }                    // failing (same as score &lt; 60)
+
+// the short-circuit guard
+if (n != 0 &amp;&amp; total / n &gt; 10) { }          // safe: division only when n != 0</code></pre>
+<h2 id="line-by-line-code-explanation">Line-by-line code explanation</h2>
+<p><code>examples/decisions_grade.cpp</code>:</p>
+<ol><li>Input is validated first (<code>if (!(std::cin &gt;&gt; score))</code>) — decisions on unvalidated data are decisions on garbage.</li><li><strong>Version 1 (commented) is deliberately wrong:</strong> <code>score &gt;= 60</code> first means 95 matches immediately and prints "D". The lesson: an <code>if/else if</code> chain is an <em>ordered</em> rule set.</li><li><strong>Version 2 (active)</strong> runs from 90 down to 60, ending in <code>else</code> — mutually exclusive by construction (each branch implies all later conditions are false), collectively exhaustive (the <code>else</code> catches all).</li><li><strong>Version 3</strong> shows the correct range check <code>score &gt;= 0 &amp;&amp; score &lt;= 100</code> beside the commented math-notation bug <code>0 &lt;= score &lt;= 100</code> — which C++ reads as <code>(0 &lt;= score) &lt;= 100</code>, i.e. a bool compared to 100: always true.</li><li>Style: every branch uses braces even for one statement — the dangling-</li></ol>
+</ol>
+<p>else insurance.</p>
+<h2 id="output-prediction-questions-with-answers">Output prediction questions (with answers)</h2>
+<ol><li><code>int x{7}; if (x = 5) { ... }</code> — runs? — Yes, ALWAYS: <code>x = 5</code> <em>assigns</em> (value 5 → true) and clobbers x. <code>==</code> compares; <code>-Wall</code> warns here.</li><li><code>int n{0}; (n != 0) &amp;&amp; (10 / n &gt; 2)</code> — value? crash? — <code>false</code>, and the division never runs (short-circuit) — no crash.</li><li><code>if (0 &lt;= s &amp;&amp; s &lt;= 100)</code> with <code>s = 150</code> — ? — false (correct range form).</li><li><code>(true || anything)</code> and <code>(false &amp;&amp; anything)</code> — ? — true / false — the right side is <em>not even evaluated</em>.</li><li>Chain: score = 85 in the corrected grade program — ? — "B" (80 branch; the 90 test failed first).</li></ol>
+</ol>
+<h2 id="common-errors-and-debugging-examples">Common errors and debugging examples</h2>
+<table><thead><tr><th>Error</th><th>Symptom</th><th>Fix</th></tr></thead><tbody><tr><td><code>=</code> instead of <code>==</code></td><td>Condition always (or never) true; variable clobbered</td><td><code>==</code>; compile with <code>-Wall</code></td></tr><tr><td>Math range notation <code>0 &lt;= x &lt;= 100</code></td><td>Always true — silent logic bug</td><td><code>0 &lt;= x &amp;&amp; x &lt;= 100</code></td></tr><tr><td>Ascending <code>else if</code> chain</td><td>High scores classified as low grades</td><td>Order descending; else catches the rest</td></tr><tr><td>Missing <code>else</code> when needed</td><td>Both messages print (two independent ifs)</td><td>Chain with <code>else if</code> when paths are exclusive</td></tr><tr><td>Dangling else</td><td>The <code>else</code> binds to the <em>nearest</em> <code>if</code></td><td>Braces on every branch</td></tr><tr><td>Un-protected division</td><td>Runtime crash when n = 0</td><td>Short-circuit guard first</td></tr></tbody></table>
+<h2 id="common-student-misconceptions">Common student misconceptions</h2>
+<ul><li><strong>"<code>=</code> and <code>==</code> are interchangeable in conditions."</strong> <code>if (x = 5)</code> assigns and is truthy; a dedicated trace example makes the damage visible (after this lecture <code>x</code> is <code>5</code>, not the tested value).</li><li><strong>"The <code>else</code> belongs to the nearest visible <code>if</code> on screen."</strong> It binds to the nearest <em>unmatched</em> <code>if</code> regardless of indentation — show the braceless nested example that renders the wrong program.</li><li><strong>"<code>if (0 &lt;= x &lt;= 10)</code> checks a range."</strong> It parses as <code>(0 &lt;= x) &lt;= 10</code> — always true for any <code>x</code>; the correct form is the logical and of two comparisons.</li><li><strong>"A <code>switch</code> falls out after each case."</strong> Without <code>break</code>, control falls through into the next case; accidental fallthrough is the classic switch bug.</li><li><strong>"Negative numbers compare differently."</strong> <code>-3 &lt; 5</code> uses ordinary arithmetic order; students who memorized ASCII tables sometimes flinch here.</li></ul>
+<h2 id="classroom-demonstrations">Classroom demonstrations</h2>
+<ol><li><strong>Order-of-branches autopsy:</strong> run version 1 (buggy) with 95, watch "D" print; then version 2 — the ordering lesson needs no lecture notes.</li><li><strong>Short-circuit proof:</strong> a function that prints before dividing, placed after <code>&amp;&amp;</code> — the print does not appear when the guard fails.</li><li><strong>Coverage hunting:</strong> feed the corrected program the boundary values 0, 59, 60, 89, 90, 100, 101 — students see every branch fire.</li></ol>
+</ol>
+<h2 id="guided-student-activities">Guided student activities</h2>
+<p><strong>Branch-coverage workshop (20 min):</strong> teams receive a bugged ticket-pricing rule set (child/adult/senior, weekend multiplier, discount stacking); they write the <code>if/else</code> chain, then adversarially list inputs that break other teams' chains (coverage hunting). Best "killer input" wins.</p>
+<h2 id="practice-problems">Practice problems</h2>
+<ul><li>Evaluate 10 boolean expressions (incl. short-circuit order, <code>!</code>, mixed int/bool).</li><li>Implement 3 rule sets as full programs (shipping cost, password length + digit check with <code>&amp;&amp;</code>, leap year).</li><li>Rewrite a 3-deep nested <code>if</code> as guard clauses.</li><li>(🟡 stretch) Explain the dangling-else problem with a 6-line example.</li></ul>
+<h2 id="summary">Summary</h2>
+<p>Decisions are bool-valued expressions: comparisons joined by <code>&amp;&amp;</code>/<code>||</code>/ <code>!</code>, with short-circuiting making guards possible. <code>if / else if / else</code> is an <em>ordered</em> rule set — descending ranges, <code>else</code> as the catch-all, braces always. The three classic bugs (<code>=</code> for <code>==</code>, math-range notation, ascending chains) are silent, so branch coverage discipline is the defense. Next (L08): the other half of selection — <code>switch</code> for discrete cases and the <code>?:</code> operator for choosing values.</p>
+<ul><li>"<code>if (0 &lt;= x &lt;= 100)</code> checks a range." (It checks <code>(0 &lt;= x) &lt;= 100</code> — always true; classic silent bug.)</li><li>"<code>else if</code> is a different statement." (It's <code>else</code> + nested <code>if</code>; the chain is syntax sugar — draw the nesting.)</li><li>"<code>&amp;&amp;</code>/<code>||</code> always evaluate both sides." (Short-circuit by standard.)</li><li>"Comparing with <code>=</code> is a type error." (It's a legal int assignment → truthiness; needs the warning set to catch.)</li></ul>
+<h2 id="exit-ticket-formative-assessment">Exit ticket / formative assessment</h2>
+<ol><li>Evaluate with short-circuit order: <code>int n{0}; n != 0 &amp;&amp; 10 / n &gt; 2</code> — value? did the division run?</li><li>Why is <code>if (x = 5)</code> always true?</li><li>Write the range check for a valid percentage (0–100 inclusive) the way the course requires.</li></ol>
+</ol>
+<h2 id="estimated-time-allocation-120-min">Estimated time allocation (120 min)</h2>
+<table><thead><tr><th>Segment</th><th>Minutes</th></tr></thead><tbody><tr><td>Recall (conversions quiz) + branching motivation</td><td>10</td></tr><tr><td>Conditions: relational/logical operators, short-circuit</td><td>35</td></tr><tr><td>Break</td><td>10</td></tr><tr><td><code>if/else if/else</code> design + guard clauses (grade example)</td><td>35</td></tr><tr><td>Branch-coverage workshop</td><td>20</td></tr><tr><td>Exit ticket + L08 preview</td><td>10</td></tr></tbody></table>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

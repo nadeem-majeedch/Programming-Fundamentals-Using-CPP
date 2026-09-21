@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L08 · `switch`, Multi-Way Selection, and the Conditional Operator · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/lectures/week_04/lecture_08.html">
+<link rel="stylesheet" href="../../styles.css">
+<script src="../../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../../index.html">Home</a></li><li><a href="../../overview.html">Overview</a></li><li><a href="../../outcomes.html">Outcomes</a></li><li><a href="../../schedule.html">Schedule</a></li><li><a href="../../lectures.html" aria-current="page">Lectures</a></li><li><a href="../../labs.html">Labs</a></li><li><a href="../../cases.html">Case Studies</a></li><li><a href="../../exercises.html">Exercises</a></li><li><a href="../../assignments.html">Assignments</a></li><li><a href="../../projects.html">Projects</a></li><li><a href="../../resources.html">Resources</a></li><li><a href="../../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="narrow">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../../index.html">Home</a> › L08 · `switch`, Multi-Way Selection, and the Conditional Operator</nav>
+<h1 class="page-title">L08 · `switch`, Multi-Way Selection, and the Conditional Operator</h1>
+<p><strong>Module 4 — Decision-Making Statements · Week 4 · Lecture 8 of 32 · 120 minutes</strong> <strong>Outcomes:</strong> CLO-3 · PF-4.3, PF-4.4 · <a href="../../outcomes.html">LEARNING_OUTCOMES.md</a> · <strong>Lab 2 week</strong></p>
+<h2 id="learning-objectives">Learning objectives</h2>
+<ol><li>Implement <code>switch</code> statements over integral and <code>char</code> selectors with correct <code>case</code>/<code>break</code>/<code>default</code> structure, and predict fall-through behavior when <code>break</code> is omitted (PF-4.3).</li><li>Use the conditional operator <code>?:</code> for value-level choices and state the readability limits the course style guide imposes on it (PF-4.4).</li><li>Choose between <code>if/else if</code> chain, <code>switch</code>, and <code>?:</code> for a given decision problem, with a one-sentence justification tied to selector type and branch count (PF-4.4).</li></ol>
+</ol>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>L07 (boolean evaluation, branch coverage discipline).</p>
+<h2 id="concept-sequence">Concept sequence</h2>
+<ol><li>When <code>if/else if</code> chains get long: the menu problem</li><li><code>switch</code> anatomy: selector, cases, <code>break</code>, <code>default</code></li><li>Fall-through: bug and (rare) feature</li><li>Grouped cases (<code>case 'a': case 'A':</code>)</li><li><code>?:</code> — the expression that chooses values (not actions)</li><li>Decision-structure selection criteria</li></ol>
+</ol>
+<h2 id="teaching-topics-detailed">Teaching topics (detailed)</h2>
+<ul><li><strong><code>switch</code> mechanics:</strong> selector must be integral/char/enum (strings rejected — demo of the error); cases are <em>labels</em> jumped to, hence the need for <code>break</code>; <code>default</code> need not be last but usually is; char menus (<code>'a'</code> add, <code>'d'</code> delete, <code>'q'</code> quit).</li><li><strong>Fall-through demo:</strong> missing <code>break</code> executes onward — show the bug, then the one legitimate use (grouped labels) with a loud comment.</li><li><strong><code>?:</code> semantics:</strong> <code>x = (a &gt; b) ? a : b;</code> — value selection; style rule: values only, never nested chains (banned by <code>docs/CODE_STYLE.md</code>); used for max/abs/idiom demos.</li><li><strong>Selection rubric:</strong> few discrete integral cases → <code>switch</code>; ranged or compound conditions → <code>if/else if</code>; single value pick → <code>?:</code>; selector on strings/doubles → <code>if/else if</code> only.</li><li><strong>Menu loop preview:</strong> menu programs need repetition → Module 5 teaser (explicit "next module completes this pattern").</li></ul>
+<h2 id="c-examples-required">C++ examples required</h2>
+<table><thead><tr><th>File</th><th>Role</th></tr></thead><tbody><tr><td><code>switch_menu.cpp</code> ✅</td><td>char-menu with grouped cases, <code>default</code>, plus the same logic as <code>if/else if</code> for side-by-side comparison</td></tr><tr><td>(live) <code>fallthrough_bug.cpp</code></td><td>deliberate missing-<code>break</code> bug fixed live</td></tr></tbody></table>
+<h2 id="common-student-misconceptions">Common student misconceptions</h2>
+<ul><li>"<code>switch</code> works on any type I can compare." (Integral/char/enum only.)</li><li>"<code>default</code> runs when no case matches <em>and</em> then the program exits the switch even without <code>break</code>." (It behaves like any case: falls through.)</li><li>"<code>?:</code> is a compact <code>if/else</code> for statements." (It's an <em>expression</em> — it produces a value; statements don't fit.)</li><li>"Cases must be in numeric order."</li></ul>
+<h2 id="conceptual-explanation-beginner-first">Conceptual explanation (beginner-first)</h2>
+<p><code>if/else if</code> chains answer "which <em>range</em> does this value fall in?" But menus ask a different question: "which <em>exact option</em> was typed?" When the choices are discrete — 'a' to add, 'd' to delete, 'q' to quit — C++ offers a purpose-built construct: <code>switch</code>. Think of it as a telephone switchboard: the selector value is plugged in, and control jumps directly to the matching <code>case</code> label. That jump is why <code>break</code> matters: without it, control <em>keeps going</em> into the next case — the fall-through bug.</p>
+<p>The conditional operator <code>?:</code> is the third decision tool, and it is smaller in ambition: it doesn't choose which <em>statements</em> to run, it chooses which <em>value</em> to produce. <code>m = (a &gt; b) ? a : b;</code> reads "if a &gt; b then a else b" — one line, one value. It shines for exactly that shape and nowhere else; the course style guide bans nesting these operators.</p>
+<p>Choosing between the three is a design skill with a rubric: discrete integral cases → <code>switch</code>; ranges or compound conditions → <code>if/else if</code>; a single value pick → <code>?:</code>.</p>
+<h2 id="terminology-and-definitions">Terminology and definitions</h2>
+<table><thead><tr><th>Term</th><th>Definition</th></tr></thead><tbody><tr><td>Selector</td><td>The integral/char expression <code>switch</code> jumps on (<code>switch (choice)</code>)</td></tr><tr><td><code>case</code> label</td><td>A named jump target for one constant value</td></tr><tr><td><code>break</code></td><td>Ends the switch — control leaves the block</td></tr><tr><td>Fall-through</td><td>Execution continuing into the next case when <code>break</code> is missing</td></tr><tr><td>Grouped cases</td><td>Several labels stacked on one body (<code>case 'a': case 'A':</code>)</td></tr><tr><td><code>default</code></td><td>The no-match branch (like a chain's final <code>else</code>)</td></tr><tr><td>Conditional operator</td><td><code>cond ? valueIfTrue : valueIfFalse</code> — an expression</td></tr><tr><td>Expression vs statement</td><td>Expressions <em>produce values</em>; <code>?:</code> is the decision-expression</td></tr><tr><td>Integral type</td><td>Whole-number types a switch can select on: int, char, enum</td></tr></tbody></table>
+<h2 id="syntax-and-c-examples">Syntax and C++ examples</h2>
+<pre><code class="language-cpp">char choice{};
+std::cin &gt;&gt; choice;
+
+switch (choice)                        // selector: integral or char only
+{
+    case &#x27;a&#x27;:                          // exact-match labels
+    case &#x27;A&#x27;:                          // grouped: both spellings share a body
+        std::cout &lt;&lt; &quot;adding...\n&quot;;
+        break;                         // jump out — or fall through
+    case &#x27;d&#x27;:
+        std::cout &lt;&lt; &quot;deleting...\n&quot;;
+        break;
+    case &#x27;q&#x27;:
+        std::cout &lt;&lt; &quot;bye\n&quot;;
+        break;
+    default:                           // everything else lands here
+        std::cout &lt;&lt; &quot;unknown option\n&quot;;
+        break;
+}
+
+// the conditional operator: a value-level decision
+int m{(a &gt; b) ? a : b};                // m = larger of a, b
+int absX{(x &lt; 0) ? -x : x};            // absolute value in one expression
+
+// the same menu as an if/else if chain — compare for yourself
+if (choice == &#x27;a&#x27; || choice == &#x27;A&#x27;)      { /* add */ }
+else if (choice == &#x27;d&#x27;)                  { /* delete */ }
+else if (choice == &#x27;q&#x27;)                  { /* quit */ }
+else                                     { /* unknown */ }</code></pre>
+<h2 id="line-by-line-code-explanation">Line-by-line code explanation</h2>
+<p><code>examples/switch_menu.cpp</code>:</p>
+<ol><li>The <code>switch (choice)</code> selector must be an integral type or <code>char</code> — the file shows the compile error a <code>std::string</code> selector produces (in a comment; the language rejects it outright).</li><li>Grouped <code>case 'a': case 'A':</code> — two labels, one body: the <em>one</em> legitimate form of fall-through, always with a comment saying so.</li><li>Every body ends in <code>break;</code> — the default too; the style rule is "falling through is never accidental in course code."</li><li>The <code>if/else if</code> twin implements identical logic; the comparison makes the selection rubric concrete (discrete chars → switch reads better; the body count is the same).</li><li>The <code>?:</code> section computes max and absolute value — value-shaped decisions only.</li></ol>
+</ol>
+<h2 id="output-prediction-questions-with-answers">Output prediction questions (with answers)</h2>
+<ol><li>Input <code>'d'</code> to the menu — ? — prints <code>deleting...</code> only (the <code>break</code> stops the fall-through).</li><li>Delete the <code>break</code> after case <code>'d'</code> — input <code>'d'</code> — ? — prints <code>deleting...</code> <em>and</em> <code>bye</code> — execution falls into case <code>'q'</code>.</li><li>Which selectors compile? <code>int</code> — yes; <code>double</code> — no; <code>char</code> — yes; <code>std::string</code> — no (compile error).</li><li><code>m = (a &gt; b) ? a : b;</code> with a = 3, b = 7 — ? — m is 7.</li><li><code>switch (grade)</code> where grade is <code>"A"</code> — ? — does not compile — strings can't be selectors.</li></ol>
+</ol>
+<h2 id="common-errors-and-debugging-examples">Common errors and debugging examples</h2>
+<table><thead><tr><th>Error</th><th>Symptom</th><th>Fix</th></tr></thead><tbody><tr><td>Missing <code>break</code></td><td>Later cases run too — the silent classic</td><td>Break every body; grouped cases only by design</td></tr><tr><td>Selector on <code>double</code>/<code>string</code></td><td>Compile error</td><td>Use an <code>if/else if</code> chain instead</td></tr><tr><td>Case values not constants</td><td>Compile error — labels must be literal constants</td><td>Constants only; ranges need if/else if</td></tr><tr><td>Forgetting <code>default</code></td><td>Silent nothing for bad input</td><td>Always handle the no-match case</td></tr><tr><td>Nested <code>?:</code> chains</td><td>Unreadable logic — style-guide violation</td><td>If/else if for anything with two conditions</td></tr><tr><td>Declaration in a case without braces</td><td>"jump over initialization" error</td><td>Braces around the case body when declaring</td></tr></tbody></table>
+<h2 id="classroom-demonstrations">Classroom demonstrations</h2>
+<ol><li><strong>Fall-through live bug:</strong> remove one <code>break</code>, run with input 'd', watch two options fire; restore — the break's job is visceral now.</li><li><strong>The rejected selector:</strong> attempt <code>switch (name)</code> with a string; read the compiler's complaint; translate to the rubric.</li><li><strong>Twin menus:</strong> run switch and if/else-if versions side by side on the same inputs — students articulate which reads better and why.</li></ol>
+</ol>
+<h2 id="guided-student-activities">Guided student activities</h2>
+<p><strong>Lab 2 (2 h, this lecture slot):</strong> <a href="../../labs.html">labs/README.md</a> — decision drills: grade classifier variants, menu programs, switch-to-if and if-to-switch translations, fall-through bug hunt. Lecture hour 2 = lab launch + supervised practice.</p>
+<h2 id="practice-problems">Practice problems</h2>
+<ul><li>Convert 3 <code>if/else if</code> chains to <code>switch</code> (and 1 that <em>cannot</em> be — say why).</li><li>Predict output of 4 fall-through programs.</li><li>Write a vowel/consonant checker two ways (grouped <code>case</code>, <code>?:</code>).</li><li>(🟡 stretch) Show why <code>switch (score / 10)</code> with cases <code>10: 9: 8: ...</code> classifies grades — and name its limitation (no ranges like 65–69).</li></ul>
+<h2 id="summary">Summary</h2>
+<p><code>switch</code> selects among discrete integral cases: enumerate every value, <code>break</code> each one, treat falling through as a bug, and use <code>if/else if</code> whenever logic involves ranges or compound conditions. The <code>?:</code> operator is a value-producing decision — use it only for short, obviously-shaped choices. Next (L09): the other way programs repeat work — loops — which turn these decision tools into iteration and open up real algorithms.</p>
+<h2 id="exit-ticket-formative-assessment">Exit ticket / formative assessment</h2>
+<ol><li>Write the <code>if/else if/else</code> equivalent of a <code>switch</code> on integer <code>code</code> with cases 1 and 2 plus <code>default</code>.</li><li>Why is the missing-<code>break</code> bug dangerous rather than merely a compile error?</li><li>What is the single circumstance where the conditional operator is a good choice?</li></ol>
+</ol>
+<h2 id="estimated-time-allocation-120-min">Estimated time allocation (120 min)</h2>
+<table><thead><tr><th>Segment</th><th>Minutes</th></tr></thead><tbody><tr><td>Recall (branch coverage quiz) + menu motivation</td><td>10</td></tr><tr><td><code>switch</code> anatomy + fall-through live demo</td><td>35</td></tr><tr><td>Break</td><td>10</td></tr><tr><td><code>?:</code> + selection rubric + menu-loop teaser</td><td>25</td></tr><tr><td><strong>Lab 2 launch</strong> + supervised practice</td><td>30</td></tr><tr><td>Exit ticket + Module 5 preview</td><td>10</td></tr></tbody></table>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

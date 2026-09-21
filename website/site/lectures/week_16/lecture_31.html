@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L31 · Classes: Data + Behavior, Constructors, Encapsulation · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/lectures/week_16/lecture_31.html">
+<link rel="stylesheet" href="../../styles.css">
+<script src="../../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../../index.html">Home</a></li><li><a href="../../overview.html">Overview</a></li><li><a href="../../outcomes.html">Outcomes</a></li><li><a href="../../schedule.html">Schedule</a></li><li><a href="../../lectures.html" aria-current="page">Lectures</a></li><li><a href="../../labs.html">Labs</a></li><li><a href="../../cases.html">Case Studies</a></li><li><a href="../../exercises.html">Exercises</a></li><li><a href="../../assignments.html">Assignments</a></li><li><a href="../../projects.html">Projects</a></li><li><a href="../../resources.html">Resources</a></li><li><a href="../../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="narrow">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../../index.html">Home</a> › L31 · Classes: Data + Behavior, Constructors, Encapsulation</nav>
+<h1 class="page-title">L31 · Classes: Data + Behavior, Constructors, Encapsulation</h1>
+<p><strong>Module 16 — Introduction to Object-Oriented Programming · Week 16 · Lecture 31 of 32 · 120 minutes</strong> <strong>Outcomes:</strong> CLO-8 · PF-16.1, PF-16.2 · <a href="../../outcomes.html">LEARNING_OUTCOMES.md</a></p>
+<h2 id="learning-objectives">Learning objectives</h2>
+<ol><li>Define a class with <code>private</code> data members, a public interface (member functions), and constructor(s); instantiate objects and call their interface (PF-16.1).</li><li>Explain encapsulation as an <em>invariant-protection</em> mechanism — contrast a public-data struct with a guarded class — and predict the compile error when outside code touches private members (PF-16.2).</li><li>Implement <code>get</code>/<code>set</code> accessors with validation so the invariant (e.g. <code>0 &lt;= score &lt;= 100</code>) cannot be violated from outside (PF-16.2).</li></ol>
+</ol>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>L28 (structs — the class is introduced as "a struct that guards itself"); L15–L26 (functions, references, passing modes — member functions use them all); M5 (loops for the menu driving objects).</p>
+<h2 id="concept-sequence">Concept sequence</h2>
+<ol><li>The struct's weakness: any code can corrupt an invariant</li><li><code>class</code>: <code>private</code> data, <code>public</code> interface; <code>.</code> on objects</li><li>Constructors: guaranteeing a valid birth state</li><li>Accessors/mutators with validation: the guarded set</li><li>Struct vs class side-by-side: same program, two disciplines</li><li>Where OOP goes next (the bridge-out slide)</li></ol>
+</ol>
+<h2 id="teaching-topics-detailed">Teaching topics (detailed)</h2>
+<ul><li><strong>Invariant motivation:</strong> L28's <code>Student</code> with <code>gpa</code> — free code sets <code>s.gpa = 99.0;</code> (nonsense accepted silently); the invariant statement ("0.0 ≤ gpa ≤ 4.0") written on the board <em>first</em>, then protected by making the data private.</li><li><strong>Class anatomy:</strong> <code>class Student { public: ... private: ... };</code> — access sections; member functions declared inside, defined after with <code>void Student::print() const {...}</code> syntax; calling via object: <code>s.print();</code> — member functions implicitly receive "the object" (the <code>this</code> idea, named informally).</li><li><strong>Constructors:</strong> default + parameterized <code>Student(std::string name, int id, double gpa)</code> with member-init-list shown once (assignment-in-body shown as the beginner form); constructor validates — an invalid gpa <em>cannot create an object</em> (clamped or rejected); objects are born valid.</li><li><strong>Accessors/mutators:</strong> <code>double get_gpa() const;</code> / <code>void set_gpa(double g)</code> with validation — the only door to the data; demo: outside write attempt <code>s.gpa = 99.0;</code> → exact compiler error (<code>double Student::gpa is private</code>); set-with-validation demo (clamp vs reject, course choice: reject with <code>false</code> return — honest about both schools).</li><li><strong><code>const</code> member functions:</strong> read-only interface marked <code>const</code> — connects to L26's const discipline; rule: getters are <code>const</code>.</li><li><strong>Bridge slide (not taught):</strong> inheritance, polymorphism, RAII-classes, templates — the OOP course's territory; this module = <em>encapsulation + constructors</em> only (<a href="../../resources.html#cpp-standard">docs/CPP_STANDARD.md</a> § 4.2).</li></ul>
+<h2 id="c-examples-required">C++ examples required</h2>
+<table><thead><tr><th>File</th><th>Role</th></tr></thead><tbody><tr><td><code>first_class.cpp</code> ✅</td><td><code>Student</code> class: private data, two constructors, validated <code>set_gpa</code>, <code>const</code> getters; the same struct-based program beside it for contrast</td></tr><tr><td>(live) <code>bank_account_class.cpp</code></td><td><code>Account</code> with <code>deposit</code>/<code>withdraw</code> enforcing <code>balance &gt;= 0</code> — invariant protection on a second domain</td></tr></tbody></table>
+<h2 id="common-student-misconceptions">Common student misconceptions</h2>
+<ul><li>"<code>private</code> hides data from other files only." (It hides from <em>all outside code</em>, including <code>main</code> in the same file.)</li><li>"Getters/setters are pointless ceremony." (They are the <em>validation point</em>; without them the invariant is unenforceable — the struct-vs-class demo proves it.)</li><li>"Constructors are optional boilerplate." (They are the guarantee that objects start valid — delete the validation and the invariant is born broken.)</li><li>"Classes are structs with different keywords." (In C++ the <em>default access</em> differs; the <em>discipline</em> differs — that's the point.)</li></ul>
+<h2 id="conceptual-explanation-beginner-first">Conceptual explanation (beginner-first)</h2>
+<p>Module 14's structs bundle data. Today's <strong>classes</strong> add the second half: <em>behavior</em> that <em>guards</em> the data. A class keeps its data <strong>private</strong> — no outside code can touch it — and exposes a small <strong>public interface</strong> of member functions ("methods") that are the only way in. The public functions enforce the rules: a <code>Student</code> whose GPA setter accepts anything is a struct with extra steps; one whose <code>set_gpa</code> rejects 99.0 has <em>protected an invariant</em> — a condition (like <code>0 &lt;= gpa &lt;= 4.0</code>) that holds for every valid object.</p>
+<p>A <strong>constructor</strong> is a member function that runs automatically at object creation and guarantees the object is born valid — no half-initialized records slipping through. And <code>const</code> member functions (getters) promise <em>not</em> to modify the object: the const-correctness habit from Module 13, now inside a class.</p>
+<p>The design habit of the week: ask <em>what can go wrong with this data if anyone can write it?</em> — then make the write paths responsible. Encapsulation is not secrecy; it's giving the type itself the power to keep its own promises.</p>
+<h2 id="terminology-and-definitions">Terminology and definitions</h2>
+<table><thead><tr><th>Term</th><th>Definition</th></tr></thead><tbody><tr><td>Class</td><td>A type bundling private data with a public interface of behavior</td></tr><tr><td><code>private:</code></td><td>Members only the class's own functions may access</td></tr><tr><td><code>public:</code></td><td>Members any code may call — the type's contract</td></tr><tr><td>Member function</td><td>A function declared inside the class; called with dot syntax</td></tr><tr><td>Constructor</td><td>Special member that runs at creation; same name as the class, no return type</td></tr><tr><td>Default constructor</td><td>The constructor callable with no arguments</td></tr><tr><td>Parameterized constructor</td><td>Takes arguments to initialize members properly</td></tr><tr><td>Getter / setter</td><td>Read-only accessor (<code>const</code>); validated writer — the invariant's checkpoints</td></tr><tr><td>Invariant</td><td>A condition that must hold for every valid object (e.g., non-negative balance)</td></tr><tr><td>Encapsulation</td><td>Data private + behavior public = the type protects its own rules</td></tr><tr><td><code>const</code> member function</td><td>Promises not to modify the object; callable on const objects</td></tr></tbody></table>
+<h2 id="syntax-and-c-examples">Syntax and C++ examples</h2>
+<pre><code class="language-cpp">class Student                 // contrast: the struct version beside it
+{
+public:                       // what any code may call — the interface
+    Student() = default;                        // default constructor
+    Student(const std::string&amp; name, int id, double gpa);
+
+    void  set_gpa(double gpa);                // validated writer
+    double get_gpa() const { return gpa_; }   // const getter: no mutation
+    void  print() const;                      // read-only behavior
+
+private:                      // the data — nobody outside may touch
+    std::string name_;
+    int         id_;
+    double      gpa_;
+};
+
+Student::Student(const std::string&amp; name, int id, double gpa)
+    : name_{name}, id_{id}
+{
+    set_gpa(gpa);            // construct valid: same validation path
+}
+
+void Student::set_gpa(double gpa)
+{
+    if (gpa &gt;= 0.0 &amp;&amp; gpa &lt;= 4.0)     // the invariant enforced HERE
+        gpa_ = gpa;
+    else
+        gpa_ = 0.0;                   // (or report — tier 1 style)
+}
+
+Student s{&quot;Ada&quot;, 1001, 3.9};
+// s.gpa_ = 99.0;        // COMPILE ERROR: private — the feature, not the obstacle
+s.set_gpa(99.0);         // legal — and rejected by the validation</code></pre>
+<h2 id="line-by-line-code-explanation">Line-by-line code explanation</h2>
+<p><code>examples/first_class.cpp</code>:</p>
+<ol><li>The class opens <code>public:</code> (interface first — readers see what they can call) and closes with <code>private:</code> data — the course layout convention.</li><li><code>Student() = default;</code> keeps a no-argument construction path; the parameterized constructor routes <em>all</em> initialization through <code>set_gpa</code> so the invariant holds from birth.</li><li><code>get_gpa() const</code> — the trailing <code>const</code> is the read-only promise; omitting it makes getters unusable on const objects (shown live).</li><li>The struct twin beside it accepts <code>s.gpa = 99.0;</code> silently — the side-by-side makes encapsulation's <em>point</em> undeniable.</li><li>The compile-error comment documents the failed outside write: the error message <em>is</em> the feature demo.</li></ol>
+</ol>
+<h2 id="output-prediction-questions-with-answers">Output prediction questions (with answers)</h2>
+<ol><li><code>s.gpa_ = 99.0;</code> from <code>main</code> — ? — Compile error: <code>gpa_</code> is private.</li><li><code>s.set_gpa(99.0); s.get_gpa()</code> — ? — 0.0 (or the chosen report): the invariant held.</li><li>Can <code>main</code> call <code>s.print() const</code>? — Yes: public and read-only.</li><li>Which section can outside code call? — <code>public:</code> only.</li><li>The struct twin vs the class on the same corrupting write — struct accepts (corrupts), class rejects (invariant survives).</li></ol>
+</ol>
+<h2 id="common-errors-and-debugging-examples">Common errors and debugging examples</h2>
+<table><thead><tr><th>Error</th><th>Symptom</th><th>Fix</th></tr></thead><tbody><tr><td>Data declared <code>public:</code></td><td>Invariant unenforceable — struct behavior</td><td>Keep data private; expose behavior</td></tr><tr><td>Setter without validation</td><td>Corrupt values accepted</td><td>Every setter checks the invariant</td></tr><tr><td>Constructor bypassing the setter</td><td>Objects born invalid</td><td>Route initialization through validation</td></tr><tr><td>Missing <code>const</code> on getters</td><td>Getters unusable on const objects; bugs hide</td><td><code>const</code> every read-only member</td></tr><tr><td><code>_</code>-less member names colliding with parameters</td><td>Self-assignment confusion</td><td><code>gpa_</code> convention from the style guide</td></tr><tr><td>God-object interface (20 public functions)</td><td>No coherent contract</td><td>Minimal interface — the siege game's lesson</td></tr></tbody></table>
+<h2 id="classroom-demonstrations">Classroom demonstrations</h2>
+<ol><li><strong>The compile error as a feature:</strong> attempt the private write in front of the class; read the error aloud; reframe: "the language just protected your invariant for free."</li><li><strong>Struct vs class, same attack:</strong> corrupt the struct's GPA (silently accepted); attack the class (rejected) — the whole module's motivation in ninety seconds.</li><li><strong>The getter trap:</strong> delete a getter's <code>const</code>; try to call it on a <code>const Student&amp;</code> parameter — the compiler explains const-correctness better than slides.</li></ol>
+</ol>
+<h2 id="guided-student-activities">Guided student activities</h2>
+<p><strong>Invariant siege (20 min):</strong> Team A ships a class with a stated invariant; Team B gets 5 minutes to <em>try</em> to violate it through any legal outside call; then roles swap with a new domain. Winning sieges list exactly which public function let the corruption through (design feedback loop).</p>
+<h2 id="practice-problems">Practice problems</h2>
+<ul><li>Convert L28's <code>Book</code> struct into a class: private stock enforced non-negative; <code>restock</code>/<code>sell</code> member functions.</li><li>Add a parameterized constructor to <code>Student</code> that rejects invalid gpas; demonstrate the compile error for outside writes.</li><li>Design the interface (signatures only) for a <code>Timer</code> class; mark every function <code>const</code>-correct.</li><li>(🟡 stretch) Explain why the compiler error for <code>s.gpa = 99.0;</code> <em>is</em> the encapsulation feature, not an obstacle.</li></ul>
+<h2 id="summary">Summary</h2>
+<p>A class pairs private data with a public interface; constructors establish the invariant at birth, setters guard it on every write, and <code>const</code> getters report without risk. The struct→class transition is the course's final architectural step: from writing correct programs to designing types that make incorrect programs <em>not compile</em>. Next (L32): the synthesis — the capstone builds and the course closes.</p>
+<h2 id="exit-ticket-formative-assessment">Exit ticket / formative assessment</h2>
+<ol><li>Which section of a class does outside code call?</li><li>Write the signature of a read-only member function <code>get_gpa</code>.</li><li>One sentence: what does a constructor guarantee?</li></ol>
+</ol>
+<h2 id="estimated-time-allocation-120-min">Estimated time allocation (120 min)</h2>
+<table><thead><tr><th>Segment</th><th>Minutes</th></tr></thead><tbody><tr><td>Recall (robustness quiz) + invariant motivation</td><td>15</td></tr><tr><td>Class anatomy + constructors</td><td>40</td></tr><tr><td>Break</td><td>10</td></tr><tr><td>Accessors + validation + struct-vs-class contrast</td><td>30</td></tr><tr><td>Invariant siege activity</td><td>20</td></tr><tr><td>Exit ticket + final-exam briefing</td><td>5</td></tr></tbody></table>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

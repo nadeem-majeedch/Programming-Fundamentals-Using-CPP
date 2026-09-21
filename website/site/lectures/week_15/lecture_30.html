@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L30 · Robust Programs: Stream State, Error Checking, Recovery Strategies · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/lectures/week_15/lecture_30.html">
+<link rel="stylesheet" href="../../styles.css">
+<script src="../../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../../index.html">Home</a></li><li><a href="../../overview.html">Overview</a></li><li><a href="../../outcomes.html">Outcomes</a></li><li><a href="../../schedule.html">Schedule</a></li><li><a href="../../lectures.html" aria-current="page">Lectures</a></li><li><a href="../../labs.html">Labs</a></li><li><a href="../../cases.html">Case Studies</a></li><li><a href="../../exercises.html">Exercises</a></li><li><a href="../../assignments.html">Assignments</a></li><li><a href="../../projects.html">Projects</a></li><li><a href="../../resources.html">Resources</a></li><li><a href="../../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="narrow">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../../index.html">Home</a> › L30 · Robust Programs: Stream State, Error Checking, Recovery Strategies</nav>
+<h1 class="page-title">L30 · Robust Programs: Stream State, Error Checking, Recovery Strategies</h1>
+<p><strong>Module 15 — File Handling and Error Management · Week 15 · Lecture 30 of 32 · 120 minutes</strong> <strong>Outcomes:</strong> CLO-8 · PF-15.3, PF-15.4 · <a href="../../outcomes.html">LEARNING_OUTCOMES.md</a> · <strong>Lab 7 clinic week · project work</strong></p>
+<h2 id="learning-objectives">Learning objectives</h2>
+<ol><li>Inspect and repair stream state with <code>fail()</code>, <code>bad()</code>, <code>eof()</code>, <code>clear()</code>, and <code>ignore()</code> — mapping each state bit to its cause and its recovery (PF-15.3).</li><li>Classify program errors into three response tiers — <em>user-fixable input errors</em> (re-prompt), <em>environment errors</em> (report + fallback), <em>program bugs</em> (assert/abort) — and implement the right tier for a given failure (PF-15.3).</li><li>Design and implement recovery strategies (re-prompt with bound, default value, skip-and-report) for a file-processing pipeline that must survive malformed input (PF-15.4).</li></ol>
+</ol>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>L29 (file reading/writing, open checks); L04 (basic <code>clear</code>/<code>ignore</code> recovery — now formalized); L12 (test-case classes — malformed input is the invalid class at file scale).</p>
+<h2 id="concept-sequence">Concept sequence</h2>
+<ol><li>From "works on my data" to robust software</li><li>Stream state bits: good/fail/bad/eof — what each means and who set it</li><li>State-repair toolkit: <code>clear()</code> + <code>ignore()</code> mechanics</li><li>The three error tiers and their responses</li><li>Recovery strategies for file pipelines (skip-and-report pattern)</li><li>Lab clinic + capstone robustness pass</li></ol>
+</ol>
+<h2 id="teaching-topics-detailed">Teaching topics (detailed)</h2>
+<ul><li><strong>State-bit table:</strong> <code>goodbit/failbit/badbit/eofbit</code> — failbit = recoverable (bad format), badbit = irrecoverable (disk), eofbit = normal end; <code>fail()</code> covers fail|bad — why course code tests <code>if (!stream)</code>; state persists across reads (a failed read taints <em>subsequent</em> reads — the reason clear-then-ignore is a pair, L04's question answered in full).</li><li><strong><code>clear()</code> + <code>ignore()</code>:</strong> <code>cin.clear();</code> resets state; <code>cin.ignore(std::numeric_limits&lt;std::streamsize&gt;::max(), '\n');</code> discards the poisoned buffer — <code>&lt;limits&gt;</code> include; the pair as a single named idiom; demo: 3-input form surviving mixed garbage input.</li><li><strong>Three error tiers with examples:</strong> user input (negative price → re-prompt with bounded attempts), environment (missing file → error message + default data / graceful exit code), program bugs (impossible state → <code>assert</code> mention, abort strategy); response matrix keyed to <em>who can fix it</em>.</li><li><strong>Skip-and-report pipeline:</strong> process <code>scores.txt</code> where some lines are malformed; per-line parse, on failure increment <code>bad_lines</code>, log line number, continue — the DS-track pattern (data cleaning); end-of-run report (processed / skipped counts) — robustness <em>measured</em>.</li><li><strong>Capstone robustness pass:</strong> every project topic adds: open-checks everywhere, input validation on the menu (M5 <code>do-while</code> + L30 idiom), skip-and-report on the data file; the milestone rubric references these three behaviors explicitly.</li></ul>
+<h2 id="c-examples-required">C++ examples required</h2>
+<table><thead><tr><th>File</th><th>Role</th></tr></thead><tbody><tr><td><code>robust_pipeline.cpp</code> ✅</td><td>malformed-file skip-and-report; tiered error handling; clear/ignore idiom wrapped as a function</td></tr><tr><td>(live) <code>input_guard.cpp</code></td><td>bounded re-prompt validator (3 attempts → default) built from the state toolkit</td></tr></tbody></table>
+<h2 id="common-student-misconceptions">Common student misconceptions</h2>
+<ul><li>"After a failed read, the next read just works." (State persists; the stream stays poisoned until cleared — demonstrated with two consecutive reads.)</li><li>"<code>clear()</code> also discards the bad text." (It resets <em>state</em> only; the buffer needs <code>ignore()</code> — the pair, never the singleton.)</li><li>"Robust programs never fail." (They fail <em>informatively and recoverably</em>; exit codes and reports are success criteria.)</li><li>"<code>assert</code> is error handling." (It's a bug detector for impossible states, not user-input handling — tier separation.)</li></ul>
+<h2 id="conceptual-explanation-beginner-first">Conceptual explanation (beginner-first)</h2>
+<p>Every <code>cin</code> operation since week 2 had a hidden second job: recording whether it succeeded. Streams carry <strong>state bits</strong> — <code>good</code> (all well), <code>fail</code> (the last read couldn't produce the value, e.g. letters into an int), <code>bad</code> (something broke at the system level), <code>eof</code> (the end was reached). Once a stream <em>fails</em>, it stays broken: every later read is skipped until you repair it — and repair is a two-step kit: <code>clear()</code> resets the state bits, <code>ignore(...)</code> flushes the bad characters still sitting in the buffer. The pair, never the singleton.</p>
+<p>Robust programs organize their responses into three <strong>tiers</strong>. Tier 1, <em>input problems</em> (user typed letters): recoverable — clear, ignore, re-prompt with a bound. Tier 2, <em>data problems</em> (missing file, garbage records inside a valid file): recoverable per-item — skip-and-report, continue, then summarize ("47 records, 3 skipped: lines 12, 30, 41"). Tier 3, <em>environment problems</em> (<code>badbit</code>, unwritable disk): not recoverable in this course — save nothing, print a clear message, exit with a non-zero status code.</p>
+<p>This lecture assembles the whole toolkit into functions — <code>read_int_bounded</code>, <code>skip_and_report</code> — that the capstone reuses, and that make "robust" a set of checkable behaviors rather than a mood.</p>
+<h2 id="terminology-and-definitions">Terminology and definitions</h2>
+<table><thead><tr><th>Term</th><th>Definition</th></tr></thead><tbody><tr><td>Stream state bits</td><td>good / fail / bad / eof — the stream's health flags</td></tr><tr><td>Poisoned stream</td><td>A failed stream that skips all reads until cleared</td></tr><tr><td><code>clear()</code></td><td>Resets the state bits (not the buffer!)</td></tr><tr><td><code>ignore(n, '\n')</code></td><td>Discards characters — up to n or the newline</td></tr><tr><td>Clear-then-ignore</td><td>The repair pair, always in that order</td></tr><tr><td>Tier 1: recoverable input</td><td>Re-prompt after clear+ignore, bounded attempts</td></tr><tr><td>Tier 2: recoverable data</td><td>Skip-and-report per bad record; end-of-run summary</td></tr><tr><td>Tier 3: unrecoverable</td><td>Clear message + non-zero exit status</td></tr><tr><td>Exit status</td><td><code>return 1;</code> signals failure to the environment</td></tr><tr><td>Bounded re-prompt</td><td>Attempts limit + default/fail — no infinite loops</td></tr></tbody></table>
+<h2 id="syntax-and-c-examples">Syntax and C++ examples</h2>
+<pre><code class="language-cpp">// the state toolkit as a reusable function
+int readIntBounded(const std::string&amp; prompt, int lo, int hi, int attempts)
+{
+    for (int used{1}; used &lt;= attempts; ++used)
+    {
+        std::cout &lt;&lt; prompt;
+        int value{};
+        if (std::cin &gt;&gt; value)                 // read + check in one
+        {
+            if (value &gt;= lo &amp;&amp; value &lt;= hi)
+                return value;                  // tier 1 success
+            std::cout &lt;&lt; &quot;must be &quot; &lt;&lt; lo &lt;&lt; &quot;..&quot; &lt;&lt; hi &lt;&lt; &#x27;\n&#x27;;
+        }
+        else
+        {
+            std::cout &lt;&lt; &quot;that is not a number\n&quot;;
+            std::cin.clear();                  // 1) reset the state
+            std::cin.ignore(1000, &#x27;\n&#x27;);       // 2) flush the bad text
+        }
+    }
+    return lo;                                 // bounded default
+}
+
+// tier 2: skip-and-report over file records
+int lineNo{0};
+int good{0}, bad{0};
+std::string line;
+while (std::getline(in, line))
+{
+    ++lineNo;
+    std::istringstream row{line};
+    int score{};
+    if (row &gt;&gt; score) { total += score; ++good; }
+    else
+    {
+        ++bad;
+        std::cerr &lt;&lt; &quot;line &quot; &lt;&lt; lineNo &lt;&lt; &quot;: skipped (bad record)\n&quot;;
+    }
+}
+std::cout &lt;&lt; good &lt;&lt; &quot; ok, &quot; &lt;&lt; bad &lt;&lt; &quot; skipped\n&quot;;
+
+// tier 3: unrecoverable
+if (!out)
+{
+    std::cerr &lt;&lt; &quot;fatal: cannot open output file\n&quot;;
+    return 1;                                  // non-zero = failure
+}</code></pre>
+<h2 id="line-by-line-code-explanation">Line-by-line code explanation</h2>
+<p><code>examples/robust_pipeline.cpp</code>:</p>
+<ol><li>The bounded validator loops <strong>at most</strong> <code>attempts</code> times — no infinite re-prompt loops; each failure path clears <em>and</em> ignores (the singleton <code>clear()</code> bug is the demo's first patient).</li><li>Range checking is separated from type checking: "not a number" and "out of range" get different messages — diagnostics that respect the user.</li><li>The pipeline reads records with <code>getline</code> + <code>istringstream</code>: the <em>line</em> is read successfully even when the <em>record</em> inside is garbage — that separation is what makes skip-and-report possible.</li><li>Bad records increment <code>bad</code> and report the line number on <code>cerr</code> (diagnostics stream, established in L29); processing continues — one poisoned record never stops the batch.</li><li>The end-of-run summary (good/bad counts) is the contract with the person who supplied the data: partial success is <em>measured</em>.</li></ol>
+</ol>
+<h2 id="output-prediction-questions-with-answers">Output prediction questions (with answers)</h2>
+<ol><li><code>cin</code> fails on <code>"abc"</code>; the program calls <code>clear()</code> only, then reads again — what happens? — The read skips: <code>abc</code> is still in the buffer; <code>ignore</code> was missing.</li><li>State bit for letters-into-int? — failbit — tier 1, recoverable.</li><li>Why clear <em>before</em> ignore? — A failed stream's <code>ignore</code> does nothing: the state must be reset first, or the pair is a no-op.</li><li>A file with 10 records, 2 malformed — output of the pipeline? — 8 processed, 2 skipped with line numbers, summary printed — exit 0.</li><li><code>badbit</code> set — what should the program do? — Tier 3: message, save nothing, exit non-zero.</li></ol>
+</ol>
+<h2 id="common-errors-and-debugging-examples">Common errors and debugging examples</h2>
+<table><thead><tr><th>Error</th><th>Symptom</th><th>Fix</th></tr></thead><tbody><tr><td><code>clear()</code> without <code>ignore()</code></td><td>Infinite re-prompt on the same bad text</td><td>The pair, always</td></tr><tr><td><code>ignore()</code> without <code>clear()</code></td><td>Ignore silently does nothing</td><td>Same answer, other order</td></tr><tr><td>Unbounded re-prompt</td><td>User can never escape the loop</td><td>Attempts bound + default (L04 discipline, formalized)</td></tr><tr><td>Treating bad records as fatal</td><td>One garbage line kills the batch</td><td>Tier 2: skip-and-report + summary</td></tr><tr><td>Using assert for user input</td><td>Crashes in production use</td><td>assert = impossible states; tiers for data</td></tr><tr><td>Zero exit on partial failure</td><td>Calling scripts can't detect the problem</td><td>Exit status policy: define and document</td></tr></tbody></table>
+<h2 id="classroom-demonstrations">Classroom demonstrations</h2>
+<ol><li><strong>The poisoned stream:</strong> type <code>abc</code> into an int prompt twice in a row — the second read vanishes; then the repair pair — recovery.</li><li><strong>Singleton surgery:</strong> run the validator missing <code>ignore</code> — the infinite loop; add <code>ignore</code> — fixed. Other order: still broken.</li><li><strong>Skip-and-report theatre:</strong> feed a roster file with three broken lines — the pipeline reports all three by line number and finishes with counts: robustness you can grade.</li></ol>
+</ol>
+<h2 id="guided-student-activities">Guided student activities</h2>
+<p><strong>Lab 7-style clinic (2 h, this lecture slot):</strong> robustness clinic — teams harden a provided fragile pipeline (missing file, garbage lines, empty file, duplicate records) against a fault-injection checklist; graded on the skip-and-report output and the three-tier matrix completion. Remaining time: capstone robustness pass with TA support (<a href="../../labs.html">labs/README.md</a>).</p>
+<h2 id="practice-problems">Practice problems</h2>
+<ul><li>Map 8 failure scenarios to (state bit, tier, response, idiom).</li><li>Implement <code>read_int_bounded(prompt, lo, hi, attempts)</code> using the full state toolkit.</li><li>Harden the L29 record loader with skip-and-report + end-of-run counts.</li><li>(🟡 stretch) Explain why <code>badbit</code> has no user-side recovery, and what the program should do when it's set (save nothing, exit non-zero).</li></ul>
+<h2 id="summary">Summary</h2>
+<p>Stream state bits make failure <em>observable</em>; the clear-ignore pair makes it <em>repairable</em>; the three tiers make responses <em>policy</em> instead of panic: bounded re-prompts for input, skip-and-report for data, clear-message-plus-exit-code for the unrecoverable. Robustness is now a checklist the capstone must satisfy. Next (L31): classes — behavior joins data.</p>
+<h2 id="exit-ticket-formative-assessment">Exit ticket / formative assessment</h2>
+<ol><li>State bit for "user typed 'abc' into an int"? Response tier?</li><li>Why must <code>clear()</code> precede <code>ignore()</code>?</li><li>Name the three tiers and one example response each.</li></ol>
+</ol>
+<h2 id="estimated-time-allocation-120-min">Estimated time allocation (120 min)</h2>
+<table><thead><tr><th>Segment</th><th>Minutes</th></tr></thead><tbody><tr><td>Recall (file I/O quiz) + robustness motivation</td><td>10</td></tr><tr><td>State bits + clear/ignore idiom</td><td>35</td></tr><tr><td>Break</td><td>10</td></tr><tr><td>Error tiers + skip-and-report pipeline</td><td>35</td></tr><tr><td>Robustness clinic + capstone pass</td><td>25</td></tr><tr><td>Exit ticket + Module 16 preview</td><td>5</td></tr></tbody></table>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

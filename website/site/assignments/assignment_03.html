@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Assignment 3 · Collatz Explorer — Loops + First Functions · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/assignments/assignment_03.html">
+<link rel="stylesheet" href="../styles.css">
+<script src="../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../index.html">Home</a></li><li><a href="../overview.html">Overview</a></li><li><a href="../outcomes.html">Outcomes</a></li><li><a href="../schedule.html">Schedule</a></li><li><a href="../lectures.html">Lectures</a></li><li><a href="../labs.html">Labs</a></li><li><a href="../cases.html">Case Studies</a></li><li><a href="../exercises.html">Exercises</a></li><li><a href="../assignments.html" aria-current="page">Assignments</a></li><li><a href="../projects.html">Projects</a></li><li><a href="../resources.html">Resources</a></li><li><a href="../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="narrow">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../index.html">Home</a> › Assignment 3 · Collatz Explorer — Loops + First Functions</nav>
+<h1 class="page-title">Assignment 3 · Collatz Explorer — Loops + First Functions</h1>
+<p><strong>Modules 5–7 (L09–L13) · 40 marks · due end of Week 7</strong> Outcomes: CLO-3, CLO-4, CLO-5 (PF-5.x, PF-7.x)</p>
+<p>The Collatz rule: for n &gt; 1, next is <code>n/2</code> if n is even, <code>3n+1</code> if odd; stop at 1. You will build a small toolkit of functions and drive it from a menu-free main.</p>
+<h2 id="requirements">Requirements</h2>
+<p>Implement and use these functions (signatures fixed):</p>
+<ol><li><code>int collatzLength(long long n);</code> — steps from n down to 1 (n ≥ 1; return 0 for n == 1). Precondition comment required.</li><li><code>long long collatzMax(long long n);</code> — the largest value seen on the path <em>including n itself</em>.</li><li><code>void printPath(long long n);</code> — prints the path comma-separated, ending with 1 and a newline (e.g., <code>6, 3, 10, 5, 16, 8, 4, 2, 1</code>).</li></ol>
+</ol>
+<p>Main:</p>
+<ul><li>Read one long long n (1 ≤ n ≤ 1,000,000; else <code>bad n</code>, exit 1 — validate the read itself too).</li><li>Print <code>steps: L</code> and <code>max: M</code> on separate lines, then the path.</li></ul>
+<h2 id="sample-run">Sample run</h2>
+<p>Input <code>6</code> →</p>
+<pre><code>steps: 8
+max: 16
+6, 3, 10, 5, 16, 8, 4, 2, 1</code></pre>
+<h2 id="constraints">Constraints</h2>
+<ul><li>All three functions take n <em>by value</em>; no globals.</li><li>The path print must not recompute the sequence differently — reuse the rule once (single loop per function is fine; duplication of the <em>rule</em> across functions is the defect to avoid; factor a <code>next(n)</code> helper if that keeps it single-sourced).</li><li><code>3n+1</code> must not overflow: keep the running value in <code>long long</code> and state why in one comment.</li></ul>
+<h2 id="deliverables">Deliverables</h2>
+<p><code>collatz.cpp</code> (contract, zero warnings) · <code>test_table.md</code> — n = 1, 2, 6, 27 (steps 111, max 9232 — verify by hand for one of them), boundary 1000000, n = 0 rejected, non-numeric rejected · <code>postmortem.md</code> (10 marks).</p>
+<h2 id="notes">Notes</h2>
+<ul><li>n = 1 path is just <code>1</code> with 0 steps.</li><li>The famous n = 27 case is a good stress test for your max tracker.</li></ul>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L05 · Arithmetic Operators, Precedence, and Integer vs Floating-Point Division · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/lectures/week_03/lecture_05.html">
+<link rel="stylesheet" href="../../styles.css">
+<script src="../../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../../index.html">Home</a></li><li><a href="../../overview.html">Overview</a></li><li><a href="../../outcomes.html">Outcomes</a></li><li><a href="../../schedule.html">Schedule</a></li><li><a href="../../lectures.html" aria-current="page">Lectures</a></li><li><a href="../../labs.html">Labs</a></li><li><a href="../../cases.html">Case Studies</a></li><li><a href="../../exercises.html">Exercises</a></li><li><a href="../../assignments.html">Assignments</a></li><li><a href="../../projects.html">Projects</a></li><li><a href="../../resources.html">Resources</a></li><li><a href="../../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="narrow">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../../index.html">Home</a> › L05 · Arithmetic Operators, Precedence, and Integer vs Floating-Point Division</nav>
+<h1 class="page-title">L05 · Arithmetic Operators, Precedence, and Integer vs Floating-Point Division</h1>
+<p><strong>Module 3 — Operators and Expressions · Week 3 · Lecture 5 of 32 · 120 minutes</strong> <strong>Outcomes:</strong> CLO-2 · PF-3.1, PF-3.2 · <a href="../../outcomes.html">LEARNING_OUTCOMES.md</a></p>
+<h2 id="learning-objectives">Learning objectives</h2>
+<ol><li>Evaluate arithmetic expressions (<code>+ - * / %</code>, unary minus) honoring precedence and left-associativity, and annotate an expression tree for any single-operator step (PF-3.1).</li><li>Predict exactly when <code>/</code> truncates (both operands integral) and compute <code>%</code> for positive <strong>and negative</strong> operands, and exploit <code>/</code>+<code>%</code> for digit extraction (PF-3.2).</li><li>Use parentheses to make intent explicit and explain why "it works" is not the standard for readable expressions (PF-3.1).</li></ol>
+</ol>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>L03–L04 (typed variables; can read/print values).</p>
+<h2 id="concept-sequence">Concept sequence</h2>
+<ol><li>Expressions produce values (everything on the right of <code>=</code>)</li><li>The arithmetic operator set + unary minus</li><li>Precedence &amp; associativity: <code>* / %</code> above <code>+ -</code>, left to right</li><li>Integer division &amp; modulo — the week's star trap</li><li>Digit extraction with <code>/ 10</code> and <code>% 10</code> (first real "algorithm")</li><li>Operator expressions inside output (<code>cout &lt;&lt; 7 / 2</code>)</li></ol>
+</ol>
+<h2 id="teaching-topics-detailed">Teaching topics (detailed)</h2>
+<ul><li><strong>Operator table</strong> with examples; <code>%</code> defined as <em>remainder</em>; sign rule shown by machine experiment (<code>-7 % 2</code> → <code>-1</code> in C++, sign follows the dividend) — students <em>predict-then-run</em>.</li><li><strong>Precedence ladder:</strong> parentheses → unary → <code><em> / %</code> → binary <code>+ -</code>; associativity left-to-right for same tier; expression-tree drawing on the board for <code>2 + 3 </em> 4 - 6 / 2</code> (→ <code>2+12-3 = 11</code>).</li><li><strong>Integer division:</strong> <code>7/2 = 3</code>, <code>-7/2 = -3</code> (truncation toward zero, not floor); <code>7.0/2 = 3.5</code>; the classic bug: <code>avg = a + b / 2;</code> (precedence) vs <code>(a + b) / 2</code> (truncation!) — both wrong differently.</li><li><strong>Modulo uses:</strong> even/odd (<code>n % 2</code>), divisibility, last digit (<code>n % 10</code>), clock arithmetic; digit-drop (<code>n / 10</code>).</li><li><strong>Style:</strong> parenthesize even when redundant; one operation per line in complex formulas.</li></ul>
+<h2 id="c-examples-required">C++ examples required</h2>
+<table><thead><tr><th>File</th><th>Role</th></tr></thead><tbody><tr><td><code>precedence_demo.cpp</code> ✅</td><td>10 expressions with printed results: precedence, associativity, int vs double division, negative <code>%</code></td></tr><tr><td>(live) <code>digit_extractor.cpp</code></td><td>takes a 3-digit number, extracts/sprints each digit with <code>/</code> and <code>%</code></td></tr></tbody></table>
+<h2 id="conceptual-explanation-beginner-first">Conceptual explanation (beginner-first)</h2>
+<p>Arithmetic in C++ looks like school math and behaves like it <em>almost</em> always. The <code>almost</code> hides two traps that break real programs:</p>
+<ol><li><strong>Operator precedence</strong>: multiplication binds tighter than addition, so <code>2 + 3 * 4</code> is 14, not 20. When in doubt, parenthesize — parentheses are free and make your intent readable.</li><li><strong>Integer division</strong>: <code>/</code> between two <em>whole numbers</em> produces a whole number — the fraction is discarded, not rounded. <code>7 / 2</code> is <code>3</code>. This is not a bug in C++; it is the <em>definition</em>: int / int → int. The moment one operand is <code>double</code> (<code>7.0 / 2</code>), you get <code>3.5</code>.</li></ol>
+</ol>
+<p>The companion operator <code>%</code> (modulo) gives the <em>remainder</em> of that whole- number division: <code>7 % 2</code> is <code>1</code>. Modulo is the Swiss-army knife of programming: even/odd tests, "every Nth item", clock arithmetic, and — as students will see in five minutes — extracting the digits of a number.</p>
+<h2 id="terminology-and-definitions">Terminology and definitions</h2>
+<table><thead><tr><th>Term</th><th>Definition</th></tr></thead><tbody><tr><td>Operand</td><td>A value an operator works on (<code>2</code> and <code>3</code> in <code>2 + 3</code>)</td></tr><tr><td>Binary / unary operator</td><td>Takes two operands (<code>a + b</code>) / one (<code>-x</code>)</td></tr><tr><td>Precedence</td><td>Which operator binds first (<code>*</code> before <code>+</code>)</td></tr><tr><td>Associativity</td><td>Same-precedence tie-break: left-to-right for <code>+ - * / %</code></td></tr><tr><td>Integer division</td><td><code>int / int</code> → <code>int</code>; fraction truncated toward zero</td></tr><tr><td>Truncation</td><td>Discarding the fraction (<code>7/2 → 3</code>, <code>-7/2 → -3</code>) — NOT rounding</td></tr><tr><td>Modulo <code>%</code></td><td>Remainder of integer division; sign follows the dividend</td></tr><tr><td>Expression tree</td><td>A diagram showing which operation happens when</td></tr><tr><td>Parenthesization</td><td>Explicit grouping that overrides precedence</td></tr></tbody></table>
+<h2 id="syntax-and-c-examples">Syntax and C++ examples</h2>
+<pre><code class="language-cpp">int a{17};
+int b{5};
+a + b      // 22      a - b      // 12
+a * b      // 85      a / b      // 3   (int / int!)
+a % b      // 2       -a         // -17 (unary minus)
+a / 2.0    // 8.5     (one double promotes the division)
+(a + b) * 2   // 44   (parentheses first)</code></pre>
+<p>Precedence ladder (high → low): <code>()</code> → unary <code>-</code> → <code>* / %</code> → <code>+ -</code>.</p>
+<h2 id="line-by-line-code-explanation">Line-by-line code explanation</h2>
+<p><code>examples/precedence_demo.cpp</code> (each printed line is a prediction exercise first):</p>
+<ol><li><code>2 + 3 <em> 4</code> → 14 — <code></em></code> first. <code>(2 + 3) * 4</code> → 20 — parentheses override.</li><li><code>20 / 2 * 5</code> → 50, not 2 — same tier, left-to-right: <code>(20/2)*5</code>.</li><li><code>7 / 2</code> → 3 and <code>-7 / 2</code> → <strong>-3</strong>: truncation is toward zero. <code>7.0 / 2</code> → 3.5 — one double changes the whole division.</li><li><code>7 % 2</code> → 1; <code>-7 % 2</code> → <strong>-1</strong>: the remainder takes the <em>dividend's</em> sign. (Standard C++ defines this since C++11; older quirks are history.)</li><li>Digit extraction: <code>927 % 10</code> → 7 (last digit); <code>927 / 10 % 10</code> → 2; <code>927 / 100</code> → 9. This pair (<code>% 10</code>, <code>/ 10</code>) returns in L09's digit-sum loop.</li><li>The average bugs: <code>a + b / 2</code> → 5 (precedence: <code>b/2</code> first); <code>(a + b) / 2</code> → 3 (truncation); <code>(a + b) / 2.0</code> → 3.5 (correct). Two different wrongs, one right — the exact trio on every midterm.</li></ol>
+</ol>
+<h2 id="output-prediction-questions-with-answers">Output prediction questions (with answers)</h2>
+<ol><li><code>10 + 4 / 2</code> — ? — <code>12</code> (division first).</li><li><code>10 % 3</code> and <code>-10 % 3</code> — ? — <code>1</code> and <code>-1</code> (sign follows dividend).</li><li><code>9 / 2 * 2</code> — ? — <code>8</code>, not 9 (<code>9/2</code> truncates to 4 first!).</li><li><code>7 / 2.0 + 1</code> — ? — <code>4.5</code> (<code>7/2.0</code> is 3.5, then <code>+ 1</code> promotes to 4.5).</li><li><code>static int</code> trick-free warm-up: <code>15 / 4</code> vs <code>15 % 4</code> — ? — <code>3</code> and <code>3</code> (quotient and remainder of the same division).</li></ol>
+</ol>
+<h2 id="common-errors-and-debugging-examples">Common errors and debugging examples</h2>
+<table><thead><tr><th>Error</th><th>Symptom</th><th>Fix</th></tr></thead><tbody><tr><td>Average via <code>(a + b) / 2</code></td><td>Whole-number averages only (3 instead of 3.5)</td><td>Divide by <code>2.0</code> (or cast)</td></tr><tr><td>Precedence bug <code>a + b / 2</code></td><td>Slightly-off results, no diagnostic</td><td>Parenthesize: <code>(a + b) / 2.0</code></td></tr><tr><td>Expecting <code>-7 / 2 == -4</code></td><td>Off-by-one in symmetry checks</td><td>Truncation is toward zero</td></tr><tr><td><code>n % 2</code> used for "is divisible by 3"</td><td>Logic error</td><td><code>n % 3 == 0</code></td></tr><tr><td>Modulo by zero</td><td>Runtime crash (integer division by zero)</td><td>Validate the divisor first</td></tr></tbody></table>
+<h2 id="common-student-misconceptions">Common student misconceptions</h2>
+<ul><li><strong>"<code>%</code> works on floating-point numbers."</strong> <code>%</code> is an integer operator in C++; for floating point there is <code>std::fmod</code> (show, don't require).</li><li><strong>"Division by zero just gives 0 or an error message."</strong> Integer division by zero is <em>undefined behavior</em> — the program may crash, lie, or appear fine; guard every divisor.</li><li><strong>"My program computes <code>a/b</code> correctly for any two ints."</strong> <code>/</code> truncates toward zero (e.g. <code>7 / 2</code> is <code>3</code>); many "wrong answer" bugs are silent truncation, not logic errors.</li><li><strong>"Parentheses are only for readability."</strong> They change the tree the compiler builds — <code>(2 + 3) <em> 4</code> vs <code>2 + 3 </em> 4</code> compute different values; precedence is about structure, not style.</li><li><strong>"<code>-7 % 2</code> is 1."</strong> In C++ the result of <code>%</code> has the sign of the <em>left</em> operand (<code>-7 % 2</code> is <code>-1</code>); students trained on other languages predict differently.</li></ul>
+<h2 id="classroom-demonstrations">Classroom demonstrations</h2>
+<ol><li><strong>Predict-then-run:</strong> reveal each printed line of <code>precedence_demo.cpp</code> one at a time; students commit answers before the line prints.</li><li><strong>Expression trees:</strong> build the tree for <code>2 + 3 * 4 - 6 / 2</code> on the board step by step, then verify with the program.</li><li><strong>The digit machine:</strong> type any 3-digit number; extract digits live with <code>/</code> and <code>%</code>, connecting L05 to the L09 loop.</li></ol>
+</ol>
+<h2 id="guided-student-activities">Guided student activities</h2>
+<p><strong>Predict-then-run tournament (20 min):</strong> 12 expressions on slides; pairs write predictions on whiteboards, then we run the program and score points; every miss gets a 30-second why. The negative-<code>%</code> round is the guaranteed upset.</p>
+<h2 id="practice-problems">Practice problems</h2>
+<ul><li>Evaluate 10 expressions by hand (2 with unary minus, 3 mixed-type).</li><li>Write digit-extractor for an arbitrary 4-digit input.</li><li>Fix 3 broken average/percentage programs (precedence bug, truncation bug, both).</li><li>(🟡 stretch) Compute minutes-and-seconds split of total seconds with one <code>/</code> and one <code>%</code>.</li></ul>
+<h2 id="summary">Summary</h2>
+<p>C++ arithmetic follows precedence (<code>* / %</code> above <code>+ -</code>, left-to-right within a tier), and parenthesization is the readable way to be explicit. Integer division truncates toward zero; modulo gives the remainder with the dividend's sign — and together they power digit extraction. The two average bugs (precedence and truncation) are the canonical traps. Next (L06): what happens when types <em>mix</em> — conversions, casts, and the increment family.</p>
+<ul><li>"<code>%</code> gives the decimal part." (It's the <em>remainder</em> of integer division.)</li><li>"<code>7/2</code> is 3.5 that gets rounded." (Truncation, not rounding; and it happens at <em>evaluation</em>, before any assignment.)</li><li>"Precedence differences are just style." (They change the computed value.)</li><li>"<code>-7/2</code> is -4." (Truncation toward zero: -3; floor is a different operator they'll meet in other languages.)</li></ul>
+<h2 id="exit-ticket-formative-assessment">Exit ticket / formative assessment</h2>
+<ol><li>Evaluate: <code>17 % 5</code>, <code>-17 % 5</code>, <code>17 / 5</code>, <code>17.0 / 5</code>.</li><li>Insert one pair of parentheses to make <code>2 + 3 * 4</code> equal 20.</li><li>One sentence: when does <code>/</code> truncate?</li></ol>
+</ol>
+<h2 id="estimated-time-allocation-120-min">Estimated time allocation (120 min)</h2>
+<table><thead><tr><th>Segment</th><th>Minutes</th></tr></thead><tbody><tr><td>Recall (I/O quiz) + expressions-produce-values</td><td>10</td></tr><tr><td>Operator set + precedence with expression trees</td><td>30</td></tr><tr><td>Break</td><td>10</td></tr><tr><td>Integer division, <code>%</code> (incl. negatives), digit extraction</td><td>35</td></tr><tr><td>Predict-then-run tournament</td><td>25</td></tr><tr><td>Exit ticket + L06 preview</td><td>10</td></tr></tbody></table>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

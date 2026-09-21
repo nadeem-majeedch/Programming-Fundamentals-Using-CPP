@@ -1,0 +1,59 @@
+# Deploy the course website to GitHub Pages.
+#
+# Builds website/site/ with tools/build_site.py (the repository markdown is
+# the single source of truth) and publishes it. The site is fully
+# self-contained with relative links, so it serves correctly from the
+# project subpath https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/
+#
+# One-time setup (after the first successful run):
+#   Settings -> Pages -> Build and deployment -> Source: "GitHub Actions"
+# If Pages was previously configured from a branch, switch the source to
+# "GitHub Actions" so this workflow can publish.
+
+name: Deploy site to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment; do not cancel in-progress runs.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Build website
+        run: python tools/build_site.py
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: website/site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

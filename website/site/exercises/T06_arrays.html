@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Exercises · T06 arrays · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/exercises/T06_arrays.html">
+<link rel="stylesheet" href="../styles.css">
+<script src="../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../index.html">Home</a></li><li><a href="../overview.html">Overview</a></li><li><a href="../outcomes.html">Outcomes</a></li><li><a href="../schedule.html">Schedule</a></li><li><a href="../lectures.html">Lectures</a></li><li><a href="../labs.html">Labs</a></li><li><a href="../cases.html">Case Studies</a></li><li><a href="../exercises.html" aria-current="page">Exercises</a></li><li><a href="../assignments.html">Assignments</a></li><li><a href="../projects.html">Projects</a></li><li><a href="../resources.html">Resources</a></li><li><a href="../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../index.html">Home</a> › Exercises · T06 arrays</nav>
+<h1 class="page-title">Exercises · T06 arrays</h1>
+<p>Covers: 1-D and 2-D arrays — declaration, traversal, fill/print, accumulate/count-if/find-first/min-max, in-place algorithms, 2-D traversals and aggregation, arrays with functions. Lectures L17–L20. Outcomes PF-9.x, PF-10.x.</p>
+<p>13 exercises · ladder 🟢 → 🔴.</p>
+<hr>
+<h3 id="pf-e-066-array-echo">PF-E-066 · Array Echo</h3>
+<p><strong>Difficulty:</strong> Beginner · <strong>Lecture:</strong> L17 · <strong>Outcomes:</strong> PF-9.1 <strong>Prerequisites:</strong> E-027 <strong>Problem:</strong> Read n (1–20) then n integers into an array; print them back space-separated on one line, then in reverse order on a second line. <strong>Input:</strong> n, then n integers · <strong>Output:</strong> two lines. <strong>Sample:</strong> <code>4 5 6 7 8</code> → <code>5 6 7 8</code> / <code>8 7 6 5</code> <strong>Hints:</strong> two loops over the same array — one forward, one with a decreasing index.</p>
+<h3 id="pf-e-067-array-sum-and-mean">PF-E-067 · Array Sum and Mean</h3>
+<p><strong>Difficulty:</strong> Beginner · <strong>Lecture:</strong> L17 · <strong>Outcomes:</strong> PF-9.1, PF-9.3 <strong>Prerequisites:</strong> E-066 <strong>Problem:</strong> Read n (1–20) then n integers. Print the sum (int) and mean (2 decimals, correctly non-truncating). <strong>Input:</strong> n, then n integers · <strong>Output:</strong> sum + mean. <strong>Sample:</strong> <code>3 1 2 4</code> → <code>sum: 7</code> / <code>mean: 2.33</code> <strong>Hints:</strong> L05's truncation lesson — cast <em>after</em> the sum.</p>
+<h3 id="pf-e-068-fill-with-pattern">PF-E-068 · Fill with Pattern</h3>
+<p><strong>Difficulty:</strong> Beginner · <strong>Lecture:</strong> L17 · <strong>Outcomes:</strong> PF-9.1 <strong>Prerequisites:</strong> E-067 <strong>Problem:</strong> Declare an array of 10 ints. Fill it so <code>a[i] = 3*i + 2</code> using a loop, print it, then re-fill with the first 10 squares and print again. <strong>Input:</strong> none · <strong>Output:</strong> two arrays. <strong>Sample:</strong> first → <code>2 5 8 11 14 17 20 23 26 29</code> <strong>Hints:</strong> the fill loop <em>computes</em> — no input needed.</p>
+<h3 id="pf-e-069-count-occurrences">PF-E-069 · Count Occurrences</h3>
+<p><strong>Difficulty:</strong> Beginner · <strong>Lecture:</strong> L18 · <strong>Outcomes:</strong> PF-9.3 <strong>Prerequisites:</strong> E-067 <strong>Problem:</strong> Read n (1–20), n integers, and a key. Print how many times the key appears and the positions (0-based) of every occurrence. <strong>Input:</strong> n, integers, key · <strong>Output:</strong> count + positions. <strong>Sample:</strong> <code>6 4 8 4 1 4 9</code> key <code>4</code> → <code>count: 3</code> / <code>positions: 0 2 4</code> <strong>Hints:</strong> COUNT-IF with an index side-report.</p>
+<h3 id="pf-e-070-min-and-max-with-positions">PF-E-070 · Min and Max with Positions</h3>
+<p><strong>Difficulty:</strong> Foundational · <strong>Lecture:</strong> L18 · <strong>Outcomes:</strong> PF-9.3 <strong>Prerequisites:</strong> E-069 <strong>Problem:</strong> Read n (1–20) then n integers. Print the minimum and maximum <em>values</em> and <em>their first positions</em>. Handle the all-equal array. <strong>Input:</strong> n, then n integers · <strong>Output:</strong> four numbers. <strong>Sample:</strong> <code>5 7 7 2 9 2</code> → <code>min: 2 (pos 3)</code> / <code>max: 9 (pos 4)</code> <strong>Hints:</strong> seed with <code>a[0]</code> (L11's lesson), loop from index 1, update value <em>and</em> index together.</p>
+<h3 id="pf-e-071-reverse-in-place">PF-E-071 · Reverse In Place</h3>
+<p><strong>Difficulty:</strong> Foundational · <strong>Lecture:</strong> L18 · <strong>Outcomes:</strong> PF-9.3 <strong>Prerequisites:</strong> E-070 <strong>Problem:</strong> Read n (1–20) then n integers. Reverse the array <strong>in place</strong> (two-index swap, no second array) and print before/after. <strong>Input:</strong> n, then n integers · <strong>Output:</strong> two lines. <strong>Sample:</strong> <code>4 1 2 3 4</code> → <code>before: 1 2 3 4</code> / <code>after: 4 3 2 1</code> <strong>Hints:</strong> swap <code>a[i]</code> with <code>a[n-1-i]</code> for i &lt; n/2.</p>
+<h3 id="pf-e-072-remove-all-occurrences-compact">PF-E-072 · Remove All Occurrences (compact)</h3>
+<p><strong>Difficulty:</strong> Foundational · <strong>Lecture:</strong> L18 · <strong>Outcomes:</strong> PF-9.3 <strong>Prerequisites:</strong> E-071 <strong>Problem:</strong> Read n (1–20), n integers, and a key. Build a <em>compacted</em> array with all occurrences of key removed (preserve order); print the new logical size and contents. <strong>Input:</strong> n, integers, key · <strong>Output:</strong> size + compacted array. <strong>Sample:</strong> <code>6 4 8 4 1 4 9</code> key <code>4</code> → <code>size: 3</code> / <code>8 1 9</code> <strong>Hints:</strong> write-index walks slower than read-index — the classic two-finger compaction.</p>
+<h3 id="pf-e-073-merge-two-sorted-arrays">PF-E-073 · Merge Two Sorted Arrays</h3>
+<p><strong>Difficulty:</strong> Intermediate · <strong>Lecture:</strong> L20 · <strong>Outcomes:</strong> PF-9.3, PF-9.4 <strong>Prerequisites:</strong> E-072 <strong>Problem:</strong> Read two sorted arrays (n₁, n₁ values; n₂, n₂ values — each ascending). Merge into one sorted array <em>without re-sorting</em> (two-finger walk). Print the merged result. <strong>Input:</strong> n₁ + values, n₂ + values (each ascending) · <strong>Output:</strong> merged line. <strong>Sample:</strong> <code>3 1 4 9</code> + <code>3 2 4 10</code> → <code>1 2 4 4 9 10</code> <strong>Hints:</strong> take the smaller head each time; then append the remainder.</p>
+<h3 id="pf-e-074-rotate-left-by-k">PF-E-074 · Rotate Left by K</h3>
+<p><strong>Difficulty:</strong> Intermediate · <strong>Lecture:</strong> L20 · <strong>Outcomes:</strong> PF-9.3 <strong>Prerequisites:</strong> E-073 <strong>Problem:</strong> Read n (1–20), n integers, and k (0–n−1). Rotate the array left by k positions <em>in place</em> is hard; instead produce the rotated result in a second array and print it. Then state (comment) how in-place could be done with three reversals. <strong>Input:</strong> n, values, k · <strong>Output:</strong> rotated array. <strong>Sample:</strong> <code>5 1 2 3 4 5</code> k=2 → <code>3 4 5 1 2</code> <strong>Hints:</strong> <code>b[i] = a[(i + k) % n]</code> — modulo does the wrap.</p>
+<h3 id="pf-e-075-histogram-of-scores">PF-E-075 · Histogram of Scores</h3>
+<p><strong>Difficulty:</strong> Intermediate · <strong>Lecture:</strong> L20 · <strong>Outcomes:</strong> PF-9.3, PF-2.3 <strong>Prerequisites:</strong> E-070 <strong>Problem:</strong> Read n (1–100) scores (0–100). Print a star histogram: one row per 10-point band (0–9, 10–19, …, 90–100), labeled, with <code>#</code> repeated per count. Reject out-of-range scores with a re-prompt. <strong>Input:</strong> n + scores · <strong>Output:</strong> 10 labeled rows. <strong>Sample:</strong> with three scores in 80s → <code>80-89: ###</code> <strong>Hints:</strong> band index = score/10 (with 100 folded into the last band); an array of 10 counters beats 10 variables.</p>
+<h3 id="pf-e-076-matrix-addition-and-scale">PF-E-076 · Matrix Addition and Scale</h3>
+<p><strong>Difficulty:</strong> Intermediate · <strong>Lecture:</strong> L20 · <strong>Outcomes:</strong> PF-10.1, PF-10.2 <strong>Prerequisites:</strong> E-075 <strong>Problem:</strong> Read a 2×3 and a 2×3 matrix of ints. Print A+B, then 3×A (each element tripled), matrices formatted in rows. <strong>Input:</strong> 6 ints, then 6 ints · <strong>Output:</strong> two matrices. <strong>Sample:</strong> A = {{1,2,3},{4,5,6}} → 3×A is <code>3 6 9 / 12 15 18</code> <strong>Hints:</strong> nested loops with <code>const int ROWS{2}; const int COLS{3};</code>.</p>
+<h3 id="pf-e-077-row-and-column-totals-2-d">PF-E-077 · Row and Column Totals (2-D)</h3>
+<p><strong>Difficulty:</strong> Intermediate · <strong>Lecture:</strong> L20 · <strong>Outcomes:</strong> PF-10.2 <strong>Prerequisites:</strong> E-076 <strong>Problem:</strong> Read a 3×4 matrix. Print row totals (one line), column totals (one line), and the grand total. Then print which row has the largest total. <strong>Input:</strong> 12 ints · <strong>Output:</strong> three lines + winning row. <strong>Sample:</strong> — → <code>rows: 22 15 40</code> / <code>cols: …</code> / <code>grand: 77</code> / <code>largest row: 2</code> <strong>Hints:</strong> accumulator <em>placement</em> (L20's inherited-accumulator bug) decides correctness.</p>
+<h3 id="pf-e-078-diagonal-difference-square-matrix">PF-E-078 · Diagonal Difference (square matrix)</h3>
+<p><strong>Difficulty:</strong> Advanced Introductory · <strong>Lecture:</strong> L20 · <strong>Outcomes:</strong> PF-10.2, PF-10.3 <strong>Prerequisites:</strong> E-077 <strong>Problem:</strong> Read n (2–8) and an n×n matrix. Compute |main diagonal − anti-diagonal| and print it. Also print whether the matrix is symmetric (a[i][j] == a[j][i] for all pairs). <strong>Input:</strong> n + n² ints · <strong>Output:</strong> difference + symmetric verdict. <strong>Sample:</strong> n=2, {{1,2},{2,1}} → <code>diff: 0</code> / <code>symmetric: yes</code> <strong>Hints:</strong> diagonals are single loops; symmetry is a j &gt; i half-matrix check.</p>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

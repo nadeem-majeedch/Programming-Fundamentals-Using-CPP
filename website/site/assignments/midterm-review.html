@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Midterm review guide · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/assignments/midterm-review.html">
+<link rel="stylesheet" href="../styles.css">
+<script src="../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../index.html">Home</a></li><li><a href="../overview.html">Overview</a></li><li><a href="../outcomes.html">Outcomes</a></li><li><a href="../schedule.html">Schedule</a></li><li><a href="../lectures.html">Lectures</a></li><li><a href="../labs.html">Labs</a></li><li><a href="../cases.html">Case Studies</a></li><li><a href="../exercises.html">Exercises</a></li><li><a href="../assignments.html" aria-current="page">Assignments</a></li><li><a href="../projects.html">Projects</a></li><li><a href="../resources.html">Resources</a></li><li><a href="../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="narrow">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../index.html">Home</a> › Midterm review guide</nav>
+<h1 class="page-title">Midterm review guide</h1>
+<p><strong>Exam format:</strong> 100 minutes · 50 marks. Conceptual ≈ 40 %, applied ≈ 60 %. Question shapes: MCQ, output tracing, debugging, short conceptual, algorithm design (IPO/decision tables), coding, code completion. A closed-book paper — no compiler, so <em>practice writing code by hand</em>.</p>
+<h2 id="what-to-be-fluent-in">What to be fluent in</h2>
+<table><thead><tr><th>Module</th><th>Must-have skills</th><th>Practice from</th></tr></thead><tbody><tr><td>M1 · Intro &amp; toolchain</td><td>4 translation stages; error classes (syntax/runtime/logic)</td><td>Quiz 01, L01–L02 notes</td></tr><tr><td>M2 · Variables &amp; I/O</td><td>brace init vs narrowing; <code>cin &gt;&gt;</code> whitespace rules; <code>fixed</code>/<code>setprecision</code></td><td>Quiz 02, exercises T01</td></tr><tr><td>M3 · Operators</td><td>precedence, integer division vs <code>%</code>, cast for averages</td><td>Quiz 03, <code>examples/precedence_demo.cpp</code></td></tr><tr><td>M4 · Decisions</td><td>ladder ordering, switch fall-through, short-circuit guards</td><td>Quiz 04, exercises T02</td></tr><tr><td>M5 · Loops</td><td>for/while/do-while boundaries; priming read; missing-update class</td><td>Quiz 05, exercises T03</td></tr><tr><td>M6 · Problem solving</td><td>IPO charts, trace tables, boundary test sets, decomposition</td><td>Quiz 06, case studies Tier 1–2</td></tr><tr><td>M7 · Functions</td><td>prototypes, pass-by-value vs reference, contracts, overloading</td><td>Quiz 07, exercises T05</td></tr><tr><td>M8 · Advanced functions</td><td>recursion base cases, scope/shadowing, default arguments</td><td>Quiz 08, <code>examples/recursion_towers.cpp</code></td></tr></tbody></table>
+<h2 id="hand-trace-drills-answers-at-the-week-s-lecture-notes">Hand-trace drills (answers at the week's lecture notes)</h2>
+<ol><li><code>int s{0}; for (int i{1}; i &lt;= 3; ++i) s += i * i;</code> → ?</li><li><code>int n{25}, c{0}; while (n &gt; 0) { n /= 2; ++c; }</code> → c?</li><li><code>int g(int n){ return n &lt;= 0 ? 0 : n + g(n - 2); }</code> — g(7)?</li><li><code>void tweak(int a, int&amp; b){ ++a; ++b; }</code> with p = q = 4 → p, q?</li></ol>
+</ol>
+<h2 id="debugging-patterns-to-recognize">Debugging patterns to recognize</h2>
+<ul><li>Shadowed accumulator (redeclared inside the loop).</li><li>Missing loop update (sentinel never re-read).</li><li>Integer division where a mean was intended.</li><li>Missing recursion base case.</li><li><code>&gt;=</code> vs <code>&gt;</code> boundary off-by-one.</li><li>Fall-through <code>switch</code> without <code>break</code>.</li></ul>
+<h2 id="coding-practice-set-closed-book">Coding practice set (closed-book)</h2>
+<ol><li>Temperature C→F with input validation, 1 decimal.</li><li>Median of three integers.</li><li>Sentinel-0 stats: count, sum, mean (2 dp) or <code>no data</code>.</li><li><code>bool isPerfect(int n)</code> + all perfect numbers ≤ 10000.</li></ol>
+</ol>
+<h2 id="exam-technique">Exam technique</h2>
+<ul><li>Trace questions: write the variable table, not just the answer.</li><li>Coding questions: a correct skeleton with one small defect earns most marks — always declare, read, compute, print in that order and validate the read.</li><li>Budget: ≈ 2 minutes per MCQ-block item, 15 minutes per coding item.</li></ul>
+<p>See also <a href="../assignments/final-review.html">../final/review_guide.md</a> after Week 8.</p>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

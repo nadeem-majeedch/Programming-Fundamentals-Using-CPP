@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L14 · Scope, Lifetime, and Program Decomposition with Functions · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/lectures/week_07/lecture_14.html">
+<link rel="stylesheet" href="../../styles.css">
+<script src="../../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../../index.html">Home</a></li><li><a href="../../overview.html">Overview</a></li><li><a href="../../outcomes.html">Outcomes</a></li><li><a href="../../schedule.html">Schedule</a></li><li><a href="../../lectures.html" aria-current="page">Lectures</a></li><li><a href="../../labs.html">Labs</a></li><li><a href="../../cases.html">Case Studies</a></li><li><a href="../../exercises.html">Exercises</a></li><li><a href="../../assignments.html">Assignments</a></li><li><a href="../../projects.html">Projects</a></li><li><a href="../../resources.html">Resources</a></li><li><a href="../../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="narrow">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../../index.html">Home</a> › L14 · Scope, Lifetime, and Program Decomposition with Functions</nav>
+<h1 class="page-title">L14 · Scope, Lifetime, and Program Decomposition with Functions</h1>
+<p><strong>Module 7 — Functions Fundamentals · Week 7 · Lecture 14 of 32 · 120 minutes</strong> <strong>Outcomes:</strong> CLO-5 · PF-7.3, PF-7.4 · <a href="../../outcomes.html">LEARNING_OUTCOMES.md</a> · <strong>Assignment 2 due</strong></p>
+<h2 id="learning-objectives">Learning objectives</h2>
+<ol><li>Predict program output involving local, block, global, and shadowed variables, and state each variable's scope and lifetime (PF-7.3).</li><li>Explain why global mutable variables are banned in course code, citing the two failure modes (hidden coupling, re-entrancy surprise) (PF-7.3).</li><li>Decompose a fresh 60–100 line problem into a function structure using stepwise refinement, then implement it to specification (PF-7.4).</li></ol>
+</ol>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>L13 (functions, call stack, copy semantics); L09–L10 (loops for the decomposed program).</p>
+<h2 id="concept-sequence">Concept sequence</h2>
+<ol><li>Scope = where a name is visible; lifetime = when it exists</li><li>Local scope and block scope; fresh frames per call</li><li>Global variables and constants — allowed vs banned</li><li>Shadowing: legal, confusing, avoidable</li><li>Static locals (mentioned, not encouraged)</li><li>Full decomposition workflow: spec → hierarchy → functions → main</li></ol>
+</ol>
+<h2 id="teaching-topics-detailed">Teaching topics (detailed)</h2>
+<ul><li><strong>Scope/lifetime table:</strong> local (<code>{}</code> block, per-call), parameter (per-call), global (whole file, whole run), <code>const</code> global (allowed — named constants from L03), static local (exists across calls; shown for completeness with a "you won't need it this semester" note).</li><li><strong>Shadowing demo:</strong> inner <code>int total</code> hiding outer <code>total</code> — compiles, runs, wrong; <code>-Wshadow</code>-style awareness via careful reading; course rule: never shadow.</li><li><strong>Global mutables banned:</strong> two failure modes demonstrated — (1) a bug in one function silently corrupts state used by another; (2) the same call returns different results depending on history. <code>const</code> globals (<code>kMaxStudents</code>) remain encouraged.</li><li><strong>Decomposition workflow (the capstone of M6+M7):</strong> exam-statistics program — spec → IPO (L11) → hierarchy chart (4 functions) → signatures designed first (paper exercise) → bodies filled → <code>main</code> as 6 readable lines.</li><li><strong>Signature-first design:</strong> write all prototypes before any body — forces contract thinking; catching signature mismatches at compile time.</li></ul>
+<h2 id="c-examples-required">C++ examples required</h2>
+<table><thead><tr><th>File</th><th>Role</th></tr></thead><tbody><tr><td><code>scope_lifetime_demo.cpp</code> ✅</td><td>4 labeled mini-sections: block scope, shadowing, global mutable bug, static local — printed traces students predict first</td></tr><tr><td>(live) <code>exam_stats_decomposed.cpp</code></td><td>built live from hierarchy chart in ≤ 8 minutes, signatures first</td></tr></tbody></table>
+<h2 id="conceptual-explanation-beginner-first">Conceptual explanation (beginner-first)</h2>
+<p>Last lecture a function received <em>one</em> number at a time. But real data comes in sets: 30 quiz scores, a week of temperatures. Copying values into a function one by one would be absurd — instead, we hand the function the <strong>array</strong> itself. In C++, what actually travels is the address of the first element (a low-level idea we'll name honestly in Module 13), plus a separate count parameter. Because the function holds the address, it can <em>see and change</em> the caller's elements: unlike a single <code>int</code>, an array parameter behaves like an open notebook, not a photocopy.</p>
+<p>That power needs discipline. The function cannot ask an array how long it is — C++ does not carry that information inside the parameter — so <strong>the caller passes the size</strong> and the function trusts it. And to promise "I will look but not touch," we mark the element type <code>const</code>: <code>const int a[]</code>. The compiler then rejects any attempt to write <code>a[i] = ...</code>, turning a class of silent bugs into compile errors.</p>
+<h2 id="terminology-and-definitions">Terminology and definitions</h2>
+<table><thead><tr><th>Term</th><th>Definition</th></tr></thead><tbody><tr><td>Array parameter</td><td>Declared as <code>int a[]</code> or <code>int* </code> — receives the address of element 0</td></tr><tr><td>Decay</td><td>An array expression converts to a pointer to its first element when passed</td></tr><tr><td>Size parameter</td><td>The companion <code>int n</code> (or <code>std::size_t n</code>) a function needs to know the length</td></tr><tr><td><code>const</code> array parameter</td><td><code>const int a[]</code> — the function promises not to modify elements</td></tr><tr><td>In-place update</td><td>Modifying the caller's array through the parameter</td></tr><tr><td>Search space</td><td>The range of positions a searching algorithm still examines</td></tr><tr><td>Sentinel search</td><td>Stop at the target <em>or</em> at the end-of-data marker</td></tr></tbody></table>
+<h2 id="syntax-and-c-examples">Syntax and C++ examples</h2>
+<pre><code class="language-cpp">// const: read-only access to the caller&#x27;s elements
+void printAll(const int a[], int n)
+{
+    for (int i{0}; i &lt; n; ++i)
+        std::cout &lt;&lt; a[i] &lt;&lt; &#x27; &#x27;;
+    std::cout &lt;&lt; &#x27;\n&#x27;;
+}
+
+// write access: fill with a value
+void fill(int a[], int n, int value)
+{
+    for (int i{0}; i &lt; n; ++i)
+        a[i] = value;                    // changes the CALLER&#x27;s array
+}
+
+// returning a computed result from an array
+int sumAll(const int a[], int n)
+{
+    int total{0};
+    for (int i{0}; i &lt; n; ++i)
+        total += a[i];
+    return total;
+}
+
+// count matches — the pattern most homework is built from
+int countBelow(const int a[], int n, int limit)
+{
+    int count{0};
+    for (int i{0}; i &lt; n; ++i)
+        if (a[i] &lt; limit) ++count;
+    return count;
+}</code></pre>
+<h2 id="line-by-line-code-explanation">Line-by-line code explanation</h2>
+<p><code>examples/array_algorithms.cpp</code> (search functions):</p>
+<ol><li><code>linearSearch(const int a[], int n, int key)</code> — walks 0..n-1, returns the index of the first match or the sentinel <code>-1</code> if none. The caller must check for <code>-1</code> before using the result.</li><li><code>findMax(const int a[], int n)</code> — seeds with <code>a[0]</code>, scans 1..n-1. For an empty array the caller must guarantee <code>n &gt;= 1</code> (documented as a precondition) — otherwise the seed itself is undefined behavior.</li><li>Every traversal uses <code>i &lt; n</code> (not <code>&lt;=</code>): exactly n elements, 0-based.</li><li>The <code>const</code> on read-only functions is the contract in action — remove it and re-add a stray write; the compiler flags the line.</li></ol>
+</ol>
+<h2 id="output-prediction-questions-with-answers">Output prediction questions (with answers)</h2>
+<ol><li><code>int x[3]{5,5,5}; fill(x, 3, 9); printAll(x, 3);</code> — ? — <code>9 9 9</code> — the change is visible to the caller (in-place).</li><li><code>sumAll({2, 3, 4}, 3)</code> — ? — 9.</li><li><code>linearSearch</code> on <code>{8, 1, 8}</code> for key 8 — ? — index 0 (first match).</li><li><code>linearSearch</code> for 42 in <code>{8, 1}</code> — ? — <code>-1</code>; the caller must test it.</li><li><code>countBelow({4, 9, 1}, 3, 5)</code> — ? — 2.</li></ol>
+</ol>
+<h2 id="common-errors-and-debugging-examples">Common errors and debugging examples</h2>
+<table><thead><tr><th>Error</th><th>Symptom</th><th>Fix</th></tr></thead><tbody><tr><td>Forgetting the size parameter</td><td>Function can't know where to stop</td><td>Always pair <code>int a[], int n</code></td></tr><tr><td>Passing <code>n</code> but looping <code>i &lt;= n</code></td><td>Reads one past the end (garbage or crash)</td><td><code>i &lt; n</code></td></tr><tr><td>Missing <code>const</code> on read-only function</td><td>Accidental writes compile silently</td><td><code>const</code> every read-only array parameter</td></tr><tr><td>Using the returned index without checking</td><td><code>-1</code> used as a real index → out-of-bounds</td><td><code>int pos = linearSearch(...); if (pos != -1) ...</code></td></tr><tr><td>Assuming the function receives a copy</td><td>Caller surprised by changed elements</td><td>Arrays pass the address — document in-place functions</td></tr><tr><td><code>sizeof(a) / sizeof(a[0])</code> inside the function</td><td>Gives pointer size, not element count — classic trap</td><td>Pass <code>n</code> explicitly</td></tr></tbody></table>
+<h2 id="common-student-misconceptions">Common student misconceptions</h2>
+<ul><li><strong>"A variable declared in a block survives after the block."</strong> Automatic objects die at scope exit; the name and the object share a lifetime — dangling use of a stale name is a compile error, which is <em>protective</em> here.</li><li><strong>"Passing by value copies nothing for big types."</strong> Every parameter is initialized from the argument; show a class-type copy being made (a copy constructor print) to make the cost concrete.</li><li><strong>"A reference parameter is a pointer the compiler hides."</strong> Conceptually a reference is an alias; the <em>observable</em> difference from pass-by-value (mutation visible in the caller) is what matters now.</li><li><strong>"Shadowing is a warning about names, not values."</strong> An inner <code>x</code> makes the outer <code>x</code> unreachable by name — code reading the wrong <code>x</code> produces plausible-looking wrong answers.</li><li><strong>"Global variables are convenient, so use them."</strong> They break the function-contract habit the module builds; local parameters keep functions testable and reusable.</li></ul>
+<h2 id="classroom-demonstrations">Classroom demonstrations</h2>
+<ol><li><strong>The notebook metaphor:</strong> print the same array twice — hand one "photocopy" (a by-value int) into a pretend function, hand the original (the array) into another — which comes back changed?</li><li><strong>Compiler as contract-enforcer:</strong> remove <code>const</code> from <code>sumAll</code>, add <code>a[0] = 0;</code>, compile — the error names the line; restore.</li><li><strong>Off-by-one autopsy:</strong> change one loop to <code>&lt;= n</code>, run — the garbage value printed is the memory lesson.</li></ol>
+</ol>
+<h2 id="guided-student-activities">Guided student activities</h2>
+<p><strong>Signature auction (20 min):</strong> teams bid (with points) on proposing the best function set for a "text-menu currency converter" spec; each bid must state name, params, return, and the single responsibility; class votes on winning architectures; instructor reveals their version for comparison.</p>
+<ol><li><strong>Pattern cards:</strong> each pair gets one operation (sum, count, max, search, fill) and writes its function; groups compare skeletons — they differ in one or two lines only.</li><li><strong>Contract writing:</strong> for <code>countBelow</code>, write the one-sentence contract (what it needs, what it returns, what it does NOT change).</li><li><strong>Bug hunt:</strong> a five-line <code>findMin</code> with a <code>&lt;=</code> bound and no <code>const</code> — find both defects, one by reading, one by compiling.</li></ol>
+</ol>
+<h2 id="practice-problems">Practice problems</h2>
+<ul><li>Predict output of 5 scope/shadowing programs (with explanations).</li><li>Convert a global-mutating program to parameter-passing form.</li><li>Full decomposition (IPO + signatures + implementation) for a "delivery cost estimator" (weight tiers + distance zones).</li><li>(🟡 stretch) Explain why two calls to a function using a static local counter return different values — and why that violates testability.</li></ul>
+<h2 id="summary">Summary</h2>
+<p>Functions + arrays = collections made reusable: the array parameter delivers the address (changes are visible to the caller), the size parameter delivers the length, and <code>const</code> separates readers from writers at compile time. The search/count/max skeletons from this lecture are the raw material of nearly every homework problem ahead. Next (L15): two-dimensional arrays — tables, grids, and rows that are arrays themselves.</p>
+<h2 id="exit-ticket-formative-assessment">Exit ticket / formative assessment</h2>
+<ol><li>A variable declared inside <code>main</code>'s <code>for</code> loop — scope? lifetime?</li><li>Why is <code>const int kMaxStudents{120};</code> at file scope acceptable while <code>int total{0};</code> is not?</li><li>Name the first artifact you produce when decomposing (not code).</li></ol>
+</ol>
+<h2 id="estimated-time-allocation-120-min">Estimated time allocation (120 min)</h2>
+<table><thead><tr><th>Segment</th><th>Minutes</th></tr></thead><tbody><tr><td>Recall (call-stack quiz) + scope vs lifetime</td><td>10</td></tr><tr><td>Scope rules + shadowing + global policy</td><td>35</td></tr><tr><td>Break</td><td>10</td></tr><tr><td>Decomposition workflow (signature-first build)</td><td>35</td></tr><tr><td>Signature auction activity</td><td>20</td></tr><tr><td>Assignment 2 hand-in + exit ticket</td><td>10</td></tr></tbody></table>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

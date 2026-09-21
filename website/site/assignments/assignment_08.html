@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Assignment 8 · Score Ledger — Structs, Files, Synthesis · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/assignments/assignment_08.html">
+<link rel="stylesheet" href="../styles.css">
+<script src="../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../index.html">Home</a></li><li><a href="../overview.html">Overview</a></li><li><a href="../outcomes.html">Outcomes</a></li><li><a href="../schedule.html">Schedule</a></li><li><a href="../lectures.html">Lectures</a></li><li><a href="../labs.html">Labs</a></li><li><a href="../cases.html">Case Studies</a></li><li><a href="../exercises.html">Exercises</a></li><li><a href="../assignments.html" aria-current="page">Assignments</a></li><li><a href="../projects.html">Projects</a></li><li><a href="../resources.html">Resources</a></li><li><a href="../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="narrow">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../index.html">Home</a> › Assignment 8 · Score Ledger — Structs, Files, Synthesis</nav>
+<h1 class="page-title">Assignment 8 · Score Ledger — Structs, Files, Synthesis</h1>
+<p><strong>Modules 13–15 (L27–L30) · 40 marks · due end of Week 15</strong> Outcomes: CLO-7, CLO-8 (PF-13.x–PF-15.x)</p>
+<p>The capstone assignment: read a ledger file of scores, compute a report, and write a clean output file. Uses <code>struct</code>, <code>std::vector</code>, and file streams.</p>
+<h2 id="input-file-format-ledger-txt-redirected-or-default-name">Input file format (<code>ledger.txt</code>, redirected or default name)</h2>
+<p>Each line: <code>name score</code> — name is one word; score is an integer 0..100. Lines may be: blank, malformed (wrong field count, non-numeric, out-of-range), or valid. Example:</p>
+<pre><code>Ayesha 88
+Ben 72
+
+Cara 95
+Dan abc
+Eve 101</code></pre>
+<h2 id="behavior">Behavior</h2>
+<ol><li>Open <code>ledger.txt</code>; on open failure print <code>cannot open ledger.txt</code> and exit 2.</li><li>Parse line by line (<code>getline</code> + <code>istringstream</code>). Valid records go into <code>std::vector&lt;Score&gt;</code> where <code>struct Score { std::string name; int value; };</code></li><li>Print a summary to stdout:</li></ol>
+</ol>
+<pre><code>loaded : 3
+skipped: 2
+mean   : 85.00
+best   : Cara</code></pre>
+<p>(best = highest score; ties → first in file order; skipped = every non-valid line including blanks; mean over loaded records with 2 decimals)</p>
+<ol><li>Append the same summary to <code>report.txt</code> (create if missing).</li><li>Exit 0 in all cases except the open failure (exit 2). A file of only bad lines is <em>not</em> an error: <code>loaded 0</code> with mean/best printed as <code>n/a</code>.</li></ol>
+</ol>
+<h2 id="constraints">Constraints</h2>
+<ul><li>No raw <code>new</code>/<code>delete</code> — <code>std::vector</code> only (the course default).</li><li><code>struct Score</code> must be defined at file scope; helper functions take <code>const std::vector&lt;Score&gt;&amp;</code>.</li><li>Bad-line detection: extraction failure OR out-of-range OR wrong field count — all are "skipped", no crash, no early exit.</li><li>If <code>report.txt</code> cannot be opened for append, print <code>cannot write report.txt</code> and exit 2 (after the stdout summary).</li></ul>
+<h2 id="deliverables">Deliverables</h2>
+<p><code>ledger.cpp</code> (contract, zero warnings) · <code>ledger.txt</code> sample (your own, ≥ 6 lines covering all line classes) · <code>test_table.md</code> — missing file, empty file, only-bad file, tie for best, 100-record file, malformed mid-file · <code>postmortem.md</code> (10 marks).</p>
+<h2 id="notes">Notes</h2>
+<ul><li><code>loaded</code> counts records, not lines.</li><li><code>best</code> prints the <em>name</em>; <code>mean</code> prints before it in the exact order shown.</li></ul>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

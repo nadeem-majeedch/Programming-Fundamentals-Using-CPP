@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L13 · Defining and Calling Functions: Parameters, Return Values, `void` · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/lectures/week_07/lecture_13.html">
+<link rel="stylesheet" href="../../styles.css">
+<script src="../../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../../index.html">Home</a></li><li><a href="../../overview.html">Overview</a></li><li><a href="../../outcomes.html">Outcomes</a></li><li><a href="../../schedule.html">Schedule</a></li><li><a href="../../lectures.html" aria-current="page">Lectures</a></li><li><a href="../../labs.html">Labs</a></li><li><a href="../../cases.html">Case Studies</a></li><li><a href="../../exercises.html">Exercises</a></li><li><a href="../../assignments.html">Assignments</a></li><li><a href="../../projects.html">Projects</a></li><li><a href="../../resources.html">Resources</a></li><li><a href="../../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="narrow">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../../index.html">Home</a> › L13 · Defining and Calling Functions: Parameters, Return Values, `void`</nav>
+<h1 class="page-title">L13 · Defining and Calling Functions: Parameters, Return Values, `void`</h1>
+<p><strong>Module 7 — Functions Fundamentals · Week 7 · Lecture 13 of 32 · 120 minutes</strong> <strong>Outcomes:</strong> CLO-5 · PF-7.1, PF-7.2 · <a href="../../outcomes.html">LEARNING_OUTCOMES.md</a></p>
+<h2 id="learning-objectives">Learning objectives</h2>
+<ol><li>Define and call functions with typed parameters, <code>return</code> values, and <code>void</code> returns; trace argument→parameter data flow and the return value's arrival at the call site (PF-7.1).</li><li>Draw and update the call stack (activation records: parameters, locals, return address) across a 3-function call sequence (PF-7.2).</li><li>State and apply the course design rules: one responsibility, verb-first name, no <code>cin</code>/<code>cout</code> inside computational functions (PF-7.1).</li></ol>
+</ol>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>M6 (decomposition boxes → now they become functions); M2–M3 (types, expressions).</p>
+<h2 id="concept-sequence">Concept sequence</h2>
+<ol><li>The reuse-and-name problem (repeated code, unnameable logic)</li><li>Function anatomy: return type, name, parameter list, body, return</li><li>Arguments vs parameters; copy semantics on call</li><li><code>void</code> functions; early <code>return</code>; multiple returns</li><li>Call stack: activation records, LIFO unwinding</li><li>Design rules + the I/O boundary principle</li></ol>
+</ol>
+<h2 id="teaching-topics-detailed">Teaching topics (detailed)</h2>
+<ul><li><strong>Anatomy:</strong> <code>double average(double a, double b) { return (a + b) / 2.0; }</code> — declaration-before-use rule; prototypes (declaration vs definition); why parameters have <em>their own</em> names.</li><li><strong>Copy semantics:</strong> arguments are copied into parameters (pass-by-value by default); changes to parameters never reach the caller — demonstrated with a failed <code>attempted_swap</code> (payoff in L15/L26).</li><li><strong><code>void</code> functions:</strong> perform actions (printing helpers); early <code>return</code> for guard checks; multiple <code>return</code> paths allowed but one job per function.</li><li><strong>Call stack:</strong> draw activation records for <code>main → get_scores → compute_avg → print_report</code>; each record holds params + locals; return pops the frame — the diagram students will reuse for recursion-free explanations on the midterm.</li><li><strong>I/O boundary principle:</strong> computational functions take parameters and <em>return</em> values; only <code>main</code> (or dedicated I/O functions) touch <code>cin</code>/<code>cout</code> — testability rule for the rest of the course.</li><li><strong>Refinement payoff:</strong> the Module 6 hierarchy chart maps 1:1 onto function definitions (design → code bridge).</li></ul>
+<h2 id="c-examples-required">C++ examples required</h2>
+<table><thead><tr><th>File</th><th>Role</th></tr></thead><tbody><tr><td><code>functions_refactor.cpp</code> ✅</td><td>flat gradebook program (before) refactored into 4 functions (after); both versions in one file, clearly separated</td></tr><tr><td>(live) <code>call_stack_demo.cpp</code></td><td>3-deep call chain with printed entry/exit lines matching the board diagram</td></tr></tbody></table>
+<h2 id="common-student-misconceptions">Common student misconceptions</h2>
+<ul><li>"Calling a function jumps away permanently." (Returns to exactly the point after the call — return address.)</li><li>"Parameters are just global-ish variables." (Each call creates <em>fresh</em> copies; two callers can't interfere.)</li><li>"<code>void</code> means the function fails to return." (It means <em>no value</em>; the function still returns control.)</li><li>"Functions must return exactly one value." (One <em>value</em>, yes — multiple outputs need references, Module 8 — the honest bridge.)</li></ul>
+<h2 id="conceptual-explanation-beginner-first">Conceptual explanation (beginner-first)</h2>
+<p>A function is a named, reusable box of behavior: it takes inputs (<strong>parameters</strong>), does its work, and hands back one answer (the <strong>return value</strong>). Everything before this course was a thousand-line <code>main</code> waiting to happen; functions are how programs stay readable — you name an operation once, then <em>call</em> it by name wherever needed, the way you say "multiply" instead of re-explaining multiplication every time.</p>
+<p>The mental model that pays for itself all semester: calling a function is hiring a contractor. You hand over <strong>copies</strong> of your materials (arguments copied into parameters). The contractor works on their own copies; whatever they do to them, your originals are untouched. The finished product comes back as the return value. That's why the classic <code>swap(int a, int b)</code> fails — the contractor swaps their own copies and tosses them out. (Module 8 hands the contractor keys to your house: references.)</p>
+<p>C++ compiles top-to-bottom, so the compiler must know a function's name and signature <em>before</em> the call site — that's the prototype: a promise the definition later keeps. And the compiler's warnings (<code>-Wall</code>) are already policing contracts for you: forget a <code>return</code> and it tells you.</p>
+<h2 id="terminology-and-definitions">Terminology and definitions</h2>
+<table><thead><tr><th>Term</th><th>Definition</th></tr></thead><tbody><tr><td>Function</td><td>Named block of behavior with parameters and (usually) a return value</td></tr><tr><td>Parameter</td><td>The function's local input variable, declared in the header</td></tr><tr><td>Argument</td><td>The actual value copied into the parameter at the call site</td></tr><tr><td>Return value</td><td>The single output, delivered by <code>return</code></td></tr><tr><td><code>void</code></td><td>Return type meaning "no value comes back"</td></tr><tr><td>Prototype / declaration</td><td>Name + return type + parameter types, promised before use</td></tr><tr><td>Definition</td><td>The full function body that delivers the promise</td></tr><tr><td>Pass-by-value</td><td>Arguments are copied; the caller's originals are safe</td></tr><tr><td>Local variable</td><td>Born inside the function, dies at its return</td></tr><tr><td>Global variable</td><td>Declared outside all functions; visible everywhere — course policy: avoid</td></tr><tr><td>Call stack</td><td>The runtime structure remembering "where to resume" after each return</td></tr><tr><td>Activation record</td><td>One call's frame: its parameters and locals</td></tr><tr><td>Contract</td><td>Precondition + postcondition — what the function needs and delivers</td></tr></tbody></table>
+<h2 id="syntax-and-c-examples">Syntax and C++ examples</h2>
+<pre><code class="language-cpp">// prototype: the promise (note the semicolon)
+int max2(int a, int b);
+double toCelsius(double fahrenheit);
+bool isEven(int n);
+void printLine(char fill, int width);   // void: behavior, no answer
+
+int main()
+{
+    std::cout &lt;&lt; max2(3, 7) &lt;&lt; &#x27;\n&#x27;;    // call: arguments copied in
+    std::cout &lt;&lt; toCelsius(98.6) &lt;&lt; &#x27;\n&#x27;;
+    printLine(&#x27;*&#x27;, 10);
+    return 0;
+}
+
+// definition: the delivery
+int max2(int a, int b)
+{
+    if (a &gt; b)
+        return a;                        // first exit point
+    return b;                            // second exit point
+}
+
+double toCelsius(double fahrenheit)
+{
+    return (fahrenheit - 32.0) * 5.0 / 9.0;
+}
+
+bool isEven(int n)
+{
+    return n % 2 == 0;                   // the comparison IS the answer
+}
+
+void printLine(char fill, int width)
+{
+    for (int i{0}; i &lt; width; ++i)
+        std::cout &lt;&lt; fill;
+    std::cout &lt;&lt; &#x27;\n&#x27;;                   // no return — void
+}</code></pre>
+<h2 id="line-by-line-code-explanation">Line-by-line code explanation</h2>
+<p><code>examples/functions_refactor.cpp</code> — the same gradebook twice:</p>
+<ol><li><strong>Before (flat):</strong> <code>main</code> reads scores, computes sum/min/max/average inline — 60 lines, no name says what any part does; changes touch everything.</li><li><strong>After (refactored):</strong> <code>double average(const int a[], int n)</code> etc. — <code>main</code> reads like the problem statement; each function is testable alone. (Array parameters appear here early; Module 9 formalizes them.)</li><li><code>max2</code> shows <em>two</em> return points — legal and clear for a two-path answer; the compiler's <code>-Wall</code> catches any path that forgets one.</li><li><code>isEven</code> returns the comparison directly — <code>n % 2 == 0</code> already <em>is</em> a bool; writing <code>if (...) return true; else return false;</code> is noise (style guide point).</li><li>The refactored <code>main</code> demonstrates the top-down story: the function names <em>are</em> the Module 6 plan.</li></ol>
+</ol>
+<h2 id="output-prediction-questions-with-answers">Output prediction questions (with answers)</h2>
+<ol><li><code>max2(3, 7)</code> — ? — 7.</li><li><code>toCelsius(212.0)</code> — ? — 100.0.</li><li><code>isEven(0)</code> — ? — true (0 % 2 == 0).</li><li>After <code>void f(int x) { x = 99; }</code> and <code>int a{5}; f(a);</code> — what is <code>a</code>? — 5: the parameter was a copy.</li><li><code>printLine('-', 3)</code> — ? — prints <code>---</code> and a newline; returns nothing.</li></ol>
+</ol>
+<h2 id="common-errors-and-debugging-examples">Common errors and debugging examples</h2>
+<table><thead><tr><th>Error</th><th>Symptom</th><th>Fix</th></tr></thead><tbody><tr><td>Using before declaring</td><td>"'max2' undeclared" at the call site</td><td>Prototype above, or define before <code>main</code></td></tr><tr><td>Missing return on a value path</td><td>Warning; garbage returned on that path</td><td>Every path returns; <code>-Wall</code> finds them</td></tr><tr><td><code>swap(a, b)</code> by value</td><td>Caller's values unchanged</td><td>Copies can't: references (M08) fix it</td></tr><tr><td>Parameter/local name shadows a global</td><td>Confusing dual behavior</td><td>No globals — course policy</td></tr><tr><td>Ignoring the return value</td><td>Computed then dropped silently</td><td>Capture it or make it <code>void</code> deliberately</td></tr><tr><td>Mismatched prototype/definition types</td><td>Overload surprise or error</td><td>Types must match exactly</td></tr></tbody></table>
+<h2 id="classroom-demonstrations">Classroom demonstrations</h2>
+<ol><li><strong>The contractor sketch:</strong> run the pass-by-value swap live; the printouts prove the originals never moved — copies, not keys.</li><li><strong>Refactor theater:</strong> flat <code>main</code> on the left; functions born one at a time on the right; <code>main</code> shrinks to a readable story.</li><li><strong>Warning hunt:</strong> delete one return path, compile with <code>-Wall</code>, read the warning aloud — the compiler is a contract enforcer.</li></ol>
+</ol>
+<h2 id="guided-student-activities">Guided student activities</h2>
+<p><strong>Function archaeology (20 min):</strong> teams receive the flat version of <code>functions_refactor.cpp</code> and the Module 6 hierarchy chart; they draw the function boundaries on the printout (name, params, return) <em>before</em> seeing the solution; scoring rewards matching the I/O-boundary principle.</p>
+<h2 id="practice-problems">Practice problems</h2>
+<ul><li>Write 6 small functions (<code>max2</code>, <code>max3</code> via <code>max2</code>, <code>to_celsius</code>, <code>is_even</code>, <code>last_digit</code>, <code>print_line</code>).</li><li>Trace a 3-function call with an activation-record diagram.</li><li>Spot the violations: 4 functions that mix I/O with computation.</li><li>(🟡 stretch) Why can't <code>get_two_values()</code> return two ints? Sketch what you <em>wish</em> the syntax were (answered in L15).</li></ul>
+<h2 id="summary">Summary</h2>
+<p>Good functions are born from two habits: naming the operation and letting the compiler's warnings police the contract. Parameters are the function's inputs (and <code>const</code> is how you promise not to change them); the return value is its output; the declaration in a prototype is the promise, the definition is the delivery. Global variables are read as "hidden wiring" and avoided. Next (L13): arrays — the first data structure — where functions will process whole collections.</p>
+<h2 id="exit-ticket-formative-assessment">Exit ticket / formative assessment</h2>
+<ol><li>Write the prototype for <code>double average3(int a, int b, int c)</code> and one sentence stating its contract.</li><li>What does <code>-Wall</code> catch about <code>int countNegatives(int a[], int n)</code> if you forget <code>return count;</code> at the end?</li><li>Rewrite the buggy <code>swap(int a, int b)</code> call site so the swap actually works, given only pass-by-value is available this week.</li></ol>
+</ol>
+<ol><li>Write a prototype for a function that converts minutes to h:mm format as two outputs... or explain why one value suffices.</li><li>What is on top of the stack when <code>compute_avg</code> runs?</li><li>What does the caller receive from a <code>void</code> function call?</li></ol>
+</ol>
+<h2 id="estimated-time-allocation-120-min">Estimated time allocation (120 min)</h2>
+<table><thead><tr><th>Segment</th><th>Minutes</th></tr></thead><tbody><tr><td>Recall (trace quiz) + the naming/reuse problem</td><td>10</td></tr><tr><td>Anatomy + copy semantics + failed swap demo</td><td>35</td></tr><tr><td>Break</td><td>10</td></tr><tr><td><code>void</code>, call stack, I/O boundary principle</td><td>35</td></tr><tr><td>Function archaeology activity</td><td>20</td></tr><tr><td>Exit ticket + L14 preview</td><td>10</td></tr></tbody></table>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

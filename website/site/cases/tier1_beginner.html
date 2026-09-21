@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Case Studies · Tier 1 · Beginner · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/cases/tier1_beginner.html">
+<link rel="stylesheet" href="../styles.css">
+<script src="../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../index.html">Home</a></li><li><a href="../overview.html">Overview</a></li><li><a href="../outcomes.html">Outcomes</a></li><li><a href="../schedule.html">Schedule</a></li><li><a href="../lectures.html">Lectures</a></li><li><a href="../labs.html">Labs</a></li><li><a href="../cases.html" aria-current="page">Case Studies</a></li><li><a href="../exercises.html">Exercises</a></li><li><a href="../assignments.html">Assignments</a></li><li><a href="../projects.html">Projects</a></li><li><a href="../resources.html">Resources</a></li><li><a href="../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../index.html">Home</a> › Case Studies · Tier 1 · Beginner</nav>
+<h1 class="page-title">Case Studies · Tier 1 · Beginner</h1>
+<p><strong>Lectures L01–L12 · Modules 1–6</strong> · think ~5 minutes · paper only. Cases ascend in difficulty within the tier. Hints are progressive — reveal one at a time, on request. Worked solutions: instructor area only.</p>
+<hr>
+<h3 id="pf-cs-001-the-vending-machine">PF-CS-001 · The Vending Machine</h3>
+<ul><li><strong>Tier:</strong> 1 Beginner · <strong>Lecture:</strong> L01 · Module 1</li><li><strong>Context:</strong> A drinks machine in the engineering building.</li><li><strong>Problem:</strong> A can costs 45. A customer inserts coins of values 5, 10, or 25 (one at a time, in that order they are fed). Design the numbered steps the machine follows to decide when to dispense the can and how much change to return; state what happens if the customer walks away before reaching 45.</li><li><strong>Input:</strong> coin values as they are inserted. <strong>Output:</strong> dispense/no-dispense decision and change amount.</li><li><strong>Constraints:</strong> total inserted is between 0 and 200; change is always payable in 5s.</li><li><strong>Thinking questions:</strong> What state must the machine remember between coins? When does the "algorithm" stop? Is the change always exact?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>You need one variable for the accumulated total.</li><li>The stopping condition compares that total against 45.</li><li>Change = total − 45; convince yourself any legal total makes it a multiple of 5.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-002-three-cup-order">PF-CS-002 · Three-Cup Order</h3>
+<ul><li><strong>Tier:</strong> 1 Beginner · <strong>Lecture:</strong> L03 · Module 2</li><li><strong>Context:</strong> Sorting three exam papers by score before entering them.</li><li><strong>Problem:</strong> Three paper slips carry integer scores. Design a pencil-and-paper method that ends with the smallest score on the left slip and the largest on the right, using as few comparisons as possible. State the minimum number of comparisons needed and why fewer is impossible.</li><li><strong>Input:</strong> three integers. <strong>Output:</strong> the three values in ascending order plus the comparison count.</li><li><strong>Constraints:</strong> values in 0…100; equal values allowed.</li><li><strong>Thinking questions:</strong> Which pair should you compare first? After two comparisons, what do you know for certain?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Compare A and B; the smaller one can never be the overall maximum.</li><li>Then compare the winner's loser against C for the minimum.</li><li>Three comparisons always suffice; two cannot order three unknowns.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-003-the-receipt-printer">PF-CS-003 · The Receipt Printer</h3>
+<ul><li><strong>Tier:</strong> 1 Beginner · <strong>Lecture:</strong> L04 · Module 2</li><li><strong>Context:</strong> A kiosk prints a formatted purchase receipt.</li><li><strong>Problem:</strong> Given an item name, unit price, and quantity, design the exact screen layout for a receipt line and a total line (see I/O). Decide the data types for each field and justify each choice.</li><li><strong>Input:</strong> item name (one word), unit price (2 dp), quantity (integer). <strong>Output:</strong> aligned columns — name (width 12), price (width 8, 2 dp), quantity (width 4), line total.</li><li><strong>Constraints:</strong> quantity ≤ 999; price ≤ 9999.99.</li><li><strong>Thinking questions:</strong> Why is <code>double</code> right for price but wrong for quantity? What breaks if you store money in <code>int</code>?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Three fields, three types: string, double, int.</li><li>The line total multiplies the two numeric fields.</li><li>Fixed-point formatting uses two digits after the decimal point.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-004-elevator-logic">PF-CS-004 · Elevator Logic</h3>
+<ul><li><strong>Tier:</strong> 1 Beginner · <strong>Lecture:</strong> L07 · Module 4</li><li><strong>Context:</strong> A two-floor building's elevator controller.</li><li><strong>Problem:</strong> The elevator reads the current floor (1 or 2) and the requested floor (1 or 2). Specify its decision rule and what it should do when both inputs are equal — the case students forget. Present the rule as a decision table before writing any if-statement.</li><li><strong>Input:</strong> two integers. <strong>Output:</strong> one verdict: <code>MOVE UP</code>, <code>MOVE DOWN</code>, or <code>STAY</code>.</li><li><strong>Constraints:</strong> inputs are always 1 or 2.</li><li><strong>Thinking questions:</strong> How many distinct input combinations exist? Which combinations share an outcome?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>2×2 = 4 combinations, but two of them are the same outcome.</li><li>Equality of the inputs is one explicit branch.</li><li>Two moves plus one stay covers all four cells.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-005-the-grading-curve-debate">PF-CS-005 · The Grading Curve Debate</h3>
+<ul><li><strong>Tier:</strong> 1 Beginner · <strong>Lecture:</strong> L07 · Module 4</li><li><strong>Context:</strong> An instructor must convert raw scores to letter grades.</li><li><strong>Problem:</strong> Design the complete decision ladder for: ≥90 A, ≥80 B, ≥70 C, ≥60 D, else F. Then a colleague suggests testing <code>&gt;= 90</code> <em>last</em>. Explain, with a concrete score, what goes wrong.</li><li><strong>Input:</strong> one integer score. <strong>Output:</strong> one letter.</li><li><strong>Constraints:</strong> scores 0…100; no invalid input.</li><li><strong>Thinking questions:</strong> Why does ladder order matter when every test is <code>&gt;=</code>? Which single score demonstrates the failure?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>An if/else-if ladder stops at the first true branch.</li><li>With <code>&gt;=</code> tests, the <em>largest</em> threshold must be tested first.</li><li>Try score = 95 against the reversed ladder.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-006-parking-fee">PF-CS-006 · Parking Fee</h3>
+<ul><li><strong>Tier:</strong> 1 Beginner · <strong>Lecture:</strong> L07 · Module 4</li><li><strong>Context:</strong> A city parking garage's pay station.</li><li><strong>Problem:</strong> The fee is: first hour 50, each additional hour (or part thereof) 30, daily maximum 200. Given arrival and departure hours (integers, same day), compute the fee. Identify which inputs make "part thereof" matter.</li><li><strong>Input:</strong> two integers (arrival hour, departure hour, departure &gt; arrival). <strong>Output:</strong> one fee amount.</li><li><strong>Constraints:</strong> 0 ≤ arrival &lt; departure ≤ 24.</li><li><strong>Thinking questions:</strong> What single arithmetic expression gives billed hours with the "or part thereof" rule? Where does the maximum kick in?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Hours from 1 to 60 minutes both bill as one hour — think of a ceiling.</li><li>Billed = hours − 1 for hours beyond the first.</li><li>Compare naive fee against 200 for a full-day stay.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-007-password-strength-meter">PF-CS-007 · Password Strength Meter</h3>
+<ul><li><strong>Tier:</strong> 1 Beginner · <strong>Lecture:</strong> L08 · Module 4</li><li><strong>Context:</strong> A signup form grades password strength.</li><li><strong>Problem:</strong> A password scores one point for each of: length ≥ 8, contains a digit, contains an uppercase letter, contains a symbol (anything not a letter or digit). Given a one-word password, design the scoring logic and the labels 0–1 <code>WEAK</code>, 2 <code>FAIR</code>, 3 <code>GOOD</code>, 4 <code>STRONG</code>.</li><li><strong>Input:</strong> one word (no spaces, ≤ 30 chars). <strong>Output:</strong> the label.</li><li><strong>Constraints:</strong> printable characters only; no spaces.</li><li><strong>Thinking questions:</strong> Which loop shape fits "look through the word until you find a digit"? Can you stop scanning early?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Length is one test; the other three need a scan over characters.</li><li><code>&lt;cctype&gt;</code> provides classification functions per character.</li><li>Boolean flags can stop a loop early once a category is found.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-008-the-countdown-timer">PF-CS-008 · The Countdown Timer</h3>
+<ul><li><strong>Tier:</strong> 1 Beginner · <strong>Lecture:</strong> L09 · Module 5</li><li><strong>Context:</strong> A microwave's display counts down seconds.</li><li><strong>Problem:</strong> Given seconds (≤ 600), specify exactly what the display shows at each step from the start until it reaches zero, in mm:ss format. Decide which loop form fits and why.</li><li><strong>Input:</strong> one integer. <strong>Output:</strong> each remaining value as mm:ss, one per line, ending at 00:00.</li><li><strong>Constraints:</strong> 1 ≤ seconds ≤ 600.</li><li><strong>Thinking questions:</strong> What changes between iterations? Why is a for-loop natural here but a while-loop defensible?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>mm:ss is just seconds/60 and seconds%60 with two-digit padding.</li><li>The loop variable is the remaining seconds itself.</li><li>A for-loop with a decrementing counter, ending at 0 inclusive.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-009-coin-split-for-pocket-money">PF-CS-009 · Coin Split for Pocket Money</h3>
+<ul><li><strong>Tier:</strong> 1 Beginner · <strong>Lecture:</strong> L06 · Module 3</li><li><strong>Context:</strong> A parent converts a rupee amount into coins.</li><li><strong>Problem:</strong> Given an amount in rupees (integer), specify how many 25-, 10-, and 5- coins to hand out using a greedy strategy, and justify that greedy is safe for this coin set.</li><li><strong>Input:</strong> one integer amount (multiple of 5). <strong>Output:</strong> counts of each coin.</li><li><strong>Constraints:</strong> 0 ≤ amount ≤ 999; amount % 5 == 0.</li><li><strong>Thinking questions:</strong> Why does taking the largest coin first never block a solution here? Would it stay safe with a 7-coin?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Integer division and remainder do all the work.</li><li>After 25s, the remainder is &lt; 25 — then apply 10s, then 5s.</li><li>Each coin divides the next smaller one's structure: the set is "friendly".</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-010-the-secret-number-hunt">PF-CS-010 · The Secret Number Hunt</h3>
+<ul><li><strong>Tier:</strong> 1 Beginner · <strong>Lecture:</strong> L09 · Module 5</li><li><strong>Context:</strong> A guessing game between two students.</li><li><strong>Problem:</strong> One student fixes a secret (1–100); the other guesses repeatedly, receiving <code>HIGH</code> or <code>LOW</code> each time. Design the loop: when does it stop, what is read each pass, and how would you <em>guarantee</em> at most 7 guesses?</li><li><strong>Input:</strong> guesses until correct. <strong>Output:</strong> HIGH/LOW feedback per guess; a stop condition.</li><li><strong>Constraints:</strong> secret in 1…100.</li><li><strong>Thinking questions:</strong> What state shrinks every round? Why is 2⁷ &gt; 100 the key number?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Track the range [lo, hi] of possible secrets.</li><li>Halve the range every guess by choosing its middle.</li><li>log₂(100) ≈ 6.64, so 7 halvings always suffice.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-011-traffic-light-cycle">PF-CS-011 · Traffic Light Cycle</h3>
+<ul><li><strong>Tier:</strong> 1 Beginner · <strong>Lecture:</strong> L09 · Module 5</li><li><strong>Context:</strong> A pedestrian signal cycles on a timer.</li><li><strong>Problem:</strong> The light cycles GREEN 30s → YELLOW 5s → RED 20s, forever. Given a second-count t, determine the light color. Then generalize: what changes if the cycle length differs per direction?</li><li><strong>Input:</strong> one integer t ≥ 0. <strong>Output:</strong> color name.</li><li><strong>Constraints:</strong> t ≤ 10⁶ (think beyond a loop!).</li><li><strong>Thinking questions:</strong> What does t mod 55 tell you? Can you answer without simulating second-by-second?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>The cycle repeats every 55 seconds.</li><li>The remainder locates you inside one cycle.</li><li>Map remainder ranges: 0–29, 30–34, 35–54.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-012-rainfall-logger">PF-CS-012 · Rainfall Logger</h3>
+<ul><li><strong>Tier:</strong> 1 Beginner · <strong>Lecture:</strong> L10 · Module 5</li><li><strong>Context:</strong> A weather station records daily rainfall.</li><li><strong>Problem:</strong> Design the accumulation loop for n daily readings (mm): running total, running maximum with its day number, and count of dry days (0.0). What must reset — and what must <em>not</em> reset — each iteration?</li><li><strong>Input:</strong> n, then n doubles. <strong>Output:</strong> total, max with day, dry count.</li><li><strong>Constraints:</strong> 1 ≤ n ≤ 366; readings ≥ 0.</li><li><strong>Thinking questions:</strong> Which variables live <em>outside</em> the loop? When is the max updated?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Total, max, dry, and day counter all persist across iterations.</li><li>Initialize max from the <em>first</em> reading, not from 0... or can 0 be right?</li><li>Update max when reading &gt; max <em>or</em> reading == max on a later day — decide the tie rule first.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-013-the-cashier-s-change-maker">PF-CS-013 · The Cashier's Change Maker</h3>
+<ul><li><strong>Tier:</strong> 1 Beginner · <strong>Lecture:</strong> L10 · Module 5</li><li><strong>Context:</strong> A shopkeeper returns change with the fewest coins.</li><li><strong>Problem:</strong> Prices are whole rupees; the customer pays with 1000. Design the loop that computes change and its coin breakdown (500, 100, 50, 20, 10, 5, 1), proving the count is minimal for any price.</li><li><strong>Input:</strong> one integer price. <strong>Output:</strong> change amount + per-coin counts.</li><li><strong>Constraints:</strong> 0 ≤ price ≤ 1000.</li><li><strong>Thinking questions:</strong> Which loop handles <em>all</em> coin denominations at once? What is the invariant after each coin pass?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>A parallel array of denominations lets one loop serve all coins.</li><li>After handling coin c, the remaining amount is &lt; c.</li><li>Greedy is minimal here because each denomination is a multiple-sum of smaller ones.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-014-class-attendance-percentages">PF-CS-014 · Class Attendance Percentages</h3>
+<ul><li><strong>Tier:</strong> 1 Beginner · <strong>Lecture:</strong> L10 · Module 5</li><li><strong>Context:</strong> A tutor tracks who attends weekly sessions.</li><li><strong>Problem:</strong> Given n students each with an attendance count out of 16 weeks, design the loop computing each student's percentage and the class average. Decide the type of every accumulator and justify the cast you need for the average.</li><li><strong>Input:</strong> n, then n integers. <strong>Output:</strong> per-student percentage (1 dp) and class average (1 dp).</li><li><strong>Constraints:</strong> 1 ≤ n ≤ 60; counts in 0…16.</li><li><strong>Thinking questions:</strong> Where does integer division silently ruin the answer? Which variable holds the running sum of <em>percentages</em>?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Percentage = count/16 × 100 — both operands' types decide the result.</li><li>static_cast to double <em>before</em> dividing.</li><li>Two accumulators: one per-student inside the loop, one class-level outside.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-015-the-left-to-right-largest">PF-CS-015 · The Left-to-Right Largest</h3>
+<ul><li><strong>Tier:</strong> 1 Beginner · <strong>Lecture:</strong> L10 · Module 5</li><li><strong>Context:</strong> A parade marshals pick the tallest scout so far as they walk the line.</li><li><strong>Problem:</strong> Scouts stand in a line with visible heights. Walking left to right, a scout is "record-breaking" if taller than every scout before them. Design the counting loop and trace it on 5 heights before coding.</li><li><strong>Input:</strong> n, then n integers. <strong>Output:</strong> count of record-breakers (the first scout always counts).</li><li><strong>Constraints:</strong> 1 ≤ n ≤ 40; heights 100…200.</li><li><strong>Thinking questions:</strong> What single variable summarizes "all scouts so far"? Does the <em>order</em> of comparisons matter?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Keep the running maximum; compare each new height to it.</li><li>A tie is <em>not</em> a new record — decide strictly greater.</li><li>One pass, O(n): no second loop needed.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-016-sum-until-the-sentinel">PF-CS-016 · Sum Until the Sentinel</h3>
+<ul><li><strong>Tier:</strong> 1 Beginner · <strong>Lecture:</strong> L09 · Module 5</li><li><strong>Context:</strong> A toll booth totals vehicle fares until the operator types the end-of-shift code.</li><li><strong>Problem:</strong> Design the sentinel-controlled loop: read fares (positive), stop at the agreed sentinel, then report count and total. Explain why the sentinel cannot be a legal fare and where you would read the first value.</li><li><strong>Input:</strong> integers until sentinel. <strong>Output:</strong> count + total.</li><li><strong>Constraints:</strong> fares 1…500; sentinel −1.</li><li><strong>Thinking questions:</strong> Why does read-then-check-then-process avoid processing the sentinel?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>The loop condition tests the <em>most recently read</em> value.</li><li>Priming read: read once before the loop starts.</li><li>Update the variables <em>inside</em> the loop body, after the check.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-017-the-pyramid-builder">PF-CS-017 · The Pyramid Builder</h3>
+<ul><li><strong>Tier:</strong> 1 Beginner · <strong>Lecture:</strong> L10 · Module 5</li><li><strong>Context:</strong> A cinema seats viewers in a triangular arrangement for a photo.</li><li><strong>Problem:</strong> For height h, specify the exact printed triangle: row i has i stars, centered by leading spaces. Give the loop bounds and the space count formula <em>before</em> writing code.</li><li><strong>Input:</strong> one integer h. <strong>Output:</strong> the centered triangle.</li><li><strong>Constraints:</strong> 1 ≤ h ≤ 15.</li><li><strong>Thinking questions:</strong> How many spaces does row i need? What does the outer loop control vs the two inner loops?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Row i (1-based) prints h − i spaces then i stars.</li><li>Outer loop rows; two inner loops: spaces, then stars.</li><li>Verify the formula on h = 1 and h = 3 by hand first.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-018-bus-fare-zoner">PF-CS-018 · Bus Fare Zoner</h3>
+<ul><li><strong>Tier:</strong> 1 Beginner · <strong>Lecture:</strong> L12 · Module 6</li><li><strong>Context:</strong> A transit system charges by zone distance.</li><li><strong>Problem:</strong> Given traveled distance (integer km), fare is 20 for the first 5 km, then 5 per additional km. Design the computation, then restate it as a single formula valid for all distances — no branching left.</li><li><strong>Input:</strong> one integer km ≥ 1. <strong>Output:</strong> one fare.</li><li><strong>Constraints:</strong> km ≤ 100.</li><li><strong>Thinking questions:</strong> Can max(0, km−5) replace the branch? Which form is easier to test exhaustively?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>The branch only decides <em>how much of</em> the per-km rate applies.</li><li>Excess = (km &gt; 5) ? km − 5 : 0 — the conditional operator.</li><li>Fare = 20 + 5 × max(0, km − 5).</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-019-the-recipe-scaler">PF-CS-019 · The Recipe Scaler</h3>
+<ul><li><strong>Tier:</strong> 1 Beginner · <strong>Lecture:</strong> L12 · Module 6</li><li><strong>Context:</strong> A hostel kitchen scales a recipe for k students.</li><li><strong>Problem:</strong> A recipe serves 4 with given gram amounts per ingredient. Design the scaling computation that keeps proportions exact for k servings, and decide the output's rounding rule so the kitchen can actually weigh it (nearest 5 g).</li><li><strong>Input:</strong> k (integer), then the 4 gram amounts (integers, serves 4). <strong>Output:</strong> 4 scaled amounts rounded to nearest 5 g.</li><li><strong>Constraints:</strong> 1 ≤ k ≤ 40; amounts ≤ 2000.</li><li><strong>Thinking questions:</strong> Where do fractions appear, and where must they <em>survive</em>? Why is rounding <em>after</em> all arithmetic essential?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Scale factor = k/4.0 — one cast keeps the math exact.</li><li>Compute in double, round only at print time.</li><li>nearest 5 = 5 × floor(x/5 + 0.5).</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-020-exam-averages-with-an-absence-rule">PF-CS-020 · Exam Averages with an Absence Rule</h3>
+<ul><li><strong>Tier:</strong> 1 Beginner · <strong>Lecture:</strong> L12 · Module 6</li><li><strong>Context:</strong> A teacher averages test scores but must handle absences.</li><li><strong>Problem:</strong> Each student has 3 scores; −1 marks an absent test. Design the average computation that ignores absent tests but flags a student with all three absent. Decide: is a 2-test average <em>comparable</em> to a 3-test average? State your policy and defend it.</li><li><strong>Input:</strong> n, then per student: 3 integers. <strong>Output:</strong> per-student average (−1 if all absent) with the policy note.</li><li><strong>Constraints:</strong> 1 ≤ n ≤ 50; scores 0…100 or −1.</li><li><strong>Thinking questions:</strong> Which accumulator counts <em>present</em> tests? What is the average when the count is zero — and does 0 lie?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Sum only scores ≥ 0; count them too.</li><li>Guard division: count == 0 means a flag, not a number.</li><li>Comparability is a <em>policy</em> decision: state it, don't hide it.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

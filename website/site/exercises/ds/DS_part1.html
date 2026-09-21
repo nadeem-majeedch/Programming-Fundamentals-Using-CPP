@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DS Exercises · DS_part1 · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/exercises/ds/DS_part1.html">
+<link rel="stylesheet" href="../../styles.css">
+<script src="../../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../../index.html">Home</a></li><li><a href="../../overview.html">Overview</a></li><li><a href="../../outcomes.html">Outcomes</a></li><li><a href="../../schedule.html">Schedule</a></li><li><a href="../../lectures.html">Lectures</a></li><li><a href="../../labs.html">Labs</a></li><li><a href="../../cases.html">Case Studies</a></li><li><a href="../../exercises.html" aria-current="page">Exercises</a></li><li><a href="../../assignments.html">Assignments</a></li><li><a href="../../projects.html">Projects</a></li><li><a href="../../resources.html">Resources</a></li><li><a href="../../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../../index.html">Home</a> › DS Exercises · DS_part1</nav>
+<h1 class="page-title">DS Exercises · DS_part1</h1>
+<p>Formulas go in comments <em>before</em> the code that implements them; integer vs floating-point choices are graded. Edge cases listed per item are part of the task, not decoration.</p>
+<hr>
+<h3 id="pf-ds-01-count-and-proportion">PF-DS-01 · Count and Proportion</h3>
+<p><strong>Level:</strong> Beginner · <strong>Lectures:</strong> L05–L06 · <strong>Prerequisites:</strong> none <strong>Problem:</strong> Read integers until EOF. Print <code>n: &lt;count&gt;</code>, then <code>even: &lt;p&gt;</code> where <code>&lt;p&gt;</code> is the proportion of even values, 2 decimals. <strong>Formula first:</strong> <code>p = (number of even values) / n</code> — division is the only floating step; cast exactly once. <strong>Input:</strong> any integers. <strong>Output:</strong> two lines as above; <code>n: 0</code> and <code>even: 0.00</code> on empty input. <strong>Edge cases:</strong> empty input; all odd; negative values (−4 is even!). <strong>Sample:</strong> <code>1 2 2 7 8</code> → <code>n: 5</code> / <code>even: 0.60</code> <strong>Hints:</strong> <code>v % 2 == 0</code> works for negatives on all course compilers; the count is an <code>int</code>, the cast happens at the division. <strong>Avoid duplicating:</strong> PF-E-067 (sum/mean) — this one is a proportion, no mean.</p>
+<hr>
+<h3 id="pf-ds-02-min-max-range-sentinel">PF-DS-02 · Min, Max, Range (sentinel)</h3>
+<p><strong>Level:</strong> Beginner · <strong>Lectures:</strong> L09–L10 · <strong>Prerequisites:</strong> DS-01 <strong>Problem:</strong> Read integers until sentinel <code>-999</code>. Print <code>min</code>, <code>max</code>, <code>range</code> (max − min) on separate lines. Sentinel never enters the data. <strong>Formula first:</strong> <code>range = max − min</code>; trackers initialize from the FIRST data value, never 0. <strong>Edge cases:</strong> sentinel first → <code>no data</code>; single value → range 0; all-equal. <strong>Sample:</strong> <code>4 17 9 22 -999</code> → <code>min: 4</code> / <code>max: 22</code> / <code>range: 18</code> <strong>Hints:</strong> one pass; no arrays needed.</p>
+<hr>
+<h3 id="pf-ds-03-mean-of-whole-marks">PF-DS-03 · Mean of Whole Marks</h3>
+<p><strong>Level:</strong> Beginner · <strong>Lecture:</strong> L09 · <strong>Prerequisites:</strong> DS-01 <strong>Problem:</strong> Read n, then n integer marks 0..100. Print <code>sum</code> and <code>mean</code> (2 dp). Reject the whole run if any mark is outside 0..100: print <code>bad mark</code> and exit 1. <strong>Formula first:</strong> <code>mean = (x1 + … + xn) / n</code> with the sum in <code>long long</code>. <strong>Edge cases:</strong> n = 0 → <code>no data</code> (exit 0); n = 100 marks (capacity check with a fixed array of 1000). <strong>Sample:</strong> <code>5 82 91 75 68 88</code> → <code>sum: 404</code> / <code>mean: 80.80</code> <strong>Hints:</strong> this is the <em>strict</em> sibling of PF-E-067: here validation rejects, there input was trusted.</p>
+<hr>
+<h3 id="pf-ds-04-count-above-the-mean-file">PF-DS-04 · Count Above the Mean (file)</h3>
+<p><strong>Level:</strong> Foundational · <strong>Lectures:</strong> L17 · <strong>Prerequisites:</strong> DS-03 <strong>Problem:</strong> Read doubles from file <code>temperatures.txt</code> (one per line) until EOF. Compute the mean, then print <code>mean</code> (1 dp) and <code>above: &lt;k&gt;</code> — how many values are STRICTLY greater than the mean. <strong>Formula first:</strong> two passes: <code>mean = Σx/n</code>, then count <code>xi &gt; mean</code>. Discuss (in a comment): why one pass cannot count-above-the-mean. <strong>Edge cases:</strong> empty file → <code>no data</code> (exit 0); file absent → exit 2 with a message; a single value counts 0 above itself. <strong>Dataset:</strong> <a href="datasets/temperatures.txt">datasets/temperatures.txt</a> (18 readings, mean 20.8 — six values above it). <strong>Sample check with the dataset:</strong> <code>mean: 20.8</code> / <code>above: 6</code> <strong>Hints:</strong> array capacity 1000; the count is int, values are double.</p>
+<hr>
+<h3 id="pf-ds-05-median-both-parities">PF-DS-05 · Median, Both Parities</h3>
+<p><strong>Level:</strong> Foundational · <strong>Lecture:</strong> L17 · <strong>Prerequisites:</strong> DS-02 <strong>Problem:</strong> Read n then n integers. Print the median (1 dp): middle value for odd n, average of the two middles for even n. <strong>Formula first:</strong> sort ascending; odd n → <code>x((n+1)/2)</code>; even n → <code>(x(n/2) + x(n/2+1)) / 2</code> (1-based). Implement your own insertion or selection sort from L24 — do not re-derive a new sort here. <strong>Edge cases:</strong> n = 0 → <code>no data</code>; n = 1; duplicates around the median. <strong>Sample:</strong> <code>7 88 92 79 85 91 72 95</code> → <code>median: 88.0</code>; even case <code>4 10 20 30 40</code> → <code>median: 25.0</code> <strong>Hints:</strong> the even case can produce .5 — that is why the return is double while the data stays int.</p>
+<hr>
+<h3 id="pf-ds-06-frequency-table-with-invalids-file">PF-DS-06 · Frequency Table with Invalids (file)</h3>
+<p><strong>Level:</strong> Foundational · <strong>Lecture:</strong> L18 · <strong>Prerequisites:</strong> DS-05 <strong>Problem:</strong> Read integers from file <code>survey_ratings.txt</code> (one per line), values expected 1..5. Print a table <code>rating count relative</code> for ratings 1..5 (relative = count/valid, 2 dp), then <code>invalid: &lt;k&gt;</code>. Out-of-range and non-numeric lines both count as invalid but are reported separately (<code>invalid-range</code>, <code>invalid-token</code> totals after the table). <strong>Formula first:</strong> <code>f(c) = |{x : x = c}|</code>, <code>rel(c) = f(c)/n_valid</code>; index shift <code>counts[r − 1]</code>. <strong>Edge cases:</strong> all-invalid file (table of zeros, relative 0.00, no division by zero!); missing file → exit 2. <strong>Dataset:</strong> <a href="datasets/survey_ratings.txt">datasets/survey_ratings.txt</a> (40 lines: 35 valid, 3 out-of-range, 2 non-numeric). <strong>Sample check:</strong> rating 4 → count 14, relative 0.40; <code>mode: 4</code> is NOT required here (that is DS-12's job). <strong>Hints:</strong> getline + istringstream per line (L29 pattern); guard the division by the valid count.</p>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

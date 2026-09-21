@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Final review guide · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/assignments/final-review.html">
+<link rel="stylesheet" href="../styles.css">
+<script src="../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../index.html">Home</a></li><li><a href="../overview.html">Overview</a></li><li><a href="../outcomes.html">Outcomes</a></li><li><a href="../schedule.html">Schedule</a></li><li><a href="../lectures.html">Lectures</a></li><li><a href="../labs.html">Labs</a></li><li><a href="../cases.html">Case Studies</a></li><li><a href="../exercises.html">Exercises</a></li><li><a href="../assignments.html" aria-current="page">Assignments</a></li><li><a href="../projects.html">Projects</a></li><li><a href="../resources.html">Resources</a></li><li><a href="../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="narrow">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../index.html">Home</a> › Final review guide</nav>
+<h1 class="page-title">Final review guide</h1>
+<p><strong>Exam format:</strong> 180 minutes · 100 marks. Modules 9–16 carry ≥ 60 %. Shapes: MCQ, tracing, debugging, short conceptual, complexity intuition, algorithm design, coding, code completion, one extended synthesis choice. Closed book — hand-write your practice.</p>
+<h2 id="emphasis-map-modules-9-16">Emphasis map (Modules 9–16)</h2>
+<table><thead><tr><th>Module</th><th>Must-have skills</th><th>Practice from</th></tr></thead><tbody><tr><td>M9 · 1-D arrays</td><td>bounds discipline, max/min from a[0], reversal, frequency tables</td><td>Quiz 09, exercises T06</td></tr><tr><td>M10 · 2-D arrays</td><td>row-major order, diagonals, border predicate, transpose</td><td>Quiz 10, <code>examples/grid_basics.cpp</code></td></tr><tr><td>M11 · Strings</td><td>getline vs <code>&gt;&gt;</code>, npos, char classes, whole-word rules</td><td>Quiz 11, exercises T07</td></tr><tr><td>M12 · Search &amp; sort</td><td>binary search invariants, insertion/selection traces, stability</td><td>Quiz 12, exercises T08</td></tr><tr><td>M13 · Pointers</td><td>address-of/dereference, element arithmetic, use-after-delete guards</td><td>Quiz 13, <code>examples/pointer_basics.cpp</code></td></tr><tr><td>M14 · Dynamic memory &amp; structs</td><td>new[]/delete[] pairing, leak paths, record copies, vector default</td><td>Quiz 14, exercises T10</td></tr><tr><td>M15 · Files &amp; errors</td><td>open-check, getline+istringstream, skip-and-report, exit codes</td><td>Quiz 15, exercises T11</td></tr><tr><td>M16 · OOP</td><td>private state, invariants, guarded mutators, const methods, has-a</td><td>Quiz 16, <code>examples/first_class.cpp</code></td></tr></tbody></table>
+<h2 id="complexity-facts-to-memorize">Complexity facts to memorize</h2>
+<ul><li>Linear search absent key: n comparisons. Binary: ⌈log2 n⌉ (1000 → ~10; 10⁶ → ~20).</li><li>Insertion sort: O(n) on sorted input, O(n²) worst; selection: always n²/2 compares.</li><li>Measured counters from L23–L24: binary ≈ 10 vs linear ≈ 1000 at n = 1000.</li></ul>
+<h2 id="trace-drills">Trace drills</h2>
+<ol><li><code>a[5]{}</code> filled <code>a[i] = i*i</code> — <code>a[1] + a[4]</code>?</li><li>Selection sort pass 0 on {5,2,9,1} — the row?</li><li><code>*p = *p + 5; p = nullptr; cout &lt;&lt; x;</code> — prints?</li><li><code>P a{3}; P b{a}; b.x = 9;</code> — <code>a.x</code>?</li></ol>
+</ol>
+<h2 id="debugging-gallery-name-defect-fix">Debugging gallery (name defect + fix)</h2>
+<p><code>i &lt;= n</code> on an array · corner double-count in borders · getline after <code>&gt;&gt;</code> · binary-search bound mixing · use-after-delete · early return past <code>delete[]</code> · unsanitized member write breaking an invariant.</p>
+<h2 id="coding-practice-set">Coding practice set</h2>
+<ol><li>Second-largest distinct or <code>N/A</code> (n ≤ 100).</li><li>Vowel/consonant/digit counts of a full line.</li><li>Insertion sort with per-pass printing.</li><li><code>Counter</code> class with guarded <code>dec()</code> returning bool.</li></ol>
+</ol>
+<h2 id="the-synthesis-question">The synthesis question</h2>
+<p>Expect a choose-one extended item: extra coding items, or a scaled practical variant (extend a class or loader, design + code + your own test table). Practice <em>writing a test table with expected outputs</em> — it is graded work.</p>
+<h2 id="exam-technique">Exam technique</h2>
+<ul><li>Class questions: write the invariant as a comment first; guards fall out of it.</li><li>File questions: open-check → per-line classify → skip counter → exit codes.</li><li>Budget: Q7 coding items ≈ 15 minutes each; leave 20 minutes for synthesis.</li></ul>
+<p>See <a href="../assignments/midterm-review.html">../midterm/review_guide.md</a> for Weeks 1–8 foundations.</p>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

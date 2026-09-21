@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L11 · From Problem to Algorithm: IPO Charts, Decomposition, Pseudocode, Flowcharts · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/lectures/week_06/lecture_11.html">
+<link rel="stylesheet" href="../../styles.css">
+<script src="../../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../../index.html">Home</a></li><li><a href="../../overview.html">Overview</a></li><li><a href="../../outcomes.html">Outcomes</a></li><li><a href="../../schedule.html">Schedule</a></li><li><a href="../../lectures.html" aria-current="page">Lectures</a></li><li><a href="../../labs.html">Labs</a></li><li><a href="../../cases.html">Case Studies</a></li><li><a href="../../exercises.html">Exercises</a></li><li><a href="../../assignments.html">Assignments</a></li><li><a href="../../projects.html">Projects</a></li><li><a href="../../resources.html">Resources</a></li><li><a href="../../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="narrow">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../../index.html">Home</a> › L11 · From Problem to Algorithm: IPO Charts, Decomposition, Pseudocode, Flowcharts</nav>
+<h1 class="page-title">L11 · From Problem to Algorithm: IPO Charts, Decomposition, Pseudocode, Flowcharts</h1>
+<p><strong>Module 6 — Problem-Solving and Algorithm Design · Week 6 · Lecture 11 of 32 · 120 minutes</strong> <strong>Outcomes:</strong> CLO-4 · PF-6.1, PF-6.2 · <a href="../../outcomes.html">LEARNING_OUTCOMES.md</a></p>
+<h2 id="learning-objectives">Learning objectives</h2>
+<ol><li>Produce an IPO chart (Input–Processing–Output) with typed inputs, ordered processing steps, and precise output formats from a problem statement (PF-6.1).</li><li>Decompose a multi-step problem into a main task plus named subtasks, drawn as a structure/hierarchy chart (PF-6.2).</li><li>Express the refined algorithm in numbered pseudocode and as a flowchart using the four standard symbols, and argue the refinement steps from naive to final (PF-6.2).</li></ol>
+</ol>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>M1–M5 (all control-flow constructs — now students can <em>read</em> any algorithm they design; that's what makes this module the consolidation point).</p>
+<h2 id="concept-sequence">Concept sequence</h2>
+<ol><li>Why design precedes code (bug-cost asymmetry; the "just start typing" trap)</li><li>IPO analysis: contract thinking</li><li>Decomposition: subtasks and hierarchy charts</li><li>Pseudocode: structured English with our control vocabulary</li><li>Flowcharts: the four symbols (process, decision, I/O, terminator)</li><li>Stepwise refinement: naive → correct → good</li></ol>
+</ol>
+<h2 id="teaching-topics-detailed">Teaching topics (detailed)</h2>
+<ul><li><strong>IPO charts:</strong> columns Input / Processing / Output; typed inputs (<code>n : int</code>), numbered processing steps referencing named variables, output <em>format</em> specified exactly (e.g. <code>Average = 87.50</code> — 2 decimals); worked on payroll and exam-statistics problems.</li><li><strong>Decomposition:</strong> hierarchy chart (main → read-data → compute → report); cohesion heuristic — each box = one sentence with no "and"; these boxes become functions in Module 7 (explicit forward reference).</li><li><strong>Pseudocode conventions (course standard):</strong> numbered steps; <code>READ</code>, <code>COMPUTE</code>, <code>DISPLAY</code>, <code>IF/ELSE</code>, <code>WHILE</code>, <code>FOR</code>; no language syntax; one step = one verifiable action.</li><li><strong>Flowchart symbols:</strong> oval terminators, parallelogram I/O, rectangle process, diamond decision (exactly two exits); loop drawn as backward arrow; common-shape misuse gallery.</li><li><strong>Stepwise refinement on one running example:</strong> "class average with drop-lowest": naive (average all) → correct (drop lowest) → good (validate inputs); each refinement justified by a requirement.</li><li><strong>Cross-module echo:</strong> digit extraction (M3), sentinels (M5) re-derived as designs, showing students they've been doing this implicitly.</li></ul>
+<h2 id="c-examples-required">C++ examples required</h2>
+<table><thead><tr><th>File</th><th>Role</th></tr></thead><tbody><tr><td>(design-only, then built) <code>loop_patterns.cpp</code> ✅</td><td>the ACCUMULATE pattern re-derived from its IPO chart — code shown as the <em>end</em> of the design pipeline</td></tr><tr><td>(live) <code>payroll_design.md</code> sketch on board → <code>payroll.cpp</code> skeleton</td><td>IPO → pseudocode → skeleton mapping demonstrated live</td></tr></tbody></table>
+<h2 id="common-student-misconceptions">Common student misconceptions</h2>
+<ul><li>"Design documents are busywork for graders." (They are the debugging leverage point — a wrong IPO becomes a wrong program no compiler catches.)</li><li>"Pseudocode is just bad C++." (It's language-independent; no <code>;</code>, no types except where the <em>contract</em> needs them.)</li><li>"Decomposition means splitting into tiny steps." (It means splitting into <em>responsibilities</em>; a 30-step list isn't decomposition.)</li><li>"Flowcharts must show every variable." (They show control flow, not state — trace tables show state, Module 6 L12.)</li></ul>
+<h2 id="conceptual-explanation-beginner-first">Conceptual explanation (beginner-first)</h2>
+<p>Everything so far taught vocabulary: variables, branches, loops. This lecture is about the <em>grammar of solving</em> — what experienced programmers do between reading a problem and typing code. The process:</p>
+<ol><li><strong>Understand</strong> — restate the problem in your own words; identify</li></ol>
+</ol>
+<p>inputs and outputs. 2. <strong>Plan</strong> — write the steps in plain language (<strong>pseudocode</strong>) and trace them by hand. 3. <strong>Code</strong> — translate pseudocode line by line. 4. <strong>Test</strong> — including the nasty cases. 5. <strong>Refine</strong> — improve names, structure, and check edge cases. Most beginner failures are step-1 or step-2 failures, not C++ failures.</p>
+<p>Hand tracing is the core skill. Before running anything, we play computer: a table with one column per variable, one row per step. If the trace is wrong, the plan is wrong — fix it on paper, where it costs seconds, not hours. And when the plan is right but the program isn't, <strong>incremental development</strong> keeps you sane: write two lines, compile, run; add a bit, compile, run. Never write 50 lines and then compile for the first time.</p>
+<h2 id="terminology-and-definitions">Terminology and definitions</h2>
+<table><thead><tr><th>Term</th><th>Definition</th></tr></thead><tbody><tr><td>Pseudocode</td><td>Plain-language steps describing an algorithm, no syntax</td></tr><tr><td>Algorithm</td><td>A finite sequence of unambiguous steps that solves a problem</td></tr><tr><td>Trace / dry run</td><td>Executing an algorithm on paper, recording every variable</td></tr><tr><td>Edge case</td><td>A boundary input: empty, one item, zero, maximum, negative</td></tr><tr><td>Incremental development</td><td>Build, compile, and run in tiny verified steps</td></tr><tr><td>Decomposition</td><td>Breaking a problem into smaller subproblems</td></tr><tr><td>Refinement (top-down)</td><td>Expanding a high-level step into more detailed steps</td></tr><tr><td>Desk checking</td><td>Verifying logic on paper before compiling</td></tr><tr><td>Regression</td><td>A previously-working behavior broken by a change</td></tr><tr><td>Minimum viable program</td><td>The smallest program that does one verifiable thing</td></tr></tbody></table>
+<h2 id="syntax-and-c-examples">Syntax and C++ examples</h2>
+<p>The example walks the full process on one classic problem: <em>read n scores, print the highest and its position</em>.</p>
+<p>Pseudocode plan (shown in the file, then coded):</p>
+<pre><code class="language-text">read n
+read first score -&gt; best, bestPos = 1
+for pos from 2 to n:
+    read score
+    if score &gt; best: best = score, bestPos = pos
+print best, bestPos</code></pre>
+<p>Then the translation to C++ — one pseudocode line per statement — with the trace table for input <code>5 42 87 87 13 60</code> filled in as a comment: best moves 42 → 87 (pos 2), and the later 87 does <strong>not</strong> move it (strict <code>&gt;</code> keeps the first occurrence).</p>
+<pre><code class="language-cpp">int n{};
+std::cin &gt;&gt; n;
+int best{}, bestPos{1};
+std::cin &gt;&gt; best;                        // first score seeds the max
+for (int pos{2}; pos &lt;= n; ++pos)
+{
+    int score{};
+    std::cin &gt;&gt; score;
+    if (score &gt; best)
+    {
+        best = score;
+        bestPos = pos;
+    }
+}
+std::cout &lt;&lt; best &lt;&lt; &#x27; &#x27; &lt;&lt; bestPos &lt;&lt; &#x27;\n&#x27;;   // 87 2</code></pre>
+<h2 id="line-by-line-code-explanation">Line-by-line code explanation</h2>
+<p>The best-so-far program (above, mirrored in <code>examples/loop_patterns.cpp</code>):</p>
+<ol><li><code>std::cin &gt;&gt; best</code> seeds the maximum with the <em>first</em> value — not 0, which fails for all-negative scores. This is an edge case decision made in the planning stage.</li><li>The loop starts at <code>pos = 2</code> because position 1 is already consumed.</li><li><code>if (score &gt; best)</code> — strict inequality: ties keep the earliest position. Change to <code>&gt;=</code> and the <em>last</em> tie wins; neither is wrong, but the choice must be deliberate.</li><li>Every pseudocode line maps to exactly one statement or small group — the code reads like the plan, which makes desk checking possible.</li></ol>
+</ol>
+<h2 id="output-prediction-questions-with-answers">Output prediction questions (with answers)</h2>
+<ol><li>Input <code>5 42 87 87 13 60</code> — ? — <code>87 2</code> (first of the two 87s).</li><li>Same program with <code>&gt;=</code> instead of <code>&gt;</code> — ? — <code>87 3</code> (last tie wins).</li><li>Input <code>1</code> followed by <code>-5</code> — ? — <code>-5 1</code>; seeding with 0 would have printed <code>0 1</code> — a wrong answer for all-negative data.</li><li>Trace pseudocode <code>x=1; while x &lt; 10: x = x * 2</code> — ? — x: 1, 2, 4, 8, 16 — four passes, exits at 16.</li><li>A plan with no step to read n before the loop — what breaks? — the loop bound is garbage; the trace table exposes it immediately.</li></ol>
+</ol>
+<h2 id="common-errors-and-debugging-examples">Common errors and debugging examples</h2>
+<table><thead><tr><th>Error</th><th>Symptom</th><th>Fix</th></tr></thead><tbody><tr><td>Coding before planning</td><td>50 broken lines, no idea where it went wrong</td><td>Pseudocode + trace first</td></tr><tr><td>Compile-only-at-the-end</td><td>Dozens of errors at once, morale collapse</td><td>Incremental development</td></tr><tr><td>No edge cases tested</td><td>Works on samples, fails on 0 / 1 / empty</td><td>Test the boundary list every time</td></tr><tr><td>Seeding max/min with 0</td><td>Wrong answer for all-negative (or all-positive min) input</td><td>Seed with the first real value</td></tr><tr><td>Off-by-one in "positions"</td><td>bestPos doesn't match the value</td><td>Keep position and value updated together</td></tr><tr><td>Silent scope creep</td><td>"Small change" breaks working code</td><td>Re-run the old test cases (regression)</td></tr></tbody></table>
+<h2 id="classroom-demonstrations">Classroom demonstrations</h2>
+<ol><li><strong>Live pseudocode → code:</strong> solve "sum the even numbers from 1 to n" on the board: plan, trace with n = 10 (2+4+6+8+10 = 30), then code — the whole method in eight minutes.</li><li><strong>Seed-the-max trap:</strong> run the best-so-far program on all-negative input with a 0 seed, then with first-value seeding — edge cases made visible.</li><li><strong>Break-it bingo:</strong> hand out a working program; teams compete to list the most inputs that break it (empty, one, huge, negative, non- numeric) — testing as an active skill.</li></ol>
+</ol>
+<h2 id="guided-student-activities">Guided student activities</h2>
+<p><strong>Plan-before-code relay (25 min):</strong> teams get a problem statement; station 1 writes the IPO chart, station 2 writes pseudocode, station 3 hand-traces it on a given input, station 4 codes it; traces are exchanged between teams for desk-checking before any code runs.</p>
+<h2 id="practice-problems">Practice problems</h2>
+<ul><li>Write IPO charts + pseudocode for: even-number summer, digit counter, menu with input validation.</li><li>Hand-trace the pseudocode from two of the above on specified inputs.</li><li>Decompose the "highest score and its position" problem; identify the seeding decision and defend it.</li><li>(🞡 stretch) Take a working program and construct three inputs that break it; classify each by test class.</li></ul>
+<h2 id="summary">Summary</h2>
+<p>Programming is a process: understand, plan, trace, code, test, refine. Pseudocode makes thinking cheap; tracing makes plans verifiable on paper; incremental development keeps compile-run cycles short; edge cases are checked by list, not by luck. The best-so-far pattern seeds with the first value — an edge-case decision that belongs in the plan. Next (L12): turning a plan into testable units — the <code>assert</code>-style mindset and building blocks of algorithm design.</p>
+<h2 id="exit-ticket-formative-assessment">Exit ticket / formative assessment</h2>
+<ol><li>List the six steps of the problem-solving process in order.</li><li>Trace: <code>s = 0; for i in 1..4: s += i</code> — give the (i, s) table.</li><li>Why is seeding the maximum with 0 a bug for the input <code>-3 -7 -2</code>, and what is the fix?</li></ol>
+</ol>
+<ol><li>What are the three columns of an IPO chart?</li><li>Convert one pseudocode step into a sentence a non-programmer could verify.</li><li>Which pseudocode step hides a subtask too big for one box? (Given sample.)</li></ol>
+</ol>
+<h2 id="estimated-time-allocation-120-min">Estimated time allocation (120 min)</h2>
+<table><thead><tr><th>Segment</th><th>Minutes</th></tr></thead><tbody><tr><td>Recall (patterns quiz) + why design first</td><td>10</td></tr><tr><td>IPO + decomposition + hierarchy charts</td><td>35</td></tr><tr><td>Break</td><td>10</td></tr><tr><td>Pseudocode + flowcharts + stepwise refinement</td><td>35</td></tr><tr><td>Design-a-thon + peer review</td><td>20</td></tr><tr><td>Exit ticket + L12 preview</td><td>10</td></tr></tbody></table>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

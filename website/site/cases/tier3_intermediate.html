@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Case Studies · Tier 3 · Intermediate · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/cases/tier3_intermediate.html">
+<link rel="stylesheet" href="../styles.css">
+<script src="../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../index.html">Home</a></li><li><a href="../overview.html">Overview</a></li><li><a href="../outcomes.html">Outcomes</a></li><li><a href="../schedule.html">Schedule</a></li><li><a href="../lectures.html">Lectures</a></li><li><a href="../labs.html">Labs</a></li><li><a href="../cases.html" aria-current="page">Case Studies</a></li><li><a href="../exercises.html">Exercises</a></li><li><a href="../assignments.html">Assignments</a></li><li><a href="../projects.html">Projects</a></li><li><a href="../resources.html">Resources</a></li><li><a href="../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../index.html">Home</a> › Case Studies · Tier 3 · Intermediate</nav>
+<h1 class="page-title">Case Studies · Tier 3 · Intermediate</h1>
+<p><strong>Lectures L17–L24 · Modules 9–12</strong> · think ~5 minutes · paper only. Cases ascend in difficulty within the tier. Worked solutions: instructor area only.</p>
+<hr>
+<h3 id="pf-cs-041-the-missing-temperature">PF-CS-041 · The Missing Temperature</h3>
+<ul><li><strong>Tier:</strong> 3 Intermediate · <strong>Lecture:</strong> L17 · Module 9</li><li><strong>Context:</strong> A sensor array logs hourly readings; one slot is corrupt.</li><li><strong>Problem:</strong> An array holds 24 readings; exactly one index holds a value outside −50…60. Design the scan that reports the suspect index and its value, <em>and</em> decide what the report should say if the array is actually clean (nothing?) — specify the none-found behavior.</li><li><strong>Input:</strong> 24 integers. <strong>Output:</strong> suspect index+value, or <code>all valid</code>.</li><li><strong>Constraints:</strong> exactly 0 or 1 bad values; others in −50…60.</li><li><strong>Thinking questions:</strong> What flag survives the loop? When is the flag set vs checked?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>A bool starts false and flips on the first violation.</li><li>Report <em>at the first</em> violation and stop, or collect all — decide the contract.</li><li>After the loop, the flag's value answers the none-found question.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-042-reverse-without-a-second-array">PF-CS-042 · Reverse Without a Second Array</h3>
+<ul><li><strong>Tier:</strong> 3 Intermediate · <strong>Lecture:</strong> L17 · Module 9</li><li><strong>Context:</strong> Memory is tight; a buffer must be reversed in place.</li><li><strong>Problem:</strong> Design the in-place reversal of n elements using one temporary variable. Trace the swap sequence for n = 5 (which pairs, how many swaps), and prove no element is touched twice.</li><li><strong>Input:</strong> n, then n integers. <strong>Output:</strong> the reversed array.</li><li><strong>Constraints:</strong> 1 ≤ n ≤ 100.</li><li><strong>Thinking questions:</strong> Which pairs exchange? Where do the two indices meet — and what happens at the meet point?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Swap a[i] with a[n−1−i].</li><li>i runs to n/2 exclusive — the middle never swaps itself.</li><li>⌊n/2⌋ swaps total; for odd n the center stays.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-043-the-two-pass-versus-one-pass-average-gap">PF-CS-043 · The Two-Pass Versus One-Pass Average Gap</h3>
+<ul><li><strong>Tier:</strong> 3 Intermediate · <strong>Lecture:</strong> L17 · Module 9</li><li><strong>Context:</strong> An analytics job reports how far each value sits from the mean.</li><li><strong>Problem:</strong> Design the computation of deviations |a[i] − mean| for n values. First as two passes (compute mean, then deviations), then ask: can one pass do it? Identify what a single pass <em>cannot</em> know and what that implies about storing the data.</li><li><strong>Input:</strong> n, then n doubles. <strong>Output:</strong> mean, then deviations.</li><li><strong>Constraints:</strong> 1 ≤ n ≤ 1000.</li><li><strong>Thinking questions:</strong> What does the second pass need that the first didn't have? If the data streamed and vanished, what would be lost?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>The mean is unknown until all values are seen.</li><li>Deviations need the final mean plus every original value.</li><li>One pass requires keeping the values — the array is the memory.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-044-rotating-the-rota">PF-CS-044 · Rotating the Rota</h3>
+<ul><li><strong>Tier:</strong> 3 Intermediate · <strong>Lecture:</strong> L18 · Module 9</li><li><strong>Context:</strong> A hospital rotates duty shifts left by k each week.</li><li><strong>Problem:</strong> Design the left-rotation of an array by k (with wraparound) <em>without</em> a second array. Trace for [A,B,C,D,E], k = 2. What goes wrong with the naive "move everything one slot, k times" for large n and k — and what is the fix?</li><li><strong>Input:</strong> n, k, then n values. <strong>Output:</strong> rotated array.</li><li><strong>Constraints:</strong> 1 ≤ n ≤ 100; 0 ≤ k ≤ n.</li><li><strong>Thinking questions:</strong> Where does element i land? What does k mod n buy you?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>New position of a[i] is (i − k + n) mod n... or a second index walk.</li><li>k mod n first: rotating by n is a no-op.</li><li>One-buffer copy with the modular index is simplest; triple-reversal is the expert trick.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-045-the-balanced-seating-chart">PF-CS-045 · The Balanced Seating Chart</h3>
+<ul><li><strong>Tier:</strong> 3 Intermediate · <strong>Lecture:</strong> L18 · Module 9</li><li><strong>Context:</strong> An exam hall seats students to balance section sizes.</li><li><strong>Problem:</strong> Given counts per section (n values), design the assignment that seats sections alternately (A,B,C,A,B,C…) until each is exhausted, then continues with the sections that remain. Specify the loop that skips exhausted sections and terminates exactly when all are empty.</li><li><strong>Input:</strong> n sections with counts. <strong>Output:</strong> seating order as section letters.</li><li><strong>Constraints:</strong> 1 ≤ sections ≤ 8; counts ≤ 40.</li><li><strong>Thinking questions:</strong> How do you detect "this section is done"? Does the loop terminate if <em>all</em> counts are zero?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>A "remaining" counter plus per-section counters.</li><li>One pass = one round; skip empties; stop when remaining == 0.</li><li>All-zero input must print nothing and stop — verify that first.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-046-parallel-arrays-break-a-report">PF-CS-046 · Parallel Arrays Break a Report</h3>
+<ul><li><strong>Tier:</strong> 3 Intermediate · <strong>Lecture:</strong> L18 · Module 9</li><li><strong>Context:</strong> A report sorts scores but names no longer match.</li><li><strong>Problem:</strong> Presented with parallel arrays names[] and scores[] where only scores[] was sorted, diagnose the exact data corruption, then design the fix that keeps records aligned while sorting (swap both, or restructure). Decide which fix you would mandate and why.</li><li><strong>Input:</strong> 5 name/score pairs, already corrupted on display. <strong>Output:</strong> diagnosis + corrected sort design.</li><li><strong>Constraints:</strong> names are unique; scores may tie.</li><li><strong>Thinking questions:</strong> What invariant did the sort violate? When does swapping both arrays still mislead?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>The invariant: names[i] and scores[i] describe the same student.</li><li>Any swap in scores must mirror in names.</li><li>Ties make "sorted by score" ambiguous — state the tie order policy.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-047-frequency-table-from-scratch">PF-CS-047 · Frequency Table from Scratch</h3>
+<ul><li><strong>Tier:</strong> 3 Intermediate · <strong>Lecture:</strong> L17 · Module 9</li><li><strong>Context:</strong> A survey records ratings 1–5; the report needs a histogram.</li><li><strong>Problem:</strong> Design the counting structure and loop for n ratings: counts per rating, then a star histogram. Decide the array size <em>before</em> seeing n, and specify what the histogram prints for a rating that never occurred.</li><li><strong>Input:</strong> n, then n ratings. <strong>Output:</strong> counts + histogram.</li><li><strong>Constraints:</strong> 1 ≤ n ≤ 500; ratings always 1…5 (validated).</li><li><strong>Thinking questions:</strong> Why is an index-shifted array (1→0) needed? What does counts[2] mean after your shift?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>int counts[6] = {} wastes slot 0 — or does it buy clarity?</li><li>counts[r]++ after validating 1 ≤ r ≤ 5.</li><li>A zero count still prints its label with no stars.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-048-the-flood-warning-diff">PF-CS-048 · The Flood Warning Diff</h3>
+<ul><li><strong>Tier:</strong> 3 Intermediate · <strong>Lecture:</strong> L17 · Module 9</li><li><strong>Context:</strong> A river gauge reports hourly levels; alarms fire on rises.</li><li><strong>Problem:</strong> Design the pass that flags every index where level[i] &gt; level[i−1] + 10 (a sharp rise). What is the correct starting index, and what does the report do with the <em>first</em> element (which has no predecessor)?</li><li><strong>Input:</strong> 24 levels. <strong>Output:</strong> flagged indices (or <code>none</code>).</li><li><strong>Constraints:</strong> levels 0…500.</li><li><strong>Thinking questions:</strong> Why does the loop start at 1? What fence-post error is lurking?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Element 0 has no predecessor: start comparing at 1.</li><li>The loop runs n−1 comparisons for n elements.</li><li>An empty flag list must still print something — <code>none</code>.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-049-seat-map-query-engine">PF-CS-049 · Seat Map Query Engine</h3>
+<ul><li><strong>Tier:</strong> 3 Intermediate · <strong>Lecture:</strong> L19 · Module 10</li><li><strong>Context:</strong> A cinema's 5×8 seat map stores 0 (free) / 1 (taken).</li><li><strong>Problem:</strong> Design the 2-D scan that answers three queries: seats free in row r, seats free in column c, and the first free seat in row-major order (as row, col or <code>full</code>). Specify behavior for a fully-booked map.</li><li><strong>Input:</strong> 5×8 grid, then queries. <strong>Output:</strong> counts or coordinates.</li><li><strong>Constraints:</strong> indices validated; grid fixed size.</li><li><strong>Thinking questions:</strong> Which queries need one loop, which need two? What is "row-major" doing for the third query?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Row count = one loop over columns; column count mirrors it.</li><li>First-free = nested loops with an early exit flag.</li><li><code>full</code> after both loops complete without finding — the fence-post of the search.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-050-the-sudoku-row-check">PF-CS-050 · The Sudoku Row Check</h3>
+<ul><li><strong>Tier:</strong> 3 Intermediate · <strong>Lecture:</strong> L19 · Module 10</li><li><strong>Context:</strong> A puzzle app validates one Sudoku row at a time.</li><li><strong>Problem:</strong> Design the check that a 9-element row contains each digit 1–9 exactly once, using a seen[] boolean array — <em>without</em> sorting. Then contrast with a sort-based approach: what does each cost, and which is clearer?</li><li><strong>Input:</strong> one row of 9 integers. <strong>Output:</strong> <code>valid</code> or the first offending digit.</li><li><strong>Constraints:</strong> entries 1…9 (out-of-range entries are "offending" too).</li><li><strong>Thinking questions:</strong> What does seen[d] mean? When do you know the answer early?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>seen[d] flips true when d appears; a repeat is an instant fail.</li><li>Out-of-range check first: 1–9 or report immediately.</li><li>Counting true values at the end proves all nine appeared.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-051-heat-grid-hotspots">PF-CS-051 · Heat Grid Hotspots</h3>
+<ul><li><strong>Tier:</strong> 3 Intermediate · <strong>Lecture:</strong> L19 · Module 10</li><li><strong>Context:</strong> A thermal camera yields a 4×6 grid of temperatures.</li><li><strong>Problem:</strong> Design the pass that finds the hottest cell and lists every cell within 2.0° of it (ties allowed). Decide the traversal for "list all": one pass or two — and what each pass stores.</li><li><strong>Input:</strong> 4×6 doubles. <strong>Output:</strong> hottest cell + neighbor list.</li><li><strong>Constraints:</strong> temps −20…120.</li><li><strong>Thinking questions:</strong> Can you list neighbors before knowing the max? What does the second pass compare against?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Pass 1 finds max and its cell; pass 2 filters.</li><li>One pass cannot list (it doesn't know the threshold yet).</li><li>|t − max| ≤ 2.0 with ≤ — ties included by design.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-052-matrix-border-sum">PF-CS-052 · Matrix Border Sum</h3>
+<ul><li><strong>Tier:</strong> 3 Intermediate · <strong>Lecture:</strong> L19 · Module 10</li><li><strong>Context:</strong> A framing tool sums the "picture frame" of a matrix.</li><li><strong>Problem:</strong> Design the border sum of an n×m matrix (first/last rows and columns) <em>without</em> double-counting corners. Trace on 3×3 with distinct values. What does your formula give for n == 1 (a single row)?</li><li><strong>Input:</strong> n, m, then the matrix. <strong>Output:</strong> border sum.</li><li><strong>Constraints:</strong> 1 ≤ n, m ≤ 10.</li><li><strong>Thinking questions:</strong> Which cells are border cells as a predicate? Which traversal avoids corner double-count?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Predicate: r==0 || r==n−1 || c==0 || c==m−1.</li><li>One loop over all cells with the predicate is safe; row/column walks need corner care.</li><li>n==1: every cell is border — the predicate handles it naturally.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-053-the-name-formatter">PF-CS-053 · The Name Formatter</h3>
+<ul><li><strong>Tier:</strong> 3 Intermediate · <strong>Lecture:</strong> L21 · Module 11</li><li><strong>Context:</strong> A form imports names in any capitalization.</li><li><strong>Problem:</strong> Design the normalization: trim surrounding spaces, collapse internal runs of spaces to one, and capitalize the first letter of each word. Trace on <code>"   aLI   rAZA   "</code>. Which of the three sub-tasks changes the string's length?</li><li><strong>Input:</strong> one line (may have messy spacing). <strong>Output:</strong> normalized name.</li><li><strong>Constraints:</strong> letters and spaces only; line ≤ 80 chars.</li><li><strong>Thinking questions:</strong> Can you build the result in a second string instead of editing in place? Which is easier to reason about?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Out-of-range/collapsing edits shrink the string — indices shift.</li><li>A result string with append-only logic avoids index chaos.</li><li>Word starts = position 0 or right after a space.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-054-word-hunt-with-word-boundaries">PF-CS-054 · Word Hunt with Word Boundaries</h3>
+<ul><li><strong>Tier:</strong> 3 Intermediate · <strong>Lecture:</strong> L22 · Module 11</li><li><strong>Context:</strong> A text tool counts whole-word matches of a keyword.</li><li><strong>Problem:</strong> Design countWord(text, word) that matches whole words only ("cat" must not match "category" or "scatter"). Specify the boundary rule (start-of-text, end-of-text, non-letter) and trace on a two-sentence example.</li><li><strong>Input:</strong> text line, then keyword. <strong>Output:</strong> match count.</li><li><strong>Constraints:</strong> text ≤ 200 chars; word ≤ 20.</li><li><strong>Thinking questions:</strong> What makes a position a word <em>start</em>? Does case matter — and who decides?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>A match is valid iff the chars before and after are non-letter boundaries.</li><li>Find a candidate, check both boundaries, continue past it.</li><li>Case policy must be explicit: exact match here (state it in the doc).</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-055-palindrome-judge-with-punctuation">PF-CS-055 · Palindrome Judge with Punctuation</h3>
+<ul><li><strong>Tier:</strong> 3 Intermediate · <strong>Lecture:</strong> L22 · Module 11</li><li><strong>Context:</strong> A quiz app judges phrase palindromes like "A man, a plan...".</li><li><strong>Problem:</strong> Design the judge that ignores case and non-alphanumerics. Specify the two-pointer method over the <em>cleaned</em> view and what it returns for strings that become empty after cleaning (e.g., "!!!" ). Trace on "No 'x' in Nixon".</li><li><strong>Input:</strong> one line. <strong>Output:</strong> <code>palindrome</code> / <code>not palindrome</code> / the empty-case verdict.</li><li><strong>Constraints:</strong> line ≤ 100 chars.</li><li><strong>Thinking questions:</strong> Where do the pointers start and stop? What does left ≥ right mean?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Two pointers walk inward, skipping junk characters.</li><li>Cleaning first simplifies the walk — decide build-then-scan vs scan-with-skips.</li><li>Empty-after-cleaning: define it as a palindrome or reject — document the choice.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-056-csv-column-statistics">PF-CS-056 · CSV Column Statistics</h3>
+<ul><li><strong>Tier:</strong> 3 Intermediate · <strong>Lecture:</strong> L21 · Module 11</li><li><strong>Context:</strong> A marks file has lines <code>name,score</code> and some corrupt lines.</li><li><strong>Problem:</strong> Design the processing loop: parse each line, compute the class mean of valid scores, list invalid line numbers. Decide the two failure categories (missing comma vs non-numeric score) and their distinct messages.</li><li><strong>Input:</strong> lines until EOF. <strong>Output:</strong> mean (2 dp) + invalid line list.</li><li><strong>Constraints:</strong> ≤ 100 lines; scores 0…100.</li><li><strong>Thinking questions:</strong> Which stream state tells you the score parse failed? Why is getline-then-istringstream the robust shape?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>istringstream &gt;&gt; score fails on "abc" — the stream's bool tells you.</li><li>Two error buckets need two counters (or one list with reasons).</li><li>Mean over <em>valid</em> lines only; report the excluded ones.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-057-the-acronym-builder">PF-CS-057 · The Acronym Builder</h3>
+<ul><li><strong>Tier:</strong> 3 Intermediate · <strong>Lecture:</strong> L21 · Module 11</li><li><strong>Context:</strong> A department tool turns course titles into acronyms.</li><li><strong>Problem:</strong> Design acronym(line) that uppercases the first letter of each word and skips small words (of, and, the). Trace on "theory of computation and data". Specify the word-detection rule you rely on.</li><li><strong>Input:</strong> one title line. <strong>Output:</strong> the acronym.</li><li><strong>Constraints:</strong> line ≤ 80; small-word list fixed.</li><li><strong>Thinking questions:</strong> What counts as a word here? Where do you test membership in the small list?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Words are maximal letter runs.</li><li>Test the whole word (not its letters) against the stop list.</li><li>toupper only on accepted words' first letters.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-058-insertion-sort-on-playing-cards">PF-CS-058 · Insertion Sort on Playing Cards</h3>
+<ul><li><strong>Tier:</strong> 3 Intermediate · <strong>Lecture:</strong> L24 · Module 12</li><li><strong>Context:</strong> A player sorts cards as they arrive, one at a time.</li><li><strong>Problem:</strong> Explain insertion sort with a hand of cards: each new card slides left into place. Design the in-place version with the inner while-loop, trace fully on [7, 3, 9, 3], and state why it does <em>no work</em> on already-sorted input.</li><li><strong>Input:</strong> n, then n integers. <strong>Output:</strong> sorted array + comparison count.</li><li><strong>Constraints:</strong> 1 ≤ n ≤ 50.</li><li><strong>Thinking questions:</strong> What is the sorted prefix at pass i? What makes the inner loop stop early?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>After pass i, a[0..i] is sorted.</li><li>Inner while shifts larger elements right until the hole is found.</li><li>Sorted input: the while fails immediately every pass — O(n) total.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-059-stable-ranking-with-ties">PF-CS-059 · Stable Ranking with Ties</h3>
+<ul><li><strong>Tier:</strong> 3 Intermediate · <strong>Lecture:</strong> L24 · Module 12</li><li><strong>Context:</strong> A leaderboard must keep earlier entrants ahead on ties.</li><li><strong>Problem:</strong> Design the sort of (name, score) pairs by score descending, preserving input order for equal scores (stability). Trace on three pairs with two tied scores. Which of the class algorithms (selection, bubble, insertion) is stable if written carefully — and what does "carefully" mean?</li><li><strong>Input:</strong> n pairs. <strong>Output:</strong> ranked list.</li><li><strong>Constraints:</strong> 1 ≤ n ≤ 40; names unique.</li><li><strong>Thinking questions:</strong> What does stability require of swaps? Which algorithm never swaps equal elements?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Stability: equal keys keep their relative order.</li><li>Selection sort's long-range swaps can jump over equal keys.</li><li>Insertion sort with strict &gt; comparison never reorders equals — stable by construction.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-060-search-benchmark-disclosure">PF-CS-060 · Search Benchmark Disclosure</h3>
+<ul><li><strong>Tier:</strong> 3 Intermediate · <strong>Lecture:</strong> L23 · Module 12</li><li><strong>Context:</strong> A vendor claims their "search" is instant; you must evaluate.</li><li><strong>Problem:</strong> Design the comparison: linear search vs binary search on the same sorted array, counting comparisons for (a) a present key, (b) an absent key. Produce the argument that answers "is binary always better?" — including the cost of <em>keeping</em> the array sorted.</li><li><strong>Input:</strong> sorted n values, then keys. <strong>Output:</strong> comparison counts per search.</li><li><strong>Constraints:</strong> 1 ≤ n ≤ 1000; keys may be absent.</li><li><strong>Thinking questions:</strong> What does binary search <em>require</em> as precondition? When is linear the right tool anyway?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Binary pays a sorting price up front; linear pays per query.</li><li>Absent keys show the gap best: log₂ n vs n.</li><li>For tiny n or unsorted one-off queries, linear wins on simplicity and total cost.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,12 @@
+Ana 20 3.4
+Ben 22 2.8
+Ana 21 3.9
+Cy 20 3.1
+Dee 23 3.5
+Ana 19 3.6
+Eli 300 2.0
+Fay 21 3.8
+Gus 22 4.1
+Hal 20 2.9
+Joy 22 3.3
+Ivy 21 three

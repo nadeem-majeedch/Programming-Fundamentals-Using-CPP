@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Exercises · T04 number problems · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/exercises/T04_number_problems.html">
+<link rel="stylesheet" href="../styles.css">
+<script src="../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../index.html">Home</a></li><li><a href="../overview.html">Overview</a></li><li><a href="../outcomes.html">Outcomes</a></li><li><a href="../schedule.html">Schedule</a></li><li><a href="../lectures.html">Lectures</a></li><li><a href="../labs.html">Labs</a></li><li><a href="../cases.html">Case Studies</a></li><li><a href="../exercises.html" aria-current="page">Exercises</a></li><li><a href="../assignments.html">Assignments</a></li><li><a href="../projects.html">Projects</a></li><li><a href="../resources.html">Resources</a></li><li><a href="../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../index.html">Home</a> › Exercises · T04 number problems</nav>
+<h1 class="page-title">Exercises · T04 number problems</h1>
+<p>Covers: classic number algorithms — divisibility, digit tricks, series, number-theory-lite, numeric reasoning combining loops and conditions. Lectures L09–L11 (builds on loops/conditions; feeds search/sort fluency). Outcomes PF-5.2–PF-5.4, PF-6.x.</p>
+<p>11 exercises · ladder 🟢 → 🔴. Distinct from T03: these are <em>algorithmic</em> tasks <strong>about numbers</strong>; T03 tasks were about <strong>loop mechanics</strong> themselves.</p>
+<hr>
+<h3 id="pf-e-043-even-odd-reporter-range">PF-E-043 · Even/Odd Reporter (range)</h3>
+<p><strong>Difficulty:</strong> Beginner · <strong>Lecture:</strong> L09 · <strong>Outcomes:</strong> PF-5.1, PF-4.1 <strong>Prerequisites:</strong> E-027, E-016 <strong>Problem:</strong> Read two integers <code>lo</code> ≤ <code>hi</code> (−50 to 50). Print each number in the range labeled <code>even</code> or <code>odd</code>, all on one line, space-separated. <strong>Input:</strong> two integers · <strong>Output:</strong> one line of labeled numbers. <strong>Sample:</strong> <code>3 6</code> → <code>3 odd 4 even 5 odd 6 even</code> <strong>Hints:</strong> <code>% 2</code> inside the loop; negative numbers: <code>-3 % 2</code> is <code>-1</code> in C++ — handle it.</p>
+<h3 id="pf-e-044-multiples-counter">PF-E-044 · Multiples Counter</h3>
+<p><strong>Difficulty:</strong> Beginner · <strong>Lecture:</strong> L09 · <strong>Outcomes:</strong> PF-5.2, PF-4.1 <strong>Prerequisites:</strong> E-043 <strong>Problem:</strong> Read <code>k</code> (2–9) and <code>n</code> (1–1000). Count how many integers in 1..n are divisible by k, and print their sum. <strong>Input:</strong> two integers · <strong>Output:</strong> count and sum. <strong>Sample:</strong> <code>3 10</code> → <code>count: 3</code> / <code>sum: 18</code> <strong>Hints:</strong> <code>i % k == 0</code> — accumulate two things in one loop.</p>
+<h3 id="pf-e-045-perfect-number-check">PF-E-045 · Perfect Number Check</h3>
+<p><strong>Difficulty:</strong> Foundational · <strong>Lecture:</strong> L10 · <strong>Outcomes:</strong> PF-5.3 <strong>Prerequisites:</strong> E-044, E-039 <strong>Problem:</strong> Read n (1–10,000). A number is <em>perfect</em> if it equals the sum of its proper divisors. Print <code>perfect</code> or <code>not perfect</code>, then list the divisors found. <strong>Input:</strong> one integer · <strong>Output:</strong> verdict + divisor list. <strong>Sample:</strong> <code>28</code> → <code>perfect (1 2 4 7 14)</code> <strong>Hints:</strong> loop divisors to √n in pairs (i and n/i) to keep it fast.</p>
+<h3 id="pf-e-046-gcd-euclid-iterative">PF-E-046 · GCD (Euclid, iterative)</h3>
+<p><strong>Difficulty:</strong> Foundational · <strong>Lecture:</strong> L10 · <strong>Outcomes:</strong> PF-5.3 <strong>Prerequisites:</strong> E-045 <strong>Problem:</strong> Read two positive integers; compute their GCD with the Euclidean algorithm (while loop, <code>%</code>), and print the GCD and the number of reduction steps. <strong>Input:</strong> two integers · <strong>Output:</strong> GCD + steps. <strong>Sample:</strong> <code>48 36</code> → <code>gcd: 12</code> / <code>steps: 3</code> <strong>Hints:</strong> <code>while (b != 0) { t = b; b = a % b; a = t; }</code> — trace once by hand.</p>
+<h3 id="pf-e-047-armstrong-numbers-range">PF-E-047 · Armstrong Numbers (range)</h3>
+<p><strong>Difficulty:</strong> Foundational · <strong>Lecture:</strong> L10 · <strong>Outcomes:</strong> PF-5.3 <strong>Prerequisites:</strong> E-032 <strong>Problem:</strong> Print all Armstrong numbers (a number equal to the sum of its digits each raised to the digit-count power) between 1 and 999, one per line, with their digit decomposition in parentheses. <strong>Input:</strong> none · <strong>Output:</strong> the list. <strong>Sample:</strong> <code>153 (1^3 + 5^3 + 3^3)</code> is among the lines. <strong>Hints:</strong> nest the digit-extraction loop inside the range loop; digit count varies per number.</p>
+<h3 id="pf-e-048-binary-representation">PF-E-048 · Binary Representation</h3>
+<p><strong>Difficulty:</strong> Intermediate · <strong>Lecture:</strong> L10 · <strong>Outcomes:</strong> PF-5.3 <strong>Prerequisites:</strong> E-033, E-047 <strong>Problem:</strong> Read a non-negative integer (&lt; 2³¹); print its binary representation (no leading zeros; <code>0</code> prints as <code>0</code>). Build it with <code>% 2</code> / <code>/ 2</code> arithmetic only — no bitset. <strong>Input:</strong> one integer · <strong>Output:</strong> one binary string. <strong>Sample:</strong> <code>13</code> → <code>1101</code> <strong>Hints:</strong> remainders come out reversed — reuse the reversal idea or collect then reverse.</p>
+<h3 id="pf-e-049-prime-twins-gap-report">PF-E-049 · Prime Twins Gap Report</h3>
+<p><strong>Difficulty:</strong> Intermediate · <strong>Lecture:</strong> L10 · <strong>Outcomes:</strong> PF-5.3, PF-5.4 <strong>Prerequisites:</strong> E-039, E-045 <strong>Problem:</strong> For all primes p ≤ 500, find consecutive prime pairs (p, q) with q − p = 2. Print each twin pair, then print how many twin pairs were found and the largest gap between consecutive primes in that range. <strong>Input:</strong> none · <strong>Output:</strong> pairs + two summary numbers. <strong>Sample:</strong> <code>(3, 5) (5, 7) (11, 13) …</code> / <code>pairs: …</code> / <code>largest gap: …</code> <strong>Hints:</strong> generate primes once into an array (or reuse a helper); track previous prime to compute gaps.</p>
+<h3 id="pf-e-050-harmonic-series-with-cutoff">PF-E-050 · Harmonic Series with Cutoff</h3>
+<p><strong>Difficulty:</strong> Intermediate · <strong>Lecture:</strong> L10 · <strong>Outcomes:</strong> PF-5.2, PF-3.2 <strong>Prerequisites:</strong> E-030, E-012 <strong>Problem:</strong> Sum H = 1 + 1/2 + 1/3 + … until the first term that is smaller than a read threshold ε (0.001–0.5). Print the number of terms used and the partial sum (6 decimals). <strong>Input:</strong> one double · <strong>Output:</strong> terms + sum. <strong>Sample:</strong> <code>0.1</code> → <code>terms: 11</code> / <code>H: 3.019877</code> <strong>Hints:</strong> loop with <code>double term = 1.0 / i;</code> — floating comparison <code>&lt;</code> (not <code>==</code>).</p>
+<h3 id="pf-e-051-palindromic-number-iterator">PF-E-051 · Palindromic Number Iterator</h3>
+<p><strong>Difficulty:</strong> Intermediate · <strong>Lecture:</strong> L10 · <strong>Outcomes:</strong> PF-5.3 <strong>Prerequisites:</strong> E-033 <strong>Problem:</strong> Read bounds <code>lo</code> ≤ <code>hi</code> (1–100,000). Print all palindromic numbers in the range (one line, space-separated), then their count. <strong>Input:</strong> two integers · <strong>Output:</strong> list + count. <strong>Sample:</strong> <code>120 131</code> → <code>121 131</code> / <code>count: 2</code> <strong>Hints:</strong> reuse E-033's reversal as the palindrome test — numbers only, no strings.</p>
+<h3 id="pf-e-052-collatz-longest-chain-under-n">PF-E-052 · Collatz Longest Chain Under N</h3>
+<p><strong>Difficulty:</strong> Advanced Introductory · <strong>Lecture:</strong> L10 · <strong>Outcomes:</strong> PF-5.3, PF-5.4 <strong>Prerequisites:</strong> E-041 <strong>Problem:</strong> Read N (2–10,000). Find the starting value ≤ N whose Collatz chain is longest; print that start, its chain length, and the chain's peak. Ties: smallest start wins. <strong>Input:</strong> one integer · <strong>Output:</strong> start, length, peak. <strong>Sample:</strong> <code>10</code> → <code>start: 9</code> / <code>length: 19</code> / <code>peak: 52</code> <strong>Hints:</strong> reuse E-041's chain logic per candidate; track best (length, start) pairs carefully.</p>
+<h3 id="pf-e-053-goldbach-verification-sweep">PF-E-053 · Goldbach Verification Sweep</h3>
+<p><strong>Difficulty:</strong> Advanced Introductory · <strong>Lecture:</strong> L10 · <strong>Outcomes:</strong> PF-5.3, PF-5.4 <strong>Prerequisites:</strong> E-049 <strong>Problem:</strong> For every even number 4 ≤ 2k ≤ 200, find <em>one</em> pair of primes (p, q), p ≤ q, with p + q = 2k. Print each even number with its pair, and print <code>verified</code> when all cases succeed. <strong>Input:</strong> none · <strong>Output:</strong> 99 lines + <code>verified</code>. <strong>Sample:</strong> <code>4 = 2 + 2</code> / <code>6 = 3 + 3</code> / <code>10 = 3 + 7</code> <strong>Hints:</strong> primality helper + a nested search loop with early exit once a pair is found.</p>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

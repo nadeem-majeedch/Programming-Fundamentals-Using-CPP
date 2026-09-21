@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L18 · Array Algorithms: Fill, Print, Sum/Average, Min/Max, Count, Linear Search · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/lectures/week_09/lecture_18.html">
+<link rel="stylesheet" href="../../styles.css">
+<script src="../../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../../index.html">Home</a></li><li><a href="../../overview.html">Overview</a></li><li><a href="../../outcomes.html">Outcomes</a></li><li><a href="../../schedule.html">Schedule</a></li><li><a href="../../lectures.html" aria-current="page">Lectures</a></li><li><a href="../../labs.html">Labs</a></li><li><a href="../../cases.html">Case Studies</a></li><li><a href="../../exercises.html">Exercises</a></li><li><a href="../../assignments.html">Assignments</a></li><li><a href="../../projects.html">Projects</a></li><li><a href="../../resources.html">Resources</a></li><li><a href="../../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="narrow">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../../index.html">Home</a> › L18 · Array Algorithms: Fill, Print, Sum/Average, Min/Max, Count, Linear Search</nav>
+<h1 class="page-title">L18 · Array Algorithms: Fill, Print, Sum/Average, Min/Max, Count, Linear Search</h1>
+<p><strong>Module 9 — One-Dimensional Arrays · Week 9 · Lecture 18 of 32 · 120 minutes</strong> <strong>Outcomes:</strong> CLO-6 · PF-9.3, PF-9.4 · <a href="../../outcomes.html">LEARNING_OUTCOMES.md</a> · <strong>Quiz 2 (Modules 5–8)</strong></p>
+<h2 id="learning-objectives">Learning objectives</h2>
+<ol><li>Implement from a blank editor — no notes — the core array algorithms: fill, print, sum/average, min/max (value <em>and</em> index), count-if, and reverse-in-place (PF-9.3).</li><li>Implement linear search with the FIND-FIRST pattern (early exit), state its best/worst comparison counts, and write its test plan including the not-found boundary (PF-9.4).</li><li>Map each algorithm to its Module 5 pattern name (ACCUMULATE, COUNT-IF, FIND-FIRST) — showing pattern vocabulary carrying new data structures (PF-9.3, PF-9.4).</li></ol>
+</ol>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>L17 (array mechanics); L09–L10 (patterns); L13 (writing functions — algorithms are written as functions from here on).</p>
+<h2 id="concept-sequence">Concept sequence</h2>
+<ol><li>Algorithms as functions over arrays (signature design first)</li><li>Fill + print (the development pair)</li><li>ACCUMULATE: sum, average (with the L05 truncation lesson!)</li><li>EXTREMES: min/max with index tracking (two-output via references — L15)</li><li>COUNT-IF: predicate counting</li><li>FIND-FIRST: linear search with early exit + complexity count</li></ol>
+</ol>
+<h2 id="teaching-topics-detailed">Teaching topics (detailed)</h2>
+<ul><li><strong>Signature design (L14 discipline):</strong> <code>void fill(int a[], int n);</code> <code>double average(const int a[], int n);</code> <code>int index_of_max(const int a[], int n);</code> <code>bool contains(const int a[], int n, int key);</code> — size travels with the array (decy question deferred to L26, honest note); <code>const</code> correctness on read-only arrays.</li><li><strong>Fill/print:</strong> fill from <code>cin</code> (with validation echo) and from deterministic pattern (i*2) for testing; print with <code>setw</code> columns (L04 formatting reuse).</li><li><strong>Average bug-in-context:</strong> <code>sum / n</code> truncates → <code>static_cast&lt;double&gt;(sum) / n</code> — L05's lesson now in its real habitat.</li><li><strong>Min/max:</strong> initialize with <code>a[0]</code>, loop from 1; track index alongside value; common wrong version: initializing min/max to 0 breaks on all-negative arrays — live fix.</li><li><strong>Count-if:</strong> e.g. count scores ≥ 60; predicate as explicit condition; COUNT-IF skeleton.</li><li><strong>Linear search:</strong> return index or -1; early <code>break</code> on first hit; comparisons: best 1, worst N, average N/2 — the baseline that binary search (L23) will beat <em>only on sorted data</em>.</li></ul>
+<h2 id="c-examples-required">C++ examples required</h2>
+<table><thead><tr><th>File</th><th>Role</th></tr></thead><tbody><tr><td><code>array_algorithms.cpp</code> ✅</td><td>all six algorithms as functions + a <code>main</code> that exercises them on a fixed test array with printed results</td></tr><tr><td>(live) <code>linear_search_trace.cpp</code></td><td>search traced with comparison counter printed per iteration</td></tr></tbody></table>
+<h2 id="conceptual-explanation-beginner-first">Conceptual explanation (beginner-first)</h2>
+<p>Real text is messy: <code>"  Ada  LOVELACE "</code> needs to become <code>"Ada Lovelace"</code>; a CSV line <code>"12,7,9"</code> needs to become three numbers; a report line needs a number glued into the middle of a sentence. This lecture is a workshop of the small algorithms that do that work — all built from the scanning patterns we already own.</p>
+<p>Two standard library helpers earn their keep this week. <code>getline(cin, s)</code> reads a <em>whole line</em> including spaces (whereas <code>cin &gt;&gt; s</code> stops at the first space) — essential for names. And string concatenation with <code>+</code> builds results character by character or piece by piece: <code>s = s + ch</code> grows a string one character at a time. Neither is exotic; both are daily tools.</p>
+<h2 id="terminology-and-definitions">Terminology and definitions</h2>
+<table><thead><tr><th>Term</th><th>Definition</th></tr></thead><tbody><tr><td><code>getline</code></td><td>Reads one full line (spaces included) into a <code>std::string</code></td></tr><tr><td>Concatenation</td><td><code>+</code> or <code>+=</code> joining strings; <code>s += ch</code> appends one char</td></tr><tr><td>Trim</td><td>Removing leading/trailing spaces</td></tr><tr><td>Word boundary</td><td>A position where a word starts/ends (space or string edge)</td></tr><tr><td>Case mapping</td><td><code>toupper</code>/<code>tolower</code> per character via <code>&lt;cctype&gt;</code></td></tr><tr><td>Token</td><td>One whitespace-separated piece of a line</td></tr><tr><td>Title case</td><td>First letter of each word upper, rest lower</td></tr></tbody></table>
+<h2 id="syntax-and-c-examples">Syntax and C++ examples</h2>
+<pre><code class="language-cpp">std::string line;
+std::getline(std::cin, line);        // whole line, spaces kept
+
+// count words: a new word starts at a non-space after a space/edge
+int words{0};
+bool inWord{false};
+for (char ch : line)
+{
+    if (std::isspace(static_cast&lt;unsigned char&gt;(ch)))
+        inWord = false;
+    else if (!inWord) { ++words; inWord = true; }
+}
+
+// build a string piece by piece
+std::string cleaned;
+for (char ch : line)
+    if (!std::isspace(static_cast&lt;unsigned char&gt;(ch)))
+        cleaned += ch;               // append one character</code></pre>
+<ul><li>"Initialize min to 0." (Breaks on negatives; initialize to <code>a[0]</code>.)</li><li>"Search must always scan the whole array." (FIND-FIRST exits early — correctness <em>and</em> speed.)</li><li>"Passing the array copies it." (What's copied is handled in L26 — for now: the <em>size must travel separately</em>, and that's a hint.)</li><li>"<code>average</code> should return int because scores are int." (Type serves the <em>answer</em>, not the input — L06 tie-in.)</li></ul>
+<h2 id="line-by-line-code-explanation">Line-by-line code explanation</h2>
+<p><code>examples/string_algorithms.cpp</code> (clean/split/build sections):</p>
+<ol><li><code>trimLeading(line)</code> — the classic index-skip: find the first non-space position <code>start</code>, then build the result from <code>substr(start)</code> (or erase in place). Edge case: all-spaces input must yield <code>""</code>, so the not-found case is checked before using <code>start</code>.</li><li>Word counter — the <code>inWord</code> flag is a tiny state machine: false means "between words." Entering a non-space while <code>inWord == false</code> is a boundary crossing: count it and flip the flag. Double spaces never double-count because the flag only flips on the space→letter transition, not on every letter.</li><li>CSV split — walk the line; on <code>','</code> push the token accumulated so far and reset it; after the loop push the final token (the one with no comma after it). Forgetting the post-loop push is <em>the</em> bug.</li><li><code>cleaned += ch</code> builds the space-free version — appending one char per accepted character; contrast with building a new <code>std::string</code> via index arithmetic for the trim.</li></ol>
+</ol>
+<h2 id="output-prediction-questions-with-answers">Output prediction questions (with answers)</h2>
+<ol><li><code>"  Ada  LOVELACE "</code> through the word counter — ? — 2 words (double space handled by the flag).</li><li>Trim of <code>"   hi   "</code> — ? — <code>"hi"</code>; trim of <code>"     "</code> — <code>""</code>.</li><li>Split of <code>"12,7,9"</code> — ? — {"12", "7", "9"}; of <code>"12,,9"</code> — ? — {"12", "", "9"} — an empty middle token is <em>data</em>, not a bug.</li><li><code>s = "val: "; s += 42;</code> — ? — appends the <em>character</em> with code 42 (<code>'*'</code>), not the digits — the char-vs-int conversion trap.</li><li>Title-case of <code>"ada l."</code> — ? — <code>"Ada L."</code>; the first-letter rule fires on the boundary, not on every letter.</li></ol>
+</ol>
+<h2 id="common-errors-and-debugging-examples">Common errors and debugging examples</h2>
+<table><thead><tr><th>Error</th><th>Symptom</th><th>Fix</th></tr></thead><tbody><tr><td>Mixing <code>cin &gt;&gt; s</code> and <code>getline</code></td><td>The getline gets an empty leftover line</td><td>Drain with <code>cin.ignore</code> after <code>&gt;&gt;</code> (L04 rule)</td></tr><tr><td>Word counter without the flag</td><td>Double spaces count twice</td><td>State machine: flag flips on transitions only</td></tr><tr><td>Missing final token in split</td><td>Last CSV field vanishes</td><td>Push the accumulator after the loop</td></tr><tr><td><code>s += 42</code> expecting digits</td><td>Asterisk appears</td><td><code>s += std::to_string(42)</code></td></tr><tr><td>Off-by-one in trim</td><td>One space survives / a letter dies</td><td>Trace a 2-char string by hand</td></tr><tr><td>Assuming <code>length()</code> counts words</td><td>Length counts characters</td><td>Words need boundaries, not counts</td></tr></tbody></table>
+<h2 id="common-student-misconceptions">Common student misconceptions</h2>
+<ul><li><strong>"Initialize the running max to 0."</strong> For values that may be negative, initializing max to <code>0</code> returns 0 for all-negative input; the correct pattern seeds from the first element.</li><li><strong>"The average of ints is an int."</strong> <code>sum / n</code> truncates — the mean of <code>1 2</code> is 1.5; converting after the loop with a <code>static_cast&lt;double&gt;</code> on the <em>division</em> is the fix to practice.</li><li><strong>"Linear search needs sorted data."</strong> It works on any order — students conflate it with binary search; that's exactly why it's the baseline before L23.</li><li><strong>"The search returns the value, not the position."</strong> Decide and document the "not found" contract (−1 as a sentinel index is the course convention).</li><li><strong>"Counting patterns need nested loops."</strong> Most counting/frequency patterns in this lecture are single-pass — the nested-loop habit arrives with L23 and should not be imported early.</li></ul>
+<h2 id="classroom-demonstrations">Classroom demonstrations</h2>
+<ol><li><strong>Double-space stress test:</strong> run the counter on <code>"a  b   c"</code> live — the flag makes it boring, which is the point.</li><li><strong>The vanishing token:</strong> run a split missing the post-loop push — <code>"12,7,9"</code> prints only two numbers; students spot the missing push.</li><li><strong>Char arithmetic surprise:</strong> <code>s += 42</code> vs <code>s += "42"</code> side by side — the type of the right operand is the whole story.</li></ol>
+</ol>
+<h2 id="guided-student-activities">Guided student activities</h2>
+<ol><li><strong>Design-your-own trim:</strong> pairs write <code>trimTrailing</code> (mirror of the leading version) and exchange with a neighbor to trace.</li><li><strong>CSV dialect:</strong> modify the splitter to accept <code>';'</code> — one character changes; discuss what a real CSV parser must additionally handle.</li><li><strong>Counting vowels:</strong> implement with <code>&lt;cctype&gt;</code> (<code>tolower</code> first), then predict its behavior on <code>"XYZ"</code> vs <code>"xyz"</code> before running.</li></ol>
+</ol>
+<h2 id="practice-problems">Practice problems</h2>
+<ul><li>Write <code>trimLeading</code> and <code>trimTrailing</code>; test on <code>""</code>, <code>"   "</code>, <code>"a "</code>.</li><li>Split <code>"12,7,9"</code> into three <code>int</code>s (with a string→int conversion — stream-state style, per the course standard).</li><li>Reverse a <code>std::string</code> in place; predict <code>"abc"</code> → <code>"cba"</code> first.</li><li>(🟡 stretch) Title-case a line using the word-boundary flag.</li></ul>
+<h2 id="practice-problems">Practice problems</h2>
+<ul><li>The four problems above are the in-class set; the stretch item becomes the homework extension when <code>exercises/homework/</code> is authored.</li></ul>
+<h2 id="summary">Summary</h2>
+<p>String work is scanning plus building: <code>getline</code> for full lines, <code>isspace</code>-gated state machines for words, <code>+=</code> to grow results, and index arithmetic to mirror or trim. The word counter's <code>inWord</code> flag is the reusable idea — transitions between "in" and "out" are where events happen. Next (L21): searching arrays — linear and binary — and the first real complexity comparison.</p>
+<h2 id="exit-ticket-formative-assessment">Exit ticket / formative assessment</h2>
+<ol><li>Write the loop that counts commas in a line — then states why it is COUNT-IF in disguise.</li><li>Given <code>line = "ada  l."</code> (two spaces), what does the word counter print, and which variable prevents a miscount?</li><li>What does the split routine owe to the loop boundary — i.e., why is there a push <em>after</em> the loop?</li></ol>
+</ol>
+<h2 id="estimated-time-allocation-120-min">Estimated time allocation (120 min)</h2>
+<table><thead><tr><th>Segment</th><th>Minutes</th></tr></thead><tbody><tr><td><strong>Quiz 2</strong></td><td>15</td></tr><tr><td>Signature design + fill/print + accumulate</td><td>25</td></tr><tr><td>Break</td><td>10</td></tr><tr><td>Extremes + count-if + linear search (+complexity count)</td><td>40</td></tr><tr><td>Algorithm relay activity</td><td>20</td></tr><tr><td>Exit ticket + Module 10 preview</td><td>10</td></tr></tbody></table>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

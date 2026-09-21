@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L15 · Function Overloading, Default Arguments, and Reference Parameters · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/lectures/week_08/lecture_15.html">
+<link rel="stylesheet" href="../../styles.css">
+<script src="../../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../../index.html">Home</a></li><li><a href="../../overview.html">Overview</a></li><li><a href="../../outcomes.html">Outcomes</a></li><li><a href="../../schedule.html">Schedule</a></li><li><a href="../../lectures.html" aria-current="page">Lectures</a></li><li><a href="../../labs.html">Labs</a></li><li><a href="../../cases.html">Case Studies</a></li><li><a href="../../exercises.html">Exercises</a></li><li><a href="../../assignments.html">Assignments</a></li><li><a href="../../projects.html">Projects</a></li><li><a href="../../resources.html">Resources</a></li><li><a href="../../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="narrow">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../../index.html">Home</a> › L15 · Function Overloading, Default Arguments, and Reference Parameters</nav>
+<h1 class="page-title">L15 · Function Overloading, Default Arguments, and Reference Parameters</h1>
+<p><strong>Module 8 — Advanced Function Concepts · Week 8 · Lecture 15 of 32 · 120 minutes</strong> <strong>Outcomes:</strong> CLO-5 · PF-8.1, PF-8.2 · <a href="../../outcomes.html">LEARNING_OUTCOMES.md</a></p>
+<h2 id="learning-objectives">Learning objectives</h2>
+<ol><li>Create valid overloaded function sets (distinct parameter lists), predict which overload a call selects, and recognize ambiguity errors (PF-8.1).</li><li>Write functions with default arguments and state the two rules (defaults rightmost; declaration-only) (PF-8.1).</li><li>Implement reference parameters (<code>T&amp;</code>, <code>const T&amp;</code>) for genuine multiple-output patterns (swap, min/max pair, statistics bundle) and justify value vs <code>const T&amp;</code> vs <code>T&amp;</code> for a given parameter (PF-8.2).</li></ol>
+</ol>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>L13–L14 (copy semantics, scope); L07 (booleans for overload selection examples).</p>
+<h2 id="concept-sequence">Concept sequence</h2>
+<ol><li>One job, many shapes: why overloading exists</li><li>Overload resolution: the compiler's matching rules</li><li>Ambiguity: when the compiler refuses to choose</li><li>Default arguments: rightmost rule, declaration placement</li><li>References as parameters: the alias model</li><li>The output-parameter pattern + <code>const T&amp;</code> for big inputs</li></ol>
+</ol>
+<h2 id="teaching-topics-detailed">Teaching topics (detailed)</h2>
+<ul><li><strong>Overloading:</strong> same name, different parameter <em>lists</em> (count or types — return type alone never distinguishes); resolution walk-through for <code>print(int)</code>, <code>print(double)</code>, <code>print(const std::string&amp;)</code> with calls <code>print(3)</code>, <code>print(3.0)</code>, <code>print('x')</code> (char → int! — teachable surprise).</li><li><strong>Ambiguity:</strong> <code>f(int)</code> + <code>f(double)</code> called with <code>f(3.5f)</code>; exact-match vs promotion tiers shown as a ladder; compiler error read live.</li><li><strong>Default arguments:</strong> <code>double power(double base, int exp = 2);</code> — rightmost-only rule; defaults declared in the prototype once; interaction with overloads (when two functions become viable — avoid the design).</li><li><strong>Reference parameters:</strong> <code>void swap(int&amp; a, int&amp; b);</code> — alias, not copy; the L13 failed-swap fixed; diagram of the two names pointing at one box; <code>const T&amp;</code> read-only contract (why big structs/strings want it — full payoff in M14); course rule: <code>T&amp;</code> only for values the caller <em>wants written back</em>.</li><li><strong>Multi-output patterns:</strong> min-max finder with two outputs; stats bundle (sum, avg, count) — contrast with "return one value" from L13; when <code>struct</code> (M14) will replace output-parameter lists (honest forward pointer).</li></ul>
+<h2 id="c-examples-required">C++ examples required</h2>
+<table><thead><tr><th>File</th><th>Role</th></tr></thead><tbody><tr><td><code>overload_ref_demo.cpp</code> ✅</td><td>overloaded <code>print</code> set with resolution prints; working swap; min-max output pattern; an intentionally ambiguous call (commented)</td></tr><tr><td>(live) <code>stats_outparams.cpp</code></td><td>statistics function with 3 output references, called with pre-declared result variables</td></tr></tbody></table>
+<h2 id="common-student-misconceptions">Common student misconceptions</h2>
+<ul><li>"Overloading = same function called flexibly." (They are <em>distinct</em> functions that share a name; resolution is at compile time.)</li><li>"Return type can distinguish overloads." (It cannot — parameter list only.)</li><li>"References pass the variable's <em>address</em> around freely." (Conceptually an alias; no pointer syntax appears — pointers are M13.)</li><li>"<code>const T&amp;</code> is just decoration." (It's a contract: caller knows nothing changes; enables passing big objects cheaply.)</li></ul>
+<h2 id="conceptual-explanation-beginner-first">Conceptual explanation (beginner-first)</h2>
+<p>Week 7's functions processed a <em>row</em> of numbers. But much data is a <em>table</em>: rows of students, columns of test scores; a chessboard; an image's pixels. A two-dimensional array is literally "an array of arrays" — <code>int grid[3][4]</code> is 3 rows, each with 4 columns, stored row by row in memory. We process tables with <strong>nested loops</strong> from week 5: the outer loop steps through rows, the inner loop through columns.</p>
+<p>Two new skills matter here. First, <strong>parameter passing</strong>: a 2D array parameter must declare the column count (<code>int g[][4]</code>), because the compiler needs to know how wide each row is to compute addresses — the row count stays free. Second, <strong>aggregation</strong>: the most common real jobs are totals per row, totals per column, and grand totals — each is a small loop pattern placed at the right nesting level.</p>
+<h2 id="terminology-and-definitions">Terminology and definitions</h2>
+<table><thead><tr><th>Term</th><th>Definition</th></tr></thead><tbody><tr><td>Two-dimensional array</td><td><code>T name[rows][cols]</code> — a table of rows × columns elements</td></tr><tr><td>Row-major storage</td><td>Rows stored one after another in memory</td></tr><tr><td>2D array parameter</td><td><code>T g[][cols]</code> — column count required, row count free</td></tr><tr><td>Row sum / column sum</td><td>Total across one row / down one column</td></tr><tr><td>Grand total</td><td>Sum over all elements</td></tr><tr><td>Aggregation</td><td>Reducing many values to one (sum, max, count)</td></tr><tr><td>Indexing</td><td><code>g[row][col]</code> — row first, then column</td></tr></tbody></table>
+<h2 id="syntax-and-c-examples">Syntax and C++ examples</h2>
+<pre><code class="language-cpp">const int ROWS{3};
+const int COLS{4};
+
+int grid[ROWS][COLS] =
+{
+    { 1,  2,  3,  4},
+    { 5,  6,  7,  8},
+    { 9, 10, 11, 12}
+};
+
+// column count mandatory; row count free — the compiler needs the width
+long long rowSum(const int g[][COLS], int rows, int r)
+{
+    long long total{0};
+    for (int c{0}; c &lt; COLS; ++c)
+        total += g[r][c];
+    return total;
+}
+
+// grand total — nested loops, the week-5 pattern returns
+long long grandTotal(const int g[][COLS], int rows)
+{
+    long long total{0};
+    for (int r{0}; r &lt; rows; ++r)
+        for (int c{0}; c &lt; COLS; ++c)
+            total += g[r][c];
+    return total;
+}</code></pre>
+<h2 id="line-by-line-code-explanation">Line-by-line code explanation</h2>
+<p><code>examples/matrix_ops.cpp</code>:</p>
+<ol><li>The matrix is initialized with a brace list of brace lists — each inner list is one row.</li><li><code>printMatrix(const int m[][COLS], int rows)</code> — outer loop rows, inner loop columns, <code>\t</code> between cells, <code>\n</code> after each row: the placement rules from the triangle exercise, now printing data instead of stars.</li><li><code>rowSums(...)</code> fills an output 1D array: for each row, sums across, stores into <code>sums[r]</code>. A 2D-in, 1D-out function — the workhorse shape of data processing.</li><li><code>transpose(...)</code> writes <code>dst[c][r] = src[r][c]</code> — swapping the indices mirrors the table across its diagonal.</li></ol>
+</ol>
+<h2 id="output-prediction-questions-with-answers">Output prediction questions (with answers)</h2>
+<ol><li><code>int a[2][3]{{1,2,3},{4,5,6}};</code> — what is <code>a[1][0]</code>? — 4.</li><li>For that <code>a</code>, <code>rowSum(a, 2, 0)</code> — ? — 6.</li><li>Grand total of <code>a</code> — ? — 21.</li><li>After transpose, the element at <code>[0][2]</code> came from — ? — <code>[2][0]</code> of the original.</li><li>A function declares <code>int g[3][]</code> (rows fixed, columns blank) — why does it not compile? — the compiler needs the column stride to compute element addresses; rows are the free dimension.</li></ol>
+</ol>
+<h2 id="common-errors-and-debugging-examples">Common errors and debugging examples</h2>
+<table><thead><tr><th>Error</th><th>Symptom</th><th>Fix</th></tr></thead><tbody><tr><td><code>int g[3][]</code> in a parameter</td><td>Compile error: missing column bound</td><td><code>int g[][COLS]</code></td></tr><tr><td>Swapped <code>[row][col]</code></td><td>Data lands in the wrong cell</td><td>Say "row first" aloud while writing</td></tr><tr><td><code>&lt;=</code> in a row/col loop</td><td>Reads past the row into the next</td><td><code>c &lt; COLS</code>, <code>r &lt; rows</code></td></tr><tr><td>Row sum inside the inner loop</td><td>Resets/accumulates wrongly</td><td>Accumulate per row, store after inner loop</td></tr><tr><td>Flat initializer mismatch</td><td>Zeros fill the gaps silently</td><td>Brace one inner list per row</td></tr></tbody></table>
+<h2 id="classroom-demonstrations">Classroom demonstrations</h2>
+<ol><li><strong>Spreadsheet on the board:</strong> draw the 3×4 grid with indices on both axes; students call out <code>g[r][c]</code> values as you point.</li><li><strong>Row-major reveal:</strong> print the six bytes of a small <code>char</code> grid with addresses — memory shows the rows lying end to end.</li><li><strong>Transpose theater:</strong> write the matrix on paper, fold along the diagonal — the indices swap visually.</li></ol>
+</ol>
+<h2 id="guided-student-activities">Guided student activities</h2>
+<ol><li><strong>Row/column sum trio:</strong> in pairs, write <code>rowSum</code>, <code>colSum</code>, and <code>grandTotal</code>; test all three on a 2×2 matrix where the answers are obvious.</li><li><strong>Largest per row:</strong> extend <code>rowSums</code> to <code>rowMaxes</code> — seed with the row's first element (the L11 lesson, reused).</li><li><strong>Trace the transpose:</strong> hand-trace <code>transpose</code> on a 2×3 input; the output is 3×2 — verify against the program.</li></ol>
+</ol>
+<h2 id="practice-problems">Practice problems</h2>
+<ul><li>Implement <code>rowSum</code>, <code>colSum</code>, and <code>grandTotal</code>; test on a 2×2 where answers are hand-computable.</li><li>Write <code>rowMaxes</code> (largest per row) — seed with the row's first element (the all-negative edge case from L11).</li><li>Transpose a 2×3 into a 3×2 destination; print before/after.</li><li>(🞡 stretch) Find the largest per <em>column</em> — which loop nesting changes?</li></ul>
+<h2 id="summary">Summary</h2>
+<p>A 2D array is an array of arrays: <code>g[r][c]</code>, row-major in memory, and as a parameter it needs <code>int g[][COLS]</code> — columns fixed, rows free. Nested loops walk the table; totals per row, per column, and overall are the same aggregation patterns from week 5 wearing table clothes. Next (L16): the midterm — everything through two-dimensional arrays.</p>
+<h2 id="exit-ticket-formative-assessment">Exit ticket / formative assessment</h2>
+<ol><li>Declare a 2×5 table of <code>double</code> named <code>rates</code> and initialize both rows explicitly.</li><li>Write the full header of <code>colSum(const int g[][COLS], int rows, int c)</code> returning <code>long long</code>.</li><li>Why must the column count appear in a 2D array parameter but not the row count?</li></ol>
+</ol>
+<ol><li><code>print('A')</code> with <code>print(int)</code> and <code>print(double)</code> overloads — which runs?</li><li>Two rules for default arguments?</li><li>Mark each as value / <code>const T&amp;</code> / <code>T&amp;</code>: (a) 1000-element vector to search; (b) result collector; (c) small int input.</li></ol>
+</ol>
+<h2 id="estimated-time-allocation-120-min">Estimated time allocation (120 min)</h2>
+<table><thead><tr><th>Segment</th><th>Minutes</th></tr></thead><tbody><tr><td>Recall (scope quiz) + why overloading</td><td>10</td></tr><tr><td>Overload resolution + ambiguity ladder</td><td>30</td></tr><tr><td>Break</td><td>10</td></tr><tr><td>Default args + reference parameters + output patterns</td><td>40</td></tr><tr><td>Resolution court activity</td><td>20</td></tr><tr><td>Exit ticket + midterm preview</td><td>10</td></tr></tbody></table>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

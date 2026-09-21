@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Exercises · T08 searching sorting · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/exercises/T08_searching_sorting.html">
+<link rel="stylesheet" href="../styles.css">
+<script src="../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../index.html">Home</a></li><li><a href="../overview.html">Overview</a></li><li><a href="../outcomes.html">Outcomes</a></li><li><a href="../schedule.html">Schedule</a></li><li><a href="../lectures.html">Lectures</a></li><li><a href="../labs.html">Labs</a></li><li><a href="../cases.html">Case Studies</a></li><li><a href="../exercises.html" aria-current="page">Exercises</a></li><li><a href="../assignments.html">Assignments</a></li><li><a href="../projects.html">Projects</a></li><li><a href="../resources.html">Resources</a></li><li><a href="../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../index.html">Home</a> › Exercises · T08 searching sorting</nav>
+<h1 class="page-title">Exercises · T08 searching sorting</h1>
+<p>Covers: linear and binary search, sort algorithms (selection, bubble), sorted-array workflows, comparison counting, complexity observation. Lectures L23–L24. Outcomes PF-12.x.</p>
+<p>11 exercises · ladder 🟢 → 🔴.</p>
+<hr>
+<h3 id="pf-e-091-linear-search-with-sentinel">PF-E-091 · Linear Search (with sentinel)</h3>
+<p><strong>Difficulty:</strong> Beginner · <strong>Lecture:</strong> L23 · <strong>Outcomes:</strong> PF-12.1 <strong>Prerequisites:</strong> E-069 <strong>Problem:</strong> Read n (1–20), n integers, then a sequence of keys terminated by <code>-1</code>. For each key print its first position or <code>not found</code>. <strong>Input:</strong> n, values, keys… −1 · <strong>Output:</strong> one line per key. <strong>Sample:</strong> values <code>5 7 5 9</code>, keys <code>5 9 2 -1</code> → <code>0</code> / <code>3</code> / <code>not found</code> <strong>Hints:</strong> reuse ONE search function per key; first occurrence wins.</p>
+<h3 id="pf-e-092-count-comparisons-linear">PF-E-092 · Count Comparisons (linear)</h3>
+<p><strong>Difficulty:</strong> Beginner · <strong>Lecture:</strong> L23 · <strong>Outcomes:</strong> PF-12.1, PF-12.4 <strong>Prerequisites:</strong> E-091 <strong>Problem:</strong> Like E-091, but the search also counts comparisons. Print position <strong>and</strong> comparison count for each key, then print the theoretical best/worst for n. <strong>Input:</strong> as E-091 · <strong>Output:</strong> per-key results + theory line. <strong>Sample:</strong> n=4, key at index 2 → <code>2 (3 comparisons)</code> / <code>theory: best 1, worst 4</code> <strong>Hints:</strong> a <code>long long&amp;</code> counter parameter (L23's harness).</p>
+<h3 id="pf-e-093-is-it-sorted">PF-E-093 · Is It Sorted?</h3>
+<p><strong>Difficulty:</strong> Beginner · <strong>Lecture:</strong> L23 · <strong>Outcomes:</strong> PF-12.2 <strong>Prerequisites:</strong> E-092 <strong>Problem:</strong> Read n (1–20) then n integers. Print <code>ascending</code>, <code>descending</code>, or <code>unsorted</code>. Equal neighbors are allowed in both sorted orders. <strong>Input:</strong> n + values · <strong>Output:</strong> one verdict. <strong>Sample:</strong> <code>4 9 7 7 2</code> → <code>descending</code> <strong>Hints:</strong> track <em>violations</em> of each order; both-zero means constant → call it <code>ascending</code>.</p>
+<h3 id="pf-e-094-binary-search-on-sorted-input">PF-E-094 · Binary Search on Sorted Input</h3>
+<p><strong>Difficulty:</strong> Foundational · <strong>Lecture:</strong> L23 · <strong>Outcomes:</strong> PF-12.1, PF-12.2 <strong>Prerequisites:</strong> E-093 <strong>Problem:</strong> Read n (1–20) then n <strong>ascending</strong> integers, then keys terminated by <code>-1</code>. Binary-search each key; print position or <code>not found</code>. If the input isn't sorted, print <code>input not sorted</code> and refuse to search. <strong>Input:</strong> n + sorted values + keys · <strong>Output:</strong> per-key result. <strong>Sample:</strong> values <code>2 4 6 8</code>, key <code>6</code> → <code>2</code> / key <code>5</code> → <code>not found</code> <strong>Hints:</strong> reuse E-093's check as the precondition gate; <code>low + (high-low)/2</code>.</p>
+<h3 id="pf-e-095-selection-sort-with-snapshots">PF-E-095 · Selection Sort with Snapshots</h3>
+<p><strong>Difficulty:</strong> Foundational · <strong>Lecture:</strong> L24 · <strong>Outcomes:</strong> PF-12.2, PF-12.3 <strong>Prerequisites:</strong> E-094 <strong>Problem:</strong> Read n (2–15) then n integers. Selection-sort the array, printing the array after every pass, plus final comparison and swap counts. <strong>Input:</strong> n + values · <strong>Output:</strong> n−1 snapshots + counts. <strong>Sample:</strong> <code>5 5 2 9 1 7</code> → pass lines ending <code>1 2 5 7 9</code>, <code>comparisons: 10</code>, <code>swaps: 3</code> <strong>Hints:</strong> swap only when <code>minIdx != i</code> — the swap count can be less than the pass count.</p>
+<h3 id="pf-e-096-bubble-sort-with-early-exit">PF-E-096 · Bubble Sort with Early Exit</h3>
+<p><strong>Difficulty:</strong> Foundational · <strong>Lecture:</strong> L24 · <strong>Outcomes:</strong> PF-12.2, PF-12.3 <strong>Prerequisites:</strong> E-095 <strong>Problem:</strong> Same I/O as E-095 but bubble sort with the swapped-flag early exit. On already-sorted input demonstrate: 1 pass, n−1 comparisons, 0 swaps. <strong>Input:</strong> n + values · <strong>Output:</strong> snapshots + counts. <strong>Sample:</strong> <code>4 1 2 3 4</code> → <code>passes: 1</code> / <code>comparisons: 3</code> / <code>swaps: 0</code> <strong>Hints:</strong> reset the flag at the top of each pass; <code>break</code> when a pass is clean.</p>
+<h3 id="pf-e-097-sort-then-binary-search-full-workflow">PF-E-097 · Sort Then Binary Search (full workflow)</h3>
+<p><strong>Difficulty:</strong> Intermediate · <strong>Lecture:</strong> L24 · <strong>Outcomes:</strong> PF-12.2, PF-12.1 <strong>Prerequisites:</strong> E-096 <strong>Problem:</strong> Read n (5–30) then n integers (any order) and one key. Sort with your selection sort, print the sorted array, then binary-search the key, printing the position <strong>in the original array</strong> (map positions through the sort). <strong>Input:</strong> n + values + key · <strong>Output:</strong> sorted array + original index. <strong>Sample:</strong> <code>5 9 1 7 3 5</code> key <code>7</code> → sorted <code>1 3 5 7 9</code> / <code>7 was originally at index 2</code> <strong>Hints:</strong> sort a parallel index array alongside the values — every value swap moves both.</p>
+<h3 id="pf-e-098-median-and-quartiles">PF-E-098 · Median and Quartiles</h3>
+<p><strong>Difficulty:</strong> Intermediate · <strong>Lecture:</strong> L24 · <strong>Outcomes:</strong> PF-12.2, PF-3.2 <strong>Prerequisites:</strong> E-097 <strong>Problem:</strong> Read n (4–20) then n integers. Sort them, then print the median (mean of two middles for even n, 1 decimal) and the lower/upper quartile (medians of the lower/upper halves). <strong>Input:</strong> n + values · <strong>Output:</strong> three numbers. <strong>Sample:</strong> <code>6 3 1 9 7 5 11</code> → sorted <code>1 3 5 7 9 11</code> / <code>median: 6.0</code> / <code>Q1: 3</code> / <code>Q3: 9</code> <strong>Hints:</strong> index arithmetic on the sorted array; halves exclude the overall median for odd n.</p>
+<h3 id="pf-e-099-deduplicate-sorted">PF-E-099 · Deduplicate (sorted)</h3>
+<p><strong>Difficulty:</strong> Intermediate · <strong>Lecture:</strong> L24 · <strong>Outcomes:</strong> PF-12.2, PF-9.3 <strong>Prerequisites:</strong> E-098 <strong>Problem:</strong> Read n (1–30) then n integers. Sort, then remove duplicates <em>in place</em> (two-finger compaction on the sorted order). Print the unique count and the deduplicated array. <strong>Input:</strong> n + values · <strong>Output:</strong> count + array. <strong>Sample:</strong> <code>7 4 1 4 9 4 1 7</code> → <code>unique: 4</code> / <code>1 4 7 9</code> <strong>Hints:</strong> in sorted order, duplicates are adjacent — a single pass suffices.</p>
+<h3 id="pf-e-100-frequency-sort-two-key-ordering">PF-E-100 · Frequency Sort (two-key ordering)</h3>
+<p><strong>Difficulty:</strong> Advanced Introductory · <strong>Lecture:</strong> L24 · <strong>Outcomes:</strong> PF-12.2, PF-12.3 <strong>Prerequisites:</strong> E-099 <strong>Problem:</strong> Read n (1–30) then n integers (values 0–99). Print each distinct value sorted by <strong>descending frequency</strong>, ties broken by ascending value, with counts. <strong>Input:</strong> n + values · <strong>Output:</strong> value:count lines. <strong>Sample:</strong> <code>8 2 2 9 2 9 1 2 9</code> → <code>2:4</code> / <code>9:3</code> / <code>1:1</code> (1 before... actually <code>1:1</code> last) <strong>Hints:</strong> count into a 100-slot table, then selection-sort the <em>distinct</em> values by (count desc, value asc).</p>
+<h3 id="pf-e-101-search-strategy-showdown">PF-E-101 · Search Strategy Showdown</h3>
+<p><strong>Difficulty:</strong> Advanced Introductory · <strong>Lecture:</strong> L24 · <strong>Outcomes:</strong> PF-12.1, PF-12.4 <strong>Prerequisites:</strong> E-100 <strong>Problem:</strong> Read n (100–2000, sorted input guaranteed) and k (10–50) keys. For the whole key set, compare total comparisons: (a) linear search for each key; (b) selection-sort (0 — already sorted) + binary search for each key. Print both totals and a one-line verdict explaining when sort+binary wins. <strong>Input:</strong> n + n sorted values + k + k keys · <strong>Output:</strong> two totals + verdict. <strong>Sample:</strong> n=1000, k=20 → <code>linear: 20000</code> / <code>sort+binary: ~200</code> / <code>verdict: binary wins when k &lt;&lt; n</code> <strong>Hints:</strong> reuse E-092 and E-094 counters; the break-even point is the L24 cost-model lesson.</p>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

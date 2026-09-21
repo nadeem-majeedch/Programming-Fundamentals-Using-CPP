@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Assignment 4 · Interval Math Library — Advanced Functions · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/assignments/assignment_04.html">
+<link rel="stylesheet" href="../styles.css">
+<script src="../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../index.html">Home</a></li><li><a href="../overview.html">Overview</a></li><li><a href="../outcomes.html">Outcomes</a></li><li><a href="../schedule.html">Schedule</a></li><li><a href="../lectures.html">Lectures</a></li><li><a href="../labs.html">Labs</a></li><li><a href="../cases.html">Case Studies</a></li><li><a href="../exercises.html">Exercises</a></li><li><a href="../assignments.html" aria-current="page">Assignments</a></li><li><a href="../projects.html">Projects</a></li><li><a href="../resources.html">Resources</a></li><li><a href="../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="narrow">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../index.html">Home</a> › Assignment 4 · Interval Math Library — Advanced Functions</nav>
+<h1 class="page-title">Assignment 4 · Interval Math Library — Advanced Functions</h1>
+<p><strong>Module 8 (L15–L16) · 40 marks · due end of Week 9</strong> Outcomes: CLO-5 (PF-8.x)</p>
+<p>Build a tiny library for closed intervals <code>[lo, hi]</code> on integers, exercising overloading, default arguments, recursion, and passing modes.</p>
+<h2 id="required-api-signatures-fixed">Required API (signatures fixed)</h2>
+<pre><code class="language-cpp">bool  isValid(int lo, int hi);                     // lo &lt;= hi
+bool  contains(int lo, int hi, int v);             // lo &lt;= v &lt;= hi
+bool  overlap(int lo1, int hi1, int lo2, int hi2); // intervals share &gt;= 1 point
+int   clamp(int v, int lo = 0, int hi = 100);      // force v into [lo,hi] (default [0,100])
+int   sumRange(int lo, int hi);                    // recursive sum lo..hi inclusive (isValid precondition)
+void  swapInts(int&amp; a, int&amp; b);                    // exchange values
+int   length2d(int w, int h, int depth = 1);       // overloading demo: volume of box
+int   length2d(int w, int h);                      // 2-D overload: w*h</code></pre>
+<p><code>main</code> must demonstrate <em>every</em> function with at least one call each, printing labeled results, including one default-argument call and one explicit-argument call of <code>clamp</code>.</p>
+<h2 id="sample-output-shape-labels-must-match">Sample output shape (labels must match)</h2>
+<pre><code>isValid(3,1)     -&gt; no
+contains(0,10,5) -&gt; yes
+overlap(0,5,5,9) -&gt; yes
+clamp(150)       -&gt; 100
+clamp(150,0,50)  -&gt; 50
+sumRange(1,5)    -&gt; 15
+swap 2,9         -&gt; 9,2
+length2d(3,4)    -&gt; 12
+length2d(3,4,2)  -&gt; 24</code></pre>
+<h2 id="constraints">Constraints</h2>
+<ul><li><code>sumRange</code> must be recursive with a stated base case (no loops inside).</li><li>No global variables. All state travels through parameters/returns.</li><li>Passing modes: value for inputs, <code>int&amp;</code> only where mutation is the contract (swap).</li></ul>
+<h2 id="deliverables">Deliverables</h2>
+<p><code>intervals.cpp</code> (contract, zero warnings) · <code>test_table.md</code> — touching intervals (<code>overlap</code> yes), disjoint (no), degenerate <code>[5,5]</code> contains/overlap, <code>clamp</code> on all three branches, <code>sumRange</code> with lo == hi, swap of same variable aliased via two names (document the result) · <code>postmortem.md</code> (10 marks).</p>
+<h2 id="notes">Notes</h2>
+<ul><li>Touching intervals share exactly one point — they overlap.</li><li><code>sumRange</code> with <code>lo &gt; hi</code> violates its precondition; assert-free handling is to document the precondition, not to "fix" inputs silently.</li></ul>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

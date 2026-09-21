@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L09 · `while` and `do-while`: Sentinel and Input-Controlled Loops · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/lectures/week_05/lecture_09.html">
+<link rel="stylesheet" href="../../styles.css">
+<script src="../../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../../index.html">Home</a></li><li><a href="../../overview.html">Overview</a></li><li><a href="../../outcomes.html">Outcomes</a></li><li><a href="../../schedule.html">Schedule</a></li><li><a href="../../lectures.html" aria-current="page">Lectures</a></li><li><a href="../../labs.html">Labs</a></li><li><a href="../../cases.html">Case Studies</a></li><li><a href="../../exercises.html">Exercises</a></li><li><a href="../../assignments.html">Assignments</a></li><li><a href="../../projects.html">Projects</a></li><li><a href="../../resources.html">Resources</a></li><li><a href="../../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="narrow">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../../index.html">Home</a> › L09 · `while` and `do-while`: Sentinel and Input-Controlled Loops</nav>
+<h1 class="page-title">L09 · `while` and `do-while`: Sentinel and Input-Controlled Loops</h1>
+<p><strong>Module 5 — Loops and Repetition · Week 5 · Lecture 9 of 32 · 120 minutes</strong> <strong>Outcomes:</strong> CLO-3 · PF-5.1, PF-5.2 · <a href="../../outcomes.html">LEARNING_OUTCOMES.md</a></p>
+<h2 id="learning-objectives">Learning objectives</h2>
+<ol><li>Write <code>while</code> loops with all three loop parts present and correct — initialization before, condition at top, update inside — and diagnose which part is missing when a loop misbehaves (PF-5.1).</li><li>Build sentinel-controlled (e.g. <code>-1</code> stops) and count-controlled loops, and distinguish <em>sentinel</em> from <em>valid data</em> (PF-5.1).</li><li>Implement <code>do-while</code> post-test loops for input validation and menus, and state exactly when post-test is the right choice (PF-5.2).</li></ol>
+</ol>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>L07–L08 (conditions, menu structure); L04 (stream-state reading — sentinels ride on it).</p>
+<h2 id="concept-sequence">Concept sequence</h2>
+<ol><li>The problem: repeating statements without copy-paste</li><li><code>while</code> anatomy: init / test / update discipline</li><li>Trace tables for loops (state before each test)</li><li>Sentinel-controlled input loops</li><li><code>do-while</code>: test-at-bottom, run-at-least-once</li><li>Input-validation idiom with <code>do-while</code></li></ol>
+</ol>
+<h2 id="teaching-topics-detailed">Teaching topics (detailed)</h2>
+<ul><li><strong>Loop discipline:</strong> every loop must (1) initialize, (2) test, (3) update; the three classic failures: infinite (no update / never-false test), never-runs (init off), one-off (update misplaced).</li><li><strong>Trace tables:</strong> columns = variables, rows = passes; first big practice with <code>sum += i</code> style loops; desk-checking formalized (full treatment in Module 6).</li><li><strong>Sentinel loops:</strong> <code>while (mark != -1)</code> — read-then-check structure; "priming read" pattern; why sentinel must be impossible data; connection to stream-state checks (<code>while (cin &gt;&gt; x)</code> idiom introduced here, formal treatment in Module 15).</li><li><strong><code>do-while</code>:</strong> post-test; menus and re-prompt validators (<code>do { ... } while (choice != 'q');</code>); warn: no <code>do-while</code> when zero iterations must be possible.</li><li><strong>Accumulators &amp; counters:</strong> <code>sum</code>, <code>count</code>, <code>product</code> initialization rules (0/0/1) — the pattern vocabulary used in every later module.</li></ul>
+<h2 id="c-examples-required">C++ examples required</h2>
+<table><thead><tr><th>File</th><th>Role</th></tr></thead><tbody><tr><td><code>loops_sum_digits.cpp</code> ✅</td><td>sentinel sum loop + digit-sum via <code>% 10</code> / <code>/ 10</code> inside <code>while</code> (ties to L05 digit extraction)</td></tr><tr><td>(live) <code>validation_loop.cpp</code></td><td><code>do-while</code> re-prompt validator with <code>clear()</code>/<code>ignore()</code> recovery</td></tr></tbody></table>
+<h2 id="common-student-misconceptions">Common student misconceptions</h2>
+<ul><li>"The loop condition checks <em>after</em> the body." (Pre-test for <code>while</code> — body may run zero times; that's why <code>do-while</code> exists.)</li><li>"Sentinel values are just any negative number." (Must be <em>impossible</em> for the data domain — a <code>-1</code> temperature is valid in some places!)</li><li>"While loops always update at the bottom." (Update placement <em>is</em> the bug source; placement is a design decision.)</li><li>"<code>do-while</code> runs at least twice."</li></ul>
+<h2 id="conceptual-explanation-beginner-first">Conceptual explanation (beginner-first)</h2>
+<p>A <strong>loop</strong> is the program's way of repeating work without repeating text. When we needed three numbers summed, writing <code>cin &gt;&gt; a; ... &gt;&gt; b; ... &gt;&gt; c;</code> worked — but summing a thousand would need a thousand lines. Instead, we keep <em>one</em> variable and let the computer do the repetition, updating that variable each time around. Every loop answers three questions: <strong>what to repeat</strong> (the body), <strong>whether to go again</strong> (the condition), and <strong>what changes between attempts</strong> (the update — in a <code>for</code>, the third clause). Forgetting the update is the classic bug: the condition never changes, so the loop never ends.</p>
+<p>The three loop forms are one idea with different emphasis. <code>while</code> asks the condition <em>before</em> each attempt — good when you don't know how many times (reading until EOF or a sentinel). <code>do-while</code> asks <em>after</em> — good for menus that must show at least once. <code>for</code> bundles initialization, condition, and update into one readable line — good when the count is known or when an index marches across a range. Choosing the wrong form rarely breaks the program; choosing it well makes the intent obvious.</p>
+<p>Loop design has a discipline: state the <strong>loop invariant</strong> — what is true before every pass — then make sure initialization establishes it, the body maintains it, and after the loop the job is done. "<code>sum</code> holds the total of all values seen so far" is the invariant of the sum loop. When a loop goes wrong, trace it: a table of every variable, updated line by line, and the bug is usually visible by row three.</p>
+<h2 id="terminology-and-definitions">Terminology and definitions</h2>
+<table><thead><tr><th>Term</th><th>Definition</th></tr></thead><tbody><tr><td>Loop</td><td>A construct that repeats a block while a condition holds</td></tr><tr><td>Iteration</td><td>One execution of the loop body</td></tr><tr><td>Loop condition</td><td>The bool expression checked each pass; false ends the loop</td></tr><tr><td>Loop variable / counter</td><td>The variable the condition watches and the update advances</td></tr><tr><td>Update (third clause)</td><td>Code run after each pass; omitting it is the #1 bug</td></tr><tr><td>Initialization (first clause)</td><td>Run once before the first condition check</td></tr><tr><td>Infinite loop</td><td>A loop whose condition never becomes false</td></tr><tr><td>Off-by-one error</td><td>Loop runs one time too many or too few (the <code>&lt;= n</code> vs <code>&lt; n</code> trap)</td></tr><tr><td>Sentinel value</td><td>A special input marking "stop reading" (e.g. 0, or -1)</td></tr><tr><td>Input as the condition</td><td><code>(std::cin &gt;&gt; x)</code> is a bool: true when a value was read</td></tr><tr><td>Loop invariant</td><td>A statement true before every iteration; the backbone of correct loop design</td></tr><tr><td>Dry run / trace</td><td>Step-by-step table of variable values — the debugging skill of the week</td></tr></tbody></table>
+<h2 id="syntax-and-c-examples">Syntax and C++ examples</h2>
+<pre><code class="language-cpp">// for — known count, everything in one line
+for (int i{0}; i &lt; 5; ++i)
+{
+    std::cout &lt;&lt; i &lt;&lt; &#x27; &#x27;;              // 0 1 2 3 4
+}
+
+// while — repeat until a condition fails; check happens FIRST
+int n{};
+std::cin &gt;&gt; n;
+while (n &gt; 0)                            // condition before every pass
+{
+    std::cout &lt;&lt; n &lt;&lt; &#x27; &#x27;;
+    --n;                                 // the update — forget it = infinite loop
+}
+
+// do-while — body runs at least once; check happens AFTER the body
+char again{};
+do
+{
+    std::cout &lt;&lt; &quot;again? &quot;;
+    std::cin &gt;&gt; again;
+} while (again == &#x27;y&#x27;);
+
+// sentinel-controlled reading — the input itself ends the loop
+int value{};
+long long total{0};
+while (std::cin &gt;&gt; value &amp;&amp; value != 0)  // stop at 0 OR on bad input
+{
+    total += value;
+}
+
+// sum of digits — while&#x27;s natural shape: unknown pass count
+int m{1234};
+int digitSum{0};
+while (m &gt; 0)
+{
+    digitSum += m % 10;                  // take the last digit
+    m /= 10;                             // drop it
+}
+// digitSum == 10</code></pre>
+<h2 id="line-by-line-code-explanation">Line-by-line code explanation</h2>
+<p><code>examples/loops_sum_digits.cpp</code>:</p>
+<ol><li><code>std::cin &gt;&gt; number</code> — reads the value whose digits will be summed.</li><li><strong>Input validation loop</strong> (before the main loop): re-prompts until the user actually supplies an integer — the <code>(std::cin &gt;&gt; x)</code> condition is the reading pattern from L04, now reused as a gate.</li><li><code>int work{number};</code> — a copy of the input is destroyed digit by digit; keeping the original intact is deliberate (good practice: don't eat your inputs).</li><li><code>while (work &gt; 0)</code> — invariant: <code>digitSum</code> equals the sum of digits removed so far; <code>work</code> still holds the digits not yet removed.</li><li><code>digitSum += work % 10;</code> — <code>% 10</code> isolates the last digit (1234 % 10 = 4).</li><li><code>work /= 10;</code> — integer division drops that digit (1234 / 10 = 123).</li><li>After the loop, <code>work == 0</code> and <code>digitSum</code> is the complete answer — the invariant plus the exit condition <em>is</em> the proof of correctness.</li></ol>
+</ol>
+<p><code>examples/loop_patterns.cpp</code> — four labeled patterns, each one small: counting (<code>for</code> with a counter), accumulation (<code>sum += value</code>), max-finding (track the best so far, initialize with the first value), and a nested <code>for</code> printing a right triangle — rows outer, columns inner.</p>
+<p><code>examples/buggy_off_by_one.cpp</code>:</p>
+<ol><li><strong>Bug 1 (infinite loop)</strong> — a <code>while</code> with no update inside; watch the terminal fill, then Ctrl+C.</li><li><strong>Bug 2 (off-by-one)</strong> — <code>for (int i{1}; i &lt;= n; ++i)</code> used where the array-style 0..n-1 range was intended: runs n times but with the wrong values, or n+1 times where the caller assumed n.</li><li>Each bug is commented; students predict the symptom, run, compare.</li></ol>
+</ol>
+<h2 id="output-prediction-questions-with-answers">Output prediction questions (with answers)</h2>
+<ol><li><code>for (int i{0}; i &lt; 3; ++i) cout &lt;&lt; i;</code> — ? — <code>012</code>.</li><li>Same loop with <code>i &lt;= 3</code> — ? — <code>0123</code> — the off-by-one is visible in the last value printed.</li><li><code>int x{3}; while (x &gt; 0) cout &lt;&lt; x;</code> (no update) — ? — <code>333...</code> forever — Ctrl+C is the lesson.</li><li>Sum-digits of 907 — ? — 16 (9+0+7); the 0 digit contributes nothing but the loop still processes a full pass on <code>work == 90</code>.</li><li>Sentinel loop with input <code>4 7 0</code> — how many values summed, what total? — 2 values, total 11; the 0 is the sentinel, never added.</li></ol>
+</ol>
+<h2 id="common-errors-and-debugging-examples">Common errors and debugging examples</h2>
+<table><thead><tr><th>Error</th><th>Symptom</th><th>Fix</th></tr></thead><tbody><tr><td>Missing update</td><td>Program hangs (infinite loop)</td><td>Advance the watched variable every pass</td></tr><tr><td><code>i &lt;= n</code> instead of <code>&lt; n</code></td><td>One extra iteration</td><td>Decide the range, match the bound to it</td></tr><tr><td>Body of <code>while</code> on one line without braces</td><td>Only the first statement repeats</td><td>Braces around every body</td></tr><tr><td><code>for(;;)</code> left in by accident</td><td>Hangs</td><td>Every <code>for</code> clause earns its place</td></tr><tr><td>Updating the counter twice</td><td>Skips values</td><td>One update, in the third clause</td></tr><tr><td>Sentinel chosen badly</td><td>A legitimate value (e.g. 0) terminates early</td><td>Pick a value outside the data domain, or use EOF</td></tr></tbody></table>
+<p>Debugging ritual: <strong>print and trace</strong> — add a <code>std::cout</code> of every relevant variable inside the loop, run a tiny input, read the table row by row against the invariant. The first row that breaks the invariant circles the bug.</p>
+<h2 id="classroom-demonstrations">Classroom demonstrations</h2>
+<ol><li><strong>Live trace:</strong> run <code>loops_sum_digits</code> on 907 with the trace table on the board — pass, work, digit, digitSum — and have the class call out each row.</li><li><strong>The infinite loop, safely:</strong> run the no-update <code>while</code>, let it fill a few lines, then Ctrl+C — naming the symptom before fixing it.</li><li><strong>Sentinel theater:</strong> feed the sum loop <code>10 20 30 0</code> then <code>10 20 0 30</code> — same digits, different totals; students explain why before you say it.</li></ol>
+</ol>
+<h2 id="guided-student-activities">Guided student activities</h2>
+<p><strong>Loop-autopsy pairs (20 min):</strong> 6 broken loops (infinite, off-by-one, skipped-body, wrong sentinel, missing update, inverted condition); pairs diagnose by <em>trace table only</em> — no running allowed — then we run and compare. Diagnosis-before-execution is the point.</p>
+<h2 id="practice-problems">Practice problems</h2>
+<ul><li>Complete 5 partial trace tables for <code>while</code> loops.</li><li>Write: sentinel grade-averager; count-down timer; <code>do-while</code> age validator (3–120 range with recovery).</li><li>Convert 2 <code>while</code> loops to <code>do-while</code> (and one where it's <em>wrong</em> — justify).</li><li>(🞡 stretch) Digit reversal with <code>while</code> (foreshadows palindrome, M11).</li></ul>
+<h2 id="summary">Summary</h2>
+<p>Loops repeat work: <code>while</code> checks first (unknown count), <code>do-while</code> checks last (must-run-once menus), <code>for</code> bundles init/condition/update (known counts and marching indices). The four classic bugs — missing update, off-by-one, wrong bound, missing braces — are all caught by one habit: trace the loop with a variable table against its invariant. Next (L10): composing loops — nested iteration, the patterns that turn loops into real algorithms, and the first honest look at running time.</p>
+<h2 id="exit-ticket-formative-assessment">Exit ticket / formative assessment</h2>
+<ol><li>Write a <code>for</code> loop printing 10 down to 1, each on its own line.</li><li>What two things are missing from <code>while (n != 0) { ... }</code> if the body never changes <code>n</code>?</li><li>Trace <code>while (m &gt; 0) { d += m % 10; m /= 10; }</code> for <code>m = 47</code>: give the table (m, d) for each pass and the final value of <code>d</code>.</li></ol>
+</ol>
+<ol><li>A <code>while</code> loop never ends. Name the two most likely missing parts.</li><li>How many times does a <code>do-while</code> body run at minimum?</li><li>Trace: <code>int i{1}, s{0}; while (i &lt;= 3) { s += i; ++i; }</code> — final <code>s</code>?</li></ol>
+</ol>
+<h2 id="estimated-time-allocation-120-min">Estimated time allocation (120 min)</h2>
+<table><thead><tr><th>Segment</th><th>Minutes</th></tr></thead><tbody><tr><td>Recall (switch quiz) + repetition motivation</td><td>10</td></tr><tr><td><code>while</code> discipline + trace tables</td><td>35</td></tr><tr><td>Break</td><td>10</td></tr><tr><td>Sentinels + <code>do-while</code> + validation idiom</td><td>35</td></tr><tr><td>Loop-autopsy activity</td><td>20</td></tr><tr><td>Exit ticket + L10 preview</td><td>10</td></tr></tbody></table>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L25 · Pointers: Addresses, `&amp;`, `*`, `nullptr`, and Pointer Arithmetic · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/lectures/week_13/lecture_25.html">
+<link rel="stylesheet" href="../../styles.css">
+<script src="../../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../../index.html">Home</a></li><li><a href="../../overview.html">Overview</a></li><li><a href="../../outcomes.html">Outcomes</a></li><li><a href="../../schedule.html">Schedule</a></li><li><a href="../../lectures.html" aria-current="page">Lectures</a></li><li><a href="../../labs.html">Labs</a></li><li><a href="../../cases.html">Case Studies</a></li><li><a href="../../exercises.html">Exercises</a></li><li><a href="../../assignments.html">Assignments</a></li><li><a href="../../projects.html">Projects</a></li><li><a href="../../resources.html">Resources</a></li><li><a href="../../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="narrow">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../../index.html">Home</a> › L25 · Pointers: Addresses, `&amp;`, `*`, `nullptr`, and Pointer Arithmetic</nav>
+<h1 class="page-title">L25 · Pointers: Addresses, `&amp;`, `*`, `nullptr`, and Pointer Arithmetic</h1>
+<p><strong>Module 13 — Pointers and References · Week 13 · Lecture 25 of 32 · 120 minutes</strong> <strong>Outcomes:</strong> CLO-7 · PF-13.1, PF-13.2 · <a href="../../outcomes.html">LEARNING_OUTCOMES.md</a></p>
+<h2 id="learning-objectives">Learning objectives</h2>
+<ol><li>Explain the address-of/dereference pair — <code>&amp;x</code> yields the address, <code>*p</code> accesses the pointed-to object — and draw state diagrams (box-and-arrow) for pointer declarations, assignments, and updates (PF-13.1).</li><li>Declare pointers, assign addresses, dereference for read/write, use <code>nullptr</code>, and distinguish the pointer variable from the pointed-to value in code and diagrams (PF-13.1).</li><li>Trace pointer arithmetic on arrays (<code>*(a + i)</code> ≡ <code>a[i]</code>), including the step-size-by-type rule (PF-13.2).</li></ol>
+</ol>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>L17 (array memory model — the box-address diagram pays off now); L15 (references as aliases — the contrast is pedagogically load-bearing); L06 (casts, type discipline).</p>
+<h2 id="concept-sequence">Concept sequence</h2>
+<ol><li>Motivation: functions couldn't modify caller variables — what <em>really</em> happens inside memory</li><li>Every variable has an address; <code>&amp;</code> reveals it</li><li>Pointer declaration/assignment; dereference <code>*</code> for read and write</li><li><code>nullptr</code> — the pointer that points nowhere (on purpose)</li><li>State diagrams: the course notation for all pointer reasoning</li><li>Pointers and arrays: decay + <code>*(a + i)</code> ≡ <code>a[i]</code> arithmetic</li></ol>
+</ol>
+<h2 id="teaching-topics-detailed">Teaching topics (detailed)</h2>
+<ul><li><strong>Addresses:</strong> <code>&amp;x</code> printed with <code>%p</code>-style via <code>static_cast&lt;const void*&gt;</code> (mention only); the <em>variable vs value vs address</em> triple; box-and-arrow notation established as the exclusive diagram language (M14, M16 reuse it).</li><li><strong>Pointer basics:</strong> <code>int* p{&amp;x};</code> — read as "p is a pointer to int"; <code>*p</code> as lvalue (write) and rvalue (read); <code>p</code> vs <code>*p</code> vs <code>&amp;x</code> spoken aloud until fluent; uninitialized pointers vs <code>nullptr</code> (initialize to <code>nullptr</code> always); dereferencing <code>nullptr</code> = crash demo (safe, deterministic).</li><li><strong>Write-through:</strong> <code>*p = 99;</code> changes <code>x</code> — the mechanism <em>under</em> L15's references; <code>sizeof(p) == 8</code> regardless of pointee type (address size), vs pointee size.</li><li><strong>Decay &amp; arithmetic:</strong> array name decays to <code>&amp;a[0]</code> in expressions; <code><em>(a + i)</code> ≡ <code>a[i]</code> ≡ <code>p[i]</code> with <code>int</em> p{a};</code>; arithmetic scales by <code>sizeof(element)</code> — printed address walk over an int array (4-byte steps) vs double array (8-byte steps); one-past-the-end pointer legality note.</li><li><strong>Style/limits (<a href="../../resources.html#cpp-standard">docs/CPP_STANDARD.md</a> § 4):</strong> no pointer arithmetic beyond array walks; <code>const int* p</code> (pointer-to-const) vs <code>int* const p</code> (const pointer) — named, one slide, not drilled.</li></ul>
+<h2 id="c-examples-required">C++ examples required</h2>
+<table><thead><tr><th>File</th><th>Role</th></tr></thead><tbody><tr><td><code>pointer_basics.cpp</code> ✅</td><td>addresses printed; read/write through <code>p</code>; <code>nullptr</code> guard; decay + arithmetic walk with printed addresses</td></tr><tr><td>(live) <code>pointer_swap.cpp</code></td><td>swap via pointer parameters (contrast with L15 reference swap — same result, different syntax)</td></tr></tbody></table>
+<h2 id="common-student-misconceptions">Common student misconceptions</h2>
+<ul><li>"<code>&amp;x</code> is the reference operator from L15." (Same symbol, different context: in a <em>declaration</em> it's a reference type; in an <em>expression</em> it's address-of — the table that resolves every confusion.)</li><li>"<code><em>p</code> declares a dereference at declaration." (<code>int</em> p, q;</code> — only <code>p</code> is a pointer; course style: one declarator per line.)</li><li>"Pointers store values." (They store <em>addresses</em>; the value lives at the address.)</li><li>"Pointer arithmetic adds bytes." (It adds <em>elements</em>; type scales the step.)</li></ul>
+<h2 id="conceptual-explanation-beginner-first">Conceptual explanation (beginner-first)</h2>
+<p>Every variable lives somewhere: <code>int x{42}</code> occupies a real box in memory, and that box has an <strong>address</strong> — a number, usually written in hexadecimal, that names the box's location. A <strong>pointer</strong> is simply a variable whose value is such an address. If <code>x</code> is a house, <code>p</code> is a sticky note with the house's street address written on it.</p>
+<p>Two operators run the whole lecture. <strong>Address-of</strong> (<code>&amp;x</code>) reads the address out of a variable: "where does x live?" <strong>Dereference</strong> (<code>*p</code>) travels to the address a pointer holds: "go to the address written on p, and use what's there." Through <code>*p</code> you can read the distant box — <code>cout &lt;&lt; *p</code> — or <em>write</em> it — <code>*p = 99</code> changes <code>x</code>. This is the mechanism that made pass-by-reference work in Module 8 (<code>int&amp; r</code> is a safe, automatic cousin) and that makes arrays and strings possible (an array name <em>is</em> an address in most contexts).</p>
+<p>With that power comes the rule that governs the module: <strong>a pointer must point at something before it is dereferenced</strong>. A pointer with no target gets the dedicated value <code>nullptr</code>, and every dereference in course code is guarded by <code>if (p != nullptr)</code> first. Dereferencing nullptr (or garbage) is undefined behavior — the crash-generating, silently-corrupting territory this lecture teaches you to never enter.</p>
+<h2 id="terminology-and-definitions">Terminology and definitions</h2>
+<table><thead><tr><th>Term</th><th>Definition</th></tr></thead><tbody><tr><td>Address</td><td>The memory location of a variable (printed in hex)</td></tr><tr><td>Pointer</td><td>A variable that stores an address; type: <code>int*</code>, <code>double*</code>, <code>char*</code></td></tr><tr><td>Address-of operator</td><td><code>&amp;x</code> — yields the address of <code>x</code></td></tr><tr><td>Dereference operator</td><td><code>*p</code> — accesses the object at the address <code>p</code> holds</td></tr><tr><td><code>nullptr</code></td><td>The pointer value meaning "points at nothing"</td></tr><tr><td>Dangling pointer</td><td>A pointer to memory no longer owned (use-after-scope)</td></tr><tr><td>Pointer arithmetic</td><td><code>p + 1</code> moves one <em>element</em> (not byte) — type-scaled</td></tr><tr><td>Array–pointer decay</td><td>An array expression converts to a pointer to element 0</td></tr><tr><td>Memory safety</td><td>The discipline: initialize, guard, never outlive</td></tr><tr><td>State diagram</td><td>Box-and-arrow picture of pointers and their targets</td></tr></tbody></table>
+<h2 id="syntax-and-c-examples">Syntax and C++ examples</h2>
+<pre><code class="language-cpp">int x{42};
+int* p{nullptr};                 // every pointer starts as nullptr
+
+p = &amp;x;                          // p now holds x&#x27;s address
+
+std::cout &lt;&lt; x &lt;&lt; &#x27;\n&#x27;;          // 42
+std::cout &lt;&lt; &amp;x &lt;&lt; &#x27;\n&#x27;;         // e.g. 0x7ffd... (machine-specific!)
+std::cout &lt;&lt; p &lt;&lt; &#x27;\n&#x27;;          // same address
+std::cout &lt;&lt; *p &lt;&lt; &#x27;\n&#x27;;         // 42 — dereference: the thing pointed at
+
+*p = 99;                         // write through the pointer
+std::cout &lt;&lt; x &lt;&lt; &#x27;\n&#x27;;          // 99 — x changed
+
+// guard before dereferencing
+if (p != nullptr)
+    std::cout &lt;&lt; *p &lt;&lt; &#x27;\n&#x27;;
+p = nullptr;                     // now it points at nothing again
+
+// pointer arithmetic walks ELEMENTS
+int a[5]{10, 20, 30, 40, 50};
+int* q{a};                       // decay: points at a[0]
+for (int i{0}; i &lt; 5; ++i)
+    std::cout &lt;&lt; *(q + i) &lt;&lt; &#x27; &#x27;;            // 10 20 30 40 50 — *(q+i) == a[i]</code></pre>
+<h2 id="line-by-line-code-explanation">Line-by-line code explanation</h2>
+<p><code>examples/pointer_basics.cpp</code>:</p>
+<ol><li>Every declaration initializes: <code>int* p{nullptr};</code> — the uninitialized- pointer bug never gets a foothold in course code.</li><li>The address block prints <code>&amp;x</code> and <code>p</code>: same value. The instructor note printed by the program says it too: <strong>exact addresses are machine- and run-specific</strong> (standard C++ doesn't fix them) — only the <em>relationships</em> are meaningful.</li><li><code>*p = 99;</code> — the write-through: <code>x</code> reads 99 afterwards. The program prints both names for the same box: "x is 99; *p is 99."</li><li>The <code>nullptr</code> guard demonstrates the pattern around every dereference; then <code>p = nullptr;</code> shows the repointable nature — the pointer is the sticky note; you can rewrite the address on it.</li><li>The array walk prints <code>q + i</code> (addresses stepping 4 bytes on this build) and <code><em>(q + i)</code> (values) — decay and element-scaled arithmetic made visible; <code></em>(q+i)</code> and <code>a[i]</code> are the same thing.</li></ol>
+</ol>
+<h2 id="output-prediction-questions-with-answers">Output prediction questions (with answers)</h2>
+<ol><li><code>int y{7}; int* q{&amp;y}; *q = *q + 1;</code> — value of <code>y</code>? — <strong>8</strong> (the addition went through the pointer).</li><li><code>q = nullptr; cout &lt;&lt; *q;</code> — ? — undefined behavior: crash or worse; the guarded version prints nothing and continues.</li><li><code>int a[3]{1,2,3}; cout &lt;&lt; *(a + 2);</code> — ? — <strong>3</strong>; equivalent to <code>a[2]</code>.</li><li><code>int* p{nullptr}; if (p) cout &lt;&lt; "yes"; else cout &lt;&lt; "no";</code> — ? — <code>no</code> — a pointer converts to bool: non-null is true.</li><li>Two runs of the program print different addresses for <code>&amp;x</code> — a bug? — no: addresses are machine/run-specific; relationships (p == &amp;x) are the invariant.</li></ol>
+</ol>
+<h2 id="common-errors-and-debugging-examples">Common errors and debugging examples</h2>
+<table><thead><tr><th>Error</th><th>Symptom</th><th>Fix</th></tr></thead><tbody><tr><td>Dereferencing uninitialized pointer</td><td>Crash or random corruption</td><td>Initialize to <code>nullptr</code> (or a target) at declaration</td></tr><tr><td>Dereferencing <code>nullptr</code></td><td>Crash on access</td><td>Guard: <code>if (p != nullptr)</code></td></tr><tr><td>Dangling pointer (target went out of scope)</td><td>Use-after-scope UB</td><td>Never return/keep addresses of locals</td></tr><tr><td><code>int* p, q;</code></td><td><code>q</code> is a plain int — the declaration trap</td><td>One pointer per line</td></tr><tr><td>Confusing <code>&amp;</code> in declaration vs expression</td><td>Type errors, wrong mental model</td><td>Declaration = reference type; expression = address-of</td></tr><tr><td>Byte-vs-element arithmetic</td><td>Off-target reads</td><td><code>p + 1</code> moves one element; the step is <code>sizeof(type)</code></td></tr></tbody></table>
+<h2 id="classroom-demonstrations">Classroom demonstrations</h2>
+<ol><li><strong>The sticky note:</strong> a named box (label <code>x</code>, value 42) and a second box holding "→ x's address"; every operator is a physical action on the two boxes.</li><li><strong>Address printing:</strong> run the example twice — different addresses, same relationships; the standard-vs-implementation distinction is made explicit (standard C++ doesn't pin addresses; <em>any</em> conforming compiler may differ).</li><li><strong>The guarded crash:</strong> dereference nullptr with and without the guard; the class sees UB's arbitrariness (one build crashes, another prints garbage).</li></ol>
+</ol>
+<h2 id="guided-student-activities">Guided student activities</h2>
+<p><strong>Box-and-arrow speed rounds (20 min):</strong> 8 code snippets projected; teams race to draw the state diagram (boxes, arrows, labels) then predict output; round 8 deliberately reassigns <code>p</code> mid-program (repointing, not overwriting) — the most-missed distinction.</p>
+<h2 id="practice-problems">Practice problems</h2>
+<ul><li>Draw state diagrams for 6 pointer sequences (incl. repointing, write- through, nullptr).</li><li>Predict printed output of 5 address/arithmetic programs.</li><li>Implement <code>array_sum(const int* a, int n)</code> using only <code>*(a + i)</code>.</li><li>(🟡 stretch) Explain what <code>p++</code> moves past on an int array vs a double array, with printed addresses as evidence.</li></ul>
+<h2 id="summary">Summary</h2>
+<p>A pointer stores an address; <code>&amp;</code> takes an address, <code><em></code> follows one, and the box-and-arrow diagram is the ground truth for every question. <code>nullptr</code> is the pointed-at-nothing state — check before following. Arrays and pointers share arithmetic (<code></em>(a+i)</code> is <code>a[i]</code>), which is both the origin of array/pointer interchangeability and the source of module 13's discipline. Next (L26): the honest, deeper story of what arrays pass to functions and how references differ.</p>
+<h2 id="exit-ticket-formative-assessment">Exit ticket / formative assessment</h2>
+<ol><li><code>int x{5}; int* p{&amp;x}; *p = 12;</code> — value of <code>x</code>? of <code>p</code>?</li><li>In <code>int* p{nullptr};</code> what does dereferencing do — and when is <code>nullptr</code> useful?</li><li><code>double d[4]; double* q{d};</code> — address step from <code>q</code> to <code>q + 1</code>?</li></ol>
+</ol>
+<h2 id="estimated-time-allocation-120-min">Estimated time allocation (120 min)</h2>
+<table><thead><tr><th>Segment</th><th>Minutes</th></tr></thead><tbody><tr><td>Recall (sorting quiz) + the caller-modification problem</td><td>10</td></tr><tr><td>Addresses, <code>&amp;</code>, <code>*</code>, nullptr + state diagrams</td><td>40</td></tr><tr><td>Break</td><td>10</td></tr><tr><td>Decay + pointer arithmetic + address walk</td><td>30</td></tr><tr><td>Speed-round activity</td><td>20</td></tr><tr><td>Exit ticket + L26 preview</td><td>10</td></tr></tbody></table>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Project 01 · Student Grade Calculator · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/projects/project-01.html">
+<link rel="stylesheet" href="../styles.css">
+<script src="../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../index.html">Home</a></li><li><a href="../overview.html">Overview</a></li><li><a href="../outcomes.html">Outcomes</a></li><li><a href="../schedule.html">Schedule</a></li><li><a href="../lectures.html">Lectures</a></li><li><a href="../labs.html">Labs</a></li><li><a href="../cases.html">Case Studies</a></li><li><a href="../exercises.html">Exercises</a></li><li><a href="../assignments.html">Assignments</a></li><li><a href="../projects.html" aria-current="page">Projects</a></li><li><a href="../resources.html">Resources</a></li><li><a href="../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="narrow">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../index.html">Home</a> › Project 01 · Student Grade Calculator</nav>
+<h1 class="page-title">Project 01 · Student Grade Calculator</h1>
+<p><strong>Modules 1–8 (Weeks 1–8) · no arrays, no files, no structs — functions are the architecture</strong> Outcomes: CLO-1…CLO-5 (PF-1…PF-8). Difficulty: ★☆☆☆☆</p>
+<h2 id="1-problem-description">1. Problem description</h2>
+<p>A tutoring center computes end-of-term grades from three components: <strong>lab 25 %, midterm 35 %, final 40 %</strong>. Their volunteer desk does this by hand and makes arithmetic errors. Write a console program that processes students one at a time (an interactive session, not a data file), computes each weighted average, maps it to a letter grade, and ends the session with a summary of everyone processed in this run.</p>
+<h2 id="2-learning-objectives">2. Learning objectives</h2>
+<ol><li>Decompose a small problem into single-purpose functions with contracts.</li><li>Use reference parameters where a function must return more than one value.</li><li>Apply decision ladders correctly (descending thresholds).</li><li>Validate every read at the boundary; distinguish bad data from end-of-run.</li><li>Distinguish integer counts (int) from weighted measures (double).</li></ol>
+</ol>
+<h2 id="3-functional-requirements">3. Functional requirements</h2>
+<ul><li>FR1 — One student = name (one word), lab, midterm, final (0..100 doubles).</li><li>FR2 — Weighted average printed with exactly 2 decimals: <code>Ayesha 88 79 91 -&gt; 86.05 C+</code> (see mapping below).</li><li>FR3 — Letter mapping: ≥ 90 A · ≥ 87 A− · ≥ 83 B+ · ≥ 80 B · ≥ 77 B− · ≥ 73 C+ · ≥ 70 C · ≥ 67 C− · ≥ 60 D · else F.</li><li>FR4 — Session loop: process students until the name <code>DONE</code> (case-sensitive).</li><li>FR5 — Session summary: students processed, highest average with owner, class average, count below 60. Print <code>no students</code> if the first entry is DONE.</li><li>FR6 — A grade below 0 or above 100 terminates that student's record with message <code>bad mark for &lt;component&gt;</code> and does NOT count them in the summary.</li></ul>
+<h2 id="4-non-functional-requirements">4. Non-functional requirements</h2>
+<ul><li>NFR1 — <code>main</code> is an outline: every computation lives in a function.</li><li>NFR2 — Every function has a contract comment (precondition/postcondition).</li><li>NFR3 — Compiles with the course contract, zero warnings.</li><li>NFR4 — No global variables; no arrays (they are Module 9 — a single student at a time is the whole point).</li><li>NFR5 — Session summary values come from accumulators updated per student, not from re-reading anything.</li></ul>
+<h2 id="5-suggested-data-structures">5. Suggested data structures</h2>
+<p>Per student: five locals in <code>main</code> (name + three marks + average). Per session: four accumulators (count, sum of averages, best average, best name). The maximum-tracking pattern (init from first value, L17 discipline) is expected even though arrays are not — accumulate as you go.</p>
+<h2 id="6-user-interaction-design">6. User interaction design</h2>
+<pre><code class="language-text">Student (or DONE): Ayesha
+lab midterm final: 88 79 91
+Ayesha: 86.05 -&gt; C+
+Student (or DONE): Bilal
+lab midterm final: 105 80 80
+bad mark for lab
+Student (or DONE): DONE
+students: 1  best: Ayesha 86.05  class avg: 86.05  below 60: 0</code></pre>
+<p>Prompts exactly as shown; no other output lines. One space between fields in the summary; averages always 2 decimals.</p>
+<h2 id="7-input-validation-requirements">7. Input validation requirements</h2>
+<ul><li>VR1 — Failed read of any mark (EOF or non-numeric): print <code>bad input</code>, exit code 1.</li><li>VR2 — Mark out of 0..100: <code>bad mark for &lt;component&gt;</code> (lab|midterm|final), record rejected, continue the session loop.</li><li>VR3 — Name <code>DONE</code> ends the session even mid-line (rest of the line ignored).</li><li>VR4 — No cin/cout inside the letter-mapping function — it takes an average, returns a letter; testability is the point.</li></ul>
+<h2 id="8-testing-plan">8. Testing plan</h2>
+<table><thead><tr><th>#</th><th>Class</th><th>Input</th><th>Expected</th></tr></thead><tbody><tr><td>T1</td><td>typical</td><td><code>Ayesha 88 79 91</code></td><td><code>86.05 -&gt; C+</code></td></tr><tr><td>T2</td><td>boundary</td><td>all three marks 90 exactly</td><td><code>90.00 -&gt; A</code></td></tr><tr><td>T3</td><td>boundary</td><td>all three marks 89.999… (use 89.99)</td><td><code>B+</code> (&gt;= 90 fails)</td></tr><tr><td>T4</td><td>even weights</td><td>lab 0 midterm 0 final 0</td><td><code>0.00 -&gt; F</code>, counts below 60</td></tr><tr><td>T5</td><td>invalid</td><td>lab 105</td><td><code>bad mark for lab</code>, not in summary</td></tr><tr><td>T6</td><td>EOF mid-record</td><td>name then EOF</td><td><code>bad input</code>, exit 1</td></tr><tr><td>T7</td><td>immediate DONE</td><td><code>DONE</code></td><td><code>no students</code></td></tr><tr><td>T8</td><td>best tracking</td><td>Ayesha 86.05 then Bilal 92.50</td><td>best Bilal 92.50</td></tr></tbody></table>
+<p>Pre-compute expected values before running (testing.md discipline); keep observed ≠ expected rows in the table with a one-line diagnosis.</p>
+<h2 id="9-milestones">9. Milestones</h2>
+<ol><li><strong>M1 (½ session):</strong> single student, FR1–FR2, no letters — get the weighted math exact.</li><li><strong>M2:</strong> letter ladder (FR3) with its own function + T1–T3.</li><li><strong>M3:</strong> session loop + rejection path (FR4, FR6, VR2) + T5–T7.</li><li><strong>M4:</strong> summary (FR5) + T4, T8 + full rubric self-check.</li></ol>
+</ol>
+<h2 id="10-extension-ideas">10. Extension ideas ⚙</h2>
+<ul><li>⚙ Marks entered as <code>A+</code>..<code>F</code> strings mapped to midpoints (Module 11).</li><li>⚙ Round-half-up policy function vs banker's rounding — which does the center want? (Documented choice; no language feature beyond Module 6.)</li><li>⚙ Percentile-free "class standing" line using only comparisons.</li></ul>
+<h2 id="11-assessment-rubric-10-points-when-graded-as-homework">11. Assessment rubric (10 points when graded as homework)</h2>
+<table><thead><tr><th>Points</th><th>Line</th></tr></thead><tbody><tr><td>0–3</td><td>FR1–FR3 correct (weights exact, ladder thresholds, 2 dp)</td></tr><tr><td>0–2</td><td>Session loop + rejection path (FR4, FR6, VR1–VR3)</td></tr><tr><td>0–2</td><td>Summary accumulators correct (FR5, T4/T8)</td></tr><tr><td>0–2</td><td>NFR1/NFR2/NFR4: function decomposition with contracts, no globals</td></tr><tr><td>0–1</td><td>Test table with pre-computed expectations</td></tr></tbody></table>
+<p>Course-gate: does not compile with the contract → 0 (rubrics cap).</p>
+<h2 id="12-student-instructions">12. Student instructions</h2>
+<p>Work individually. Read the whole spec before coding; implement milestones in order and compile after each. The deliverable is <code>grade_calc.cpp</code> plus <code>test_table.md</code> (T1–T8 minimum) plus <code>postmortem.md</code> (one real defect: symptom → hypothesis → test → fix). Submit as a zip named <code>p01_&lt;yourid&gt;.zip</code>. Late policy per syllabus. Ask clarifying questions early — "the spec was ambiguous" is only a valid defense if you asked by Week 7.</p>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

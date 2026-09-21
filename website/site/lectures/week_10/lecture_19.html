@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L19 · 2-D Arrays: Declaration, Row/Column Indexing, Nested Traversal · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/lectures/week_10/lecture_19.html">
+<link rel="stylesheet" href="../../styles.css">
+<script src="../../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../../index.html">Home</a></li><li><a href="../../overview.html">Overview</a></li><li><a href="../../outcomes.html">Outcomes</a></li><li><a href="../../schedule.html">Schedule</a></li><li><a href="../../lectures.html" aria-current="page">Lectures</a></li><li><a href="../../labs.html">Labs</a></li><li><a href="../../cases.html">Case Studies</a></li><li><a href="../../exercises.html">Exercises</a></li><li><a href="../../assignments.html">Assignments</a></li><li><a href="../../projects.html">Projects</a></li><li><a href="../../resources.html">Resources</a></li><li><a href="../../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="narrow">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../../index.html">Home</a> › L19 · 2-D Arrays: Declaration, Row/Column Indexing, Nested Traversal</nav>
+<h1 class="page-title">L19 · 2-D Arrays: Declaration, Row/Column Indexing, Nested Traversal</h1>
+<p><strong>Module 10 — Two-Dimensional Arrays · Week 10 · Lecture 19 of 32 · 120 minutes</strong> <strong>Outcomes:</strong> CLO-6 · PF-10.1, PF-10.2 · <a href="../../outcomes.html">LEARNING_OUTCOMES.md</a></p>
+<h2 id="learning-objectives">Learning objectives</h2>
+<ol><li>Declare, initialize, and index 2-D arrays with row/column addressing <code>a[r][c]</code>, and explain row-major memory layout with a linearized address diagram (PF-10.1).</li><li>Implement the four traversal patterns — row-wise, column-wise, diagonal, boundary — with correct loop bounds and nesting order (PF-10.2).</li><li>Predict output of 2-D traversal programs by annotating row/column iteration tables (PF-10.2).</li></ol>
+</ol>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>M9 (1-D arrays, traversal discipline); L10 (nested loops, iteration-count arithmetic).</p>
+<h2 id="concept-sequence">Concept sequence</h2>
+<ol><li>From lists to tables: the grid motivation (seating chart, spreadsheet)</li><li>Declaration + row/column indexing (<code>a[2][3]</code> — row 2, column 3)</li><li>Row-major memory layout: the grid is a <em>view</em> over a linear array</li><li>Row-wise traversal (outer = rows, inner = columns) and its transpose</li><li>Diagonal and boundary traversals</li><li>Initialization forms for 2-D arrays</li></ol>
+</ol>
+<h2 id="teaching-topics-detailed">Teaching topics (detailed)</h2>
+<ul><li><strong>Declaration/semantics:</strong> <code>int grid[3][4];</code> — 3 rows × 4 columns = 12 contiguous ints; row-major linearization: element <code>[r][c]</code> lives at offset <code>r * COLS + c</code> (COLS as <code>const int</code>); address arithmetic demo printing <code>&amp;grid[r][c]</code> to <em>show</em> the linear layout (foreshadows M13 pointer arithmetic).</li><li><strong>Indexing discipline:</strong> rows then columns (<code>a[row][col]</code>, never <code>a[col][row]</code> by accident); valid ranges <code>0..ROWS-1</code>, <code>0..COLS-1</code>; non- square grids as the classic source of transposed bugs.</li><li><strong>Row-major traversal:</strong> <code>for r: for c:</code> — cache-friendly order (brief practical note); column-wise swaps the loops; when each is needed (row totals vs column totals — L20's lab).</li><li><strong>Diagonal traversal:</strong> <code>a[i][i]</code> (main), <code>a[i][N-1-i]</code> (anti-diagonal) — square-grid only; boundary: first/last row full, first/last column excluding corners (the fence-post corners discussion).</li><li><strong>Initialization:</strong> <code>int g[2][3] = {{1,2,3},{4,5,6}};</code> and the flattened form <code>{1,2,3,4,5,6}</code> (legal, unreadable — style verdict); <code>int g[2][3]{}</code> zeroed.</li></ul>
+<h2 id="c-examples-required">C++ examples required</h2>
+<table><thead><tr><th>File</th><th>Role</th></tr></thead><tbody><tr><td><code>grid_basics.cpp</code> ✅</td><td>declare/init a 3×4 grid; row-wise and column-wise prints; addresses showing row-major layout</td></tr><tr><td>(live) <code>traversal_patterns.cpp</code></td><td>diagonal sum + boundary sum with loop-bound walk-through</td></tr></tbody></table>
+<h2 id="common-student-misconceptions">Common student misconceptions</h2>
+<ul><li>"<code>a[2][3]</code> means 2 columns × 3 rows." (Rows first: row 2, col 3.)</li><li>"A 2-D array is an array of pointers to rows." (One contiguous block; row-major offset arithmetic — pointer-of-arrays is a different construct not taught.)</li><li>"<code>a[i][j]</code> and <code>a[j][i]</code> are interchangeable for square grids." (Only if the grid is square <em>and</em> the operation is symmetric.)</li><li>"Column-wise traversal needs different syntax." (Same <code>[][]</code>; only the loop nesting order changes.)</li></ul>
+<h2 id="conceptual-explanation-beginner-first">Conceptual explanation (beginner-first)</h2>
+<p>A one-dimensional array is a row of boxes. A two-dimensional array is a <em>sheet</em> of boxes — like graph paper. <code>int grid[3][4]</code> announces "3 rows, 4 columns each," and you point at any cell with two numbers: <code>grid[row][col]</code>. The surprise worth showing early: the computer's memory is a single line, not a sheet. C++ stores the grid <strong>row by row</strong> (row-major): all of row 0, then all of row 1. The grid is a convenient <em>view</em> over a linear array — the offset of <code>grid[r][c]</code> is <code>r * COLS + c</code> elements from the start. This is why the column count must be known to the compiler whenever a function receives a 2-D array parameter, and why row-wise traversal matches memory order.</p>
+<p>Traversal is Module 5's nested loops wearing table clothes: outer loop = rows, inner = columns (or swapped, for column-wise work). New this week: two special-purpose walks — the <strong>diagonal</strong> (<code>a[i][i]</code> on square grids) and the <strong>boundary</strong> (the grid's edge cells, with corners counted once — a fence-post question in two dimensions).</p>
+<h2 id="terminology-and-definitions">Terminology and definitions</h2>
+<table><thead><tr><th>Term</th><th>Definition</th></tr></thead><tbody><tr><td>2-D array</td><td><code>T name[ROWS][COLS]</code> — ROWS × COLS elements, one type</td></tr><tr><td>Element access</td><td><code>name[r][c]</code> — row index first, then column index</td></tr><tr><td>Row-major layout</td><td>Rows stored consecutively; <code>[r][c]</code> at offset <code>r*COLS + c</code></td></tr><tr><td>Row-wise traversal</td><td>Outer rows, inner columns — natural reading order</td></tr><tr><td>Column-wise traversal</td><td>Outer columns, inner rows — walks down each column</td></tr><tr><td>Diagonal traversal</td><td><code>a[i][i]</code> (main) or <code>a[i][N-1-i]</code> (anti) — square grids</td></tr><tr><td>Boundary traversal</td><td>First/last row and first/last column — edge cells</td></tr><tr><td>Fence-post corners</td><td>Cells belonging to two edges; count them once</td></tr><tr><td>Linearized offset</td><td>Element position in the underlying linear memory</td></tr></tbody></table>
+<h2 id="syntax-and-c-examples">Syntax and C++ examples</h2>
+<pre><code class="language-cpp">const int ROWS{3};
+const int COLS{4};
+
+int grid[ROWS][COLS] =
+{
+    { 1,  2,  3,  4},
+    { 5,  6,  7,  8},
+    { 9, 10, 11, 12}
+};
+
+// row-wise: reading order
+for (int r{0}; r &lt; ROWS; ++r)
+{
+    for (int c{0}; c &lt; COLS; ++c)
+        std::cout &lt;&lt; grid[r][c] &lt;&lt; &#x27;\t&#x27;;
+    std::cout &lt;&lt; &#x27;\n&#x27;;                     // newline per ROW
+}
+
+// column-wise: swap the loops
+for (int c{0}; c &lt; COLS; ++c)
+{
+    for (int r{0}; r &lt; ROWS; ++r)
+        std::cout &lt;&lt; grid[r][c] &lt;&lt; &#x27;\t&#x27;;
+    std::cout &lt;&lt; &#x27;\n&#x27;;
+}
+
+// main diagonal (square grid only)
+int sq[3][3]{{1,2,3},{4,5,6},{7,8,9}};
+for (int i{0}; i &lt; 3; ++i)
+    std::cout &lt;&lt; sq[i][i] &lt;&lt; &#x27; &#x27;;          // 1 5 9
+
+// boundary: full first &amp; last rows; side columns between them
+for (int c{0}; c &lt; COLS; ++c) std::cout &lt;&lt; grid[0][c] &lt;&lt; &#x27; &#x27;;
+for (int c{0}; c &lt; COLS; ++c) std::cout &lt;&lt; grid[ROWS-1][c] &lt;&lt; &#x27; &#x27;;
+for (int r{1}; r &lt; ROWS-1; ++r)
+    std::cout &lt;&lt; grid[r][0] &lt;&lt; &#x27; &#x27; &lt;&lt; grid[r][COLS-1] &lt;&lt; &#x27; &#x27;;</code></pre>
+<h2 id="line-by-line-code-explanation">Line-by-line code explanation</h2>
+<p><code>examples/grid_basics.cpp</code>:</p>
+<ol><li>The brace-list initializer nests one inner list per row — the readable form; the flattened <code>{1,2,3,4,5,6}</code> is legal but unreadable (style verdict: never in course code).</li><li>Row-wise print: <code>\t</code> <em>inside</em> the inner loop (per cell), <code>\n</code> <em>outside</em> it but inside the outer loop (per row) — the placement rule from the triangle exercise, now printing data.</li><li>The address demo prints <code>static_cast&lt;void*&gt;(&amp;grid[r][c])</code> for each cell: addresses step by <code>sizeof(int)</code> across a row and jump by <code>COLS * sizeof(int)</code> between rows — row-major made visible.</li><li><code>grid[0][0]</code> is the first element, <code>grid[ROWS-1][COLS-1]</code> the last; <code>grid[3][0]</code> here is out of bounds — same UB discipline as 1-D.</li></ol>
+</ol>
+<h2 id="output-prediction-questions-with-answers">Output prediction questions (with answers)</h2>
+<ol><li><code>int a[2][3]{{1,2,3},{4,5,6}};</code> — what is <code>a[1][0]</code>? — <strong>4</strong>.</li><li>Same <code>a</code>: the column-wise walk prints which pair first? — <code>1 4</code> (down column 0).</li><li>On the 3×4 grid above: <code>grid[0][2] + grid[2][0]</code> — ? — <code>3 + 9 = 12</code>.</li><li>Main diagonal of <code>sq</code> — ? — <code>1 5 9</code>; anti-diagonal — <code>3 5 7</code> via <code>sq[i][3-1-i]</code>.</li><li>Boundary cells of a 3×4 grid — how many? — <code>2*COLS + 2*(ROWS-2) = 8 + 2 = 10</code> — corners counted once.</li></ol>
+</ol>
+<h2 id="common-errors-and-debugging-examples">Common errors and debugging examples</h2>
+<table><thead><tr><th>Error</th><th>Symptom</th><th>Fix</th></tr></thead><tbody><tr><td>Swapped indices (<code>a[c][r]</code>)</td><td>Transposed data</td><td>Say "row first" while writing</td></tr><tr><td><code>&lt;=</code> in either bound</td><td>Reads into the next row / past the array</td><td><code>r &lt; ROWS</code>, <code>c &lt; COLS</code></td></tr><tr><td>Newline inside the inner loop</td><td>One cell per line</td><td>Newline belongs to the row level</td></tr><tr><td>Diagonal code on non-square grids</td><td>Wrong cells / OOB reads</td><td>Diagonals are square-grid-only</td></tr><tr><td>Double-counted corners</td><td>Boundary sum too high</td><td>Full rows, then columns <code>1..ROWS-2</code></td></tr><tr><td>Flat initializer list</td><td>Row boundaries invisible</td><td>One inner brace-list per row</td></tr></tbody></table>
+<h2 id="classroom-demonstrations">Classroom demonstrations</h2>
+<ol><li><strong>The address march:</strong> print every cell's address; the class calls the pattern out (step 4 across, jump 16 down on a 4-wide int grid): row-major without hand-waving.</li><li><strong>Transpose on paper:</strong> write a 2×3 grid, rotate the paper 90° — reading row-wise reproduces the original column-wise walk.</li><li><strong>Corner census:</strong> walk a hand-drawn 3×4 boundary; students count 10 and defend why it is not 12.</li></ol>
+</ol>
+<h2 id="guided-student-activities">Guided student activities</h2>
+<p><strong>Grid walk (15 min):</strong> 4×5 seating arrangement; students physically are elements; instructor calls coordinates and traversal orders (row-wise, column-wise, boundary) — students stand when "visited"; anti-diagonal gets a deliberate wrong call first, corrected by the class.</p>
+<h2 id="practice-problems">Practice problems</h2>
+<ul><li>Annotate a printed 3×3 grid with linear-memory offsets for all 9 elements.</li><li>Write row-wise, column-wise, main-diagonal, and boundary printers for a 4×4 grid; annotate iteration counts.</li><li>Predict output of 4 traversal programs (one non-square trap).</li><li>(🟡 stretch) Sum the "checkerboard" cells ((r+c) even) — predicate inside the inner loop.</li></ul>
+<h2 id="summary">Summary</h2>
+<p>A 2-D array is a sheet of cells over linear memory: <code>a[r][c]</code>, stored row-major, traversed with Module 5's nested loops. Row-wise and column-wise walks swap loop order; diagonals and boundaries are square-grid and edge-cell specialties with fence-post corners. Next (L20): aggregation — row sums, column sums, and the transpose that remaps the grid.</p>
+<h2 id="exit-ticket-formative-assessment">Exit ticket / formative assessment</h2>
+<ul><li>Annotate a printed 3×3 grid with linear-memory offsets for all 9 elements.</li><li>Write row-wise, column-wise, main-diagonal, and boundary printers for a 4×4 grid; annotate iteration counts.</li><li>Predict output of 4 traversal programs (one non-square trap).</li><li>(🟡 stretch) Sum the "checkerboard" cells ((r+c) even) — predicate inside the inner loop.</li></ul>
+<h2 id="exit-ticket-formative-assessment">Exit ticket / formative assessment</h2>
+<ol><li>For <code>int a[5][6]</code>, what is the offset of <code>a[3][4]</code> in elements?</li><li>Which loop is outer for <em>column totals</em> preparation traversal?</li><li>Write the anti-diagonal access expression for an N×N grid.</li></ol>
+</ol>
+<h2 id="estimated-time-allocation-120-min">Estimated time allocation (120 min)</h2>
+<table><thead><tr><th>Segment</th><th>Minutes</th></tr></thead><tbody><tr><td>Recall (arrays quiz) + grid motivation</td><td>10</td></tr><tr><td>Declaration, indexing, row-major layout</td><td>35</td></tr><tr><td>Break</td><td>10</td></tr><tr><td>Traversal patterns (row/column/diagonal/boundary)</td><td>35</td></tr><tr><td>Grid-walk activity</td><td>15</td></tr><tr><td>Exit ticket + L20 preview</td><td>15</td></tr></tbody></table>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

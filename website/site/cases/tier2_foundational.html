@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Case Studies · Tier 2 · Foundational · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/cases/tier2_foundational.html">
+<link rel="stylesheet" href="../styles.css">
+<script src="../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../index.html">Home</a></li><li><a href="../overview.html">Overview</a></li><li><a href="../outcomes.html">Outcomes</a></li><li><a href="../schedule.html">Schedule</a></li><li><a href="../lectures.html">Lectures</a></li><li><a href="../labs.html">Labs</a></li><li><a href="../cases.html" aria-current="page">Case Studies</a></li><li><a href="../exercises.html">Exercises</a></li><li><a href="../assignments.html">Assignments</a></li><li><a href="../projects.html">Projects</a></li><li><a href="../resources.html">Resources</a></li><li><a href="../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../index.html">Home</a> › Case Studies · Tier 2 · Foundational</nav>
+<h1 class="page-title">Case Studies · Tier 2 · Foundational</h1>
+<p><strong>Lectures L13–L16 · Modules 7–8</strong> · think ~5 minutes · paper only. Cases ascend in difficulty within the tier. Worked solutions: instructor area only.</p>
+<hr>
+<h3 id="pf-cs-021-leap-year-interrogation">PF-CS-021 · Leap Year Interrogation</h3>
+<ul><li><strong>Tier:</strong> 2 Foundational · <strong>Lecture:</strong> L13 · Module 7</li><li><strong>Context:</strong> A calendar library needs a leap-year routine other teams will call.</li><li><strong>Problem:</strong> Write the decision rule for leap years (divisible by 4, except centuries unless divisible by 400) as a <em>single</em> boolean expression, then wrap it as a function with a one-line contract comment. Which form — nested ifs or one expression — is easier to test exhaustively?</li><li><strong>Input:</strong> a set of test years. <strong>Output:</strong> true/false per year.</li><li><strong>Constraints:</strong> years 1…9999.</li><li><strong>Thinking questions:</strong> What is the minimal test set that exercises every branch? Where do boolean operators replace nesting?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>The two "except" clauses combine with &amp;&amp; and ||.</li><li>(y%4==0 &amp;&amp; y%100!=0) || y%400==0 — verify on 1900, 2000, 2024.</li><li>A pure function (bool → bool) is testable without I/O.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-022-the-safe-division-service">PF-CS-022 · The Safe Division Service</h3>
+<ul><li><strong>Tier:</strong> 2 Foundational · <strong>Lecture:</strong> L13 · Module 7</li><li><strong>Context:</strong> A calculator app exposes divide() to other modules.</li><li><strong>Problem:</strong> Design divide(a, b) so the caller can always tell whether the division succeeded. Choose the interface: return code + out-parameter, or a sentinel? Defend your choice for beginners, and specify behavior for b == 0.</li><li><strong>Input:</strong> pairs of integers. <strong>Output:</strong> quotient or an explicit failure signal.</li><li><strong>Constraints:</strong> b may be 0; a in −10⁶…10⁶.</li><li><strong>Thinking questions:</strong> What is wrong with returning −99999 for "error"? Who owns the decision when division fails?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>A sentinel can collide with a legal quotient.</li><li>Two channels: one return for the value, one reference/bool for validity.</li><li>The caller decides policy; the function reports facts.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-023-unit-converter-with-contracts">PF-CS-023 · Unit Converter with Contracts</h3>
+<ul><li><strong>Tier:</strong> 2 Foundational · <strong>Lecture:</strong> L13 · Module 7</li><li><strong>Context:</strong> A physics toolkit converts temperatures.</li><li><strong>Problem:</strong> Design celsiusToFahrenheit(double) and its inverse. State each function's precondition and postcondition as comments, and decide what the inverse should return for inputs below absolute zero (−273.15 °C).</li><li><strong>Input:</strong> temperatures. <strong>Output:</strong> converted values or a documented rejection.</li><li><strong>Constraints:</strong> valid range −273.15…1000 °C.</li><li><strong>Thinking questions:</strong> Should the rejection be a value or a boolean channel? What does the comment contract promise callers?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>F = C×9/5 + 32; the inverse undoes each operation in reverse order.</li><li>Below absolute zero the <em>input</em> is invalid — decide: error channel vs clamped value.</li><li>Precondition: C ≥ −273.15; postcondition: |result − expected| &lt; 1e-9.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-024-the-collatz-witness">PF-CS-024 · The Collatz Witness</h3>
+<ul><li><strong>Tier:</strong> 2 Foundational · <strong>Lecture:</strong> L14 · Module 7</li><li><strong>Context:</strong> A math club explores the 3n+1 conjecture.</li><li><strong>Problem:</strong> Design collatzSteps(n) returning the number of steps to reach 1. Then use it in a loop to find which n in 1…100 takes the most steps. Why must the helper function exist at all — what goes wrong if the logic is inlined in the search loop?</li><li><strong>Input:</strong> none (fixed scan 1…100). <strong>Output:</strong> the n with maximum steps and that step count.</li><li><strong>Constraints:</strong> n ≤ 100 (fits easily in int; intermediate values stay small here).</li><li><strong>Thinking questions:</strong> Which loop tracks the maximum? What does "one responsibility per function" buy here?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>collatzSteps does one job: count steps for a single n.</li><li>The scan loop is a different job: track (best n, best count).</li><li>Inline the logic and the scan's max-tracking disappears inside step arithmetic — harder to test, harder to read.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-025-invoice-splitter">PF-CS-025 · Invoice Splitter</h3>
+<ul><li><strong>Tier:</strong> 2 Foundational · <strong>Lecture:</strong> L14 · Module 7</li><li><strong>Context:</strong> Roommates split a restaurant bill fairly.</li><li><strong>Problem:</strong> Design splitBill(total, people) returning each share, and decide — <em>before coding</em> — the types: should money be double or integer (paisa/cents)? Specify behavior for people ≤ 0 and for totals that do not divide evenly (who rounds, and by how much?).</li><li><strong>Input:</strong> total (2 dp) and people. <strong>Output:</strong> per-person share with an explicit remainder policy.</li><li><strong>Constraints:</strong> 1 ≤ people ≤ 20; total ≤ 100000.</li><li><strong>Thinking questions:</strong> Why do professionals store money in integer cents? What is the <em>contract</em> when the division is uneven?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Compute in cents: total×100 as long long.</li><li>Share = cents/people; leftover cents must go somewhere — state the rule.</li><li>people ≤ 0 is a caller error: document it, and decide the function's response.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-026-the-recursive-looking-password">PF-CS-026 · The Recursive-Looking Password</h3>
+<ul><li><strong>Tier:</strong> 2 Foundational · <strong>Lecture:</strong> L14 · Module 7</li><li><strong>Context:</strong> An IT policy requires repeated-character detection in passwords.</li><li><strong>Problem:</strong> Design hasDoubleChar(s) — true if two <em>adjacent</em> equal characters exist (e.g., "book" yes, "bok" no). Specify the loop bounds that avoid reading past the end, and justify why the last character needs special handling.</li><li><strong>Input:</strong> one word. <strong>Output:</strong> true/false.</li><li><strong>Constraints:</strong> length ≤ 40; no spaces.</li><li><strong>Thinking questions:</strong> What is the neighbor of s[i]? For which i is that neighbor valid?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Compare s[i] with s[i+1].</li><li>i must stop at size()−2 — the classic off-by-one.</li><li>An empty or 1-char string has no adjacent pair: false.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-027-overload-tournament">PF-CS-027 · Overload Tournament</h3>
+<ul><li><strong>Tier:</strong> 2 Foundational · <strong>Lecture:</strong> L15 · Module 8</li><li><strong>Context:</strong> A geometry module wants one name, area(), for several shapes.</li><li><strong>Problem:</strong> Design the overload set area(square), area(rectangle), area(circle), area(triangle-base-height). For each, specify parameters, types, and what makes the call unambiguous. Which overload is <em>dangerous</em> for ambiguity, and why?</li><li><strong>Input:</strong> a mix of shape calls. <strong>Output:</strong> each area.</li><li><strong>Constraints:</strong> dimensions &gt; 0; use π = 3.14159265358979.</li><li><strong>Thinking questions:</strong> How does the compiler pick? Could two overloads accept the same call?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Overloads differ in parameter count or types.</li><li>area(int) vs area(double) can collide at call sites with int literals — discuss.</li><li>Count of parameters (2 for rect, 1 for circle) is the safest discriminator.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-028-the-swap-handoff">PF-CS-028 · The Swap Handoff</h3>
+<ul><li><strong>Tier:</strong> 2 Foundational · <strong>Lecture:</strong> L15 · Module 8</li><li><strong>Context:</strong> A sorting routine will need in-place exchanges.</li><li><strong>Problem:</strong> Three versions of mySwap are proposed: by value, by pointer, by reference. Predict the observable effect of each on the caller's variables, then select the version the sorting routine should adopt and justify why the other two fail or merely work.</li><li><strong>Input:</strong> two variables in a driver. <strong>Output:</strong> before/after values.</li><li><strong>Constraints:</strong> integer values.</li><li><strong>Thinking questions:</strong> What actually travels in each mechanism? Which version makes caller intent visible at the call site?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>By value copies: the caller's originals never move.</li><li>Pointer and reference both reach the caller's storage.</li><li>References make the call read like the value version but behave like the pointer version — that is exactly their power and their danger.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-029-statistics-on-demand">PF-CS-029 · Statistics on Demand</h3>
+<ul><li><strong>Tier:</strong> 2 Foundational · <strong>Lecture:</strong> L15 · Module 8</li><li><strong>Context:</strong> A lab instrument reports min, max, and mean of a sensor burst.</li><li><strong>Problem:</strong> Design ONE function computeStats(a, n, minOut, maxOut, meanOut) using reference out-parameters, and a second design returning a small struct-like trio via three functions. Compare the two interfaces: call sites, failure modes, readability. Which fits a beginner codebase and why?</li><li><strong>Input:</strong> n, then n doubles. <strong>Output:</strong> min, max, mean.</li><li><strong>Constraints:</strong> 1 ≤ n ≤ 1000; values ≥ 0.</li><li><strong>Thinking questions:</strong> What happens to out-parameters when n == 0? Who initializes them?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Out-parameters must be initialized by the caller or in the function's guard.</li><li>n == 0 must be rejected <em>before</em> reading a[0].</li><li>One function keeps the three numbers consistent; three functions risk a stale mix.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-030-default-grading-modes">PF-CS-030 · Default Grading Modes</h3>
+<ul><li><strong>Tier:</strong> 2 Foundational · <strong>Lecture:</strong> L15 · Module 8</li><li><strong>Context:</strong> A grading script runs in strict or lenient mode.</li><li><strong>Problem:</strong> Design curve(score, mode) where mode has a default (lenient). Lenient rounds up from x.5; strict truncates. Specify the two behaviors with example scores, then decide: should the default be the <em>dangerous</em> mode or the safe one? Defend with a concrete transcript.</li><li><strong>Input:</strong> scores with and without explicit mode. <strong>Output:</strong> adjusted scores.</li><li><strong>Constraints:</strong> scores 0…100; mode 'S' or 'L'.</li><li><strong>Thinking questions:</strong> What does a default argument promise every existing call site? Who is harmed if the default changes later?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Default arguments live in the declaration, not per-call.</li><li>89.5 → 90 lenient, 89 strict: the transcript that argues the policy.</li><li>Defaults should be the mode that cannot inflate grades silently.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-031-the-recursive-countdown">PF-CS-031 · The Recursive Countdown</h3>
+<ul><li><strong>Tier:</strong> 2 Foundational · <strong>Lecture:</strong> L16 · Module 8</li><li><strong>Context:</strong> A launch console prints a countdown.</li><li><strong>Problem:</strong> Write countDown(n) two ways — loop and recursion. For the recursive version, identify the base case, the recursive case, and what guarantees termination. Which version risks stack overflow, and for roughly what n?</li><li><strong>Input:</strong> one n. <strong>Output:</strong> identical lines from both versions.</li><li><strong>Constraints:</strong> 0 ≤ n ≤ 10000.</li><li><strong>Thinking questions:</strong> What is the smallest input the base case must cover? What shrinks in every recursive call?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Base case n == 0 prints and returns.</li><li>Each call passes n−1: strictly shrinking.</li><li>Recursion depth equals n — thousands deep is where the stack complains (implementation-defined limit).</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-032-recursive-sum-of-digits">PF-CS-032 · Recursive Sum of Digits</h3>
+<ul><li><strong>Tier:</strong> 2 Foundational · <strong>Lecture:</strong> L16 · Module 8</li><li><strong>Context:</strong> A checksum algorithm needs digit sums.</li><li><strong>Problem:</strong> Design digitSum(n) recursively (digitSum(907) = 16). State the base case for single digits and the recurrence. Then prove (informally) why the recursion terminates for every non-negative int — what strictly decreases?</li><li><strong>Input:</strong> one integer ≥ 0. <strong>Output:</strong> digit sum.</li><li><strong>Constraints:</strong> 0 ≤ n ≤ 2×10⁹ (consider long long).</li><li><strong>Thinking questions:</strong> Which expression peels one digit? Why is n/10 the shrinking part?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>digitSum(n) = n%10 + digitSum(n/10).</li><li>Base: n &lt; 10 → n.</li><li>n/10 &lt; n for all n ≥ 10, so the chain must hit a single digit.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-033-tower-of-hanoi-move-counter">PF-CS-033 · Tower of Hanoi — Move Counter</h3>
+<ul><li><strong>Tier:</strong> 2 Foundational · <strong>Lecture:</strong> L16 · Module 8</li><li><strong>Context:</strong> A puzzle demonstration for open house.</li><li><strong>Problem:</strong> State the minimum number of moves for the Tower of Hanoi with n disks, derive it as a recurrence hanoi(n) = 2·hanoi(n−1) + 1, and design the recursive function that <em>prints</em> each move for n = 3. Verify by counting your own printed lines.</li><li><strong>Input:</strong> n disks. <strong>Output:</strong> move list + total count.</li><li><strong>Constraints:</strong> 1 ≤ n ≤ 10.</li><li><strong>Thinking questions:</strong> Which disk moves last in the recursion? Why does the count double (plus one) each time?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Move n−1 aside, move the big disk, move n−1 back: two subproblems.</li><li>hanoi(1) = 1; each level doubles the work.</li><li>2ⁿ − 1; for n = 3 that is 7 moves — count them.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-034-function-table-refactor">PF-CS-034 · Function Table Refactor</h3>
+<ul><li><strong>Tier:</strong> 2 Foundational · <strong>Lecture:</strong> L16 · Module 8</li><li><strong>Context:</strong> A weather report repeats the same 12 lines three times with tiny differences.</li><li><strong>Problem:</strong> Given the pseudo-code of a 60-line main() with three near-identical blocks, design the function decomposition: what becomes a parameter, what stays local, what the function returns. Give the new main() in outline.</li><li><strong>Input:</strong> pseudo-code on the projector. <strong>Output:</strong> decomposition sketch.</li><li><strong>Constraints:</strong> differences are only in the city name and the multiplier.</li><li><strong>Thinking questions:</strong> What is the <em>only</em> thing that varies? Should the function print or return — and what decides it?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Parameters carry the variation: name and multiplier.</li><li>Printing functions are easy to call but hard to test; returning values is the reverse.</li><li>For this course: compute-and-return, print at the call site.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-035-the-pass-by-value-budget">PF-CS-035 · The Pass-by-Value Budget</h3>
+<ul><li><strong>Tier:</strong> 2 Foundational · <strong>Lecture:</strong> L15 · Module 8</li><li><strong>Context:</strong> A tutor explains why one prototype compiles but does nothing.</li><li><strong>Problem:</strong> A student writes void addTax(double price) { price *= 1.17; } and calls it on a variable. Explain the observable behavior, then produce two correct alternatives (reference; return value) and argue which fits the call site total = addTax(total).</li><li><strong>Input:</strong> a price. <strong>Output:</strong> corrected behavior + both fixes.</li><li><strong>Constraints:</strong> tax rate 17%.</li><li><strong>Thinking questions:</strong> Where does the copy live and die? What does the caller have to <em>do</em> differently in each fix?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>The parameter is a copy; the mutation dies with it.</li><li>Fix A: double&amp; price. Fix B: return the new value.</li><li>Fix B forces the call site to show assignment — visible data flow.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-036-primes-in-a-range-function-anatomy">PF-CS-036 · Primes in a Range — Function Anatomy</h3>
+<ul><li><strong>Tier:</strong> 2 Foundational · <strong>Lecture:</strong> L14 · Module 7</li><li><strong>Context:</strong> A cryptography teaser lists primes in a range.</li><li><strong>Problem:</strong> Decompose into isPrime(n) and printPrimes(lo, hi). Specify each signature, the loop in isPrime (including the √n stopping rule and why it is safe), and the division of labor. Which function should know about printing?</li><li><strong>Input:</strong> lo, hi. <strong>Output:</strong> primes in [lo, hi].</li><li><strong>Constraints:</strong> 2 ≤ lo ≤ hi ≤ 10⁴.</li><li><strong>Thinking questions:</strong> What is the smallest divisor worth testing? Why is testing even numbers beyond 2 wasted work?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>If d divides n, so does n/d — one of them is ≤ √n.</li><li>Test 2, then odd divisors only.</li><li>printPrimes owns I/O; isPrime returns bool — one job each.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-037-the-bilingual-menu-overload-vs-default">PF-CS-037 · The Bilingual Menu (Overload vs Default)</h3>
+<ul><li><strong>Tier:</strong> 2 Foundational · <strong>Lecture:</strong> L15 · Module 8</li><li><strong>Context:</strong> An app greets users in English or Urdu.</li><li><strong>Problem:</strong> Two designs: (a) greet(string name, string lang = "en"); (b) overloads greet(string name) and greet(string name, string lang). Produce both, show the call matrix, and decide which communicates intent better for exactly two languages — and what breaks if a third language arrives.</li><li><strong>Input:</strong> calls from a driver. <strong>Output:</strong> greeting per call.</li><li><strong>Constraints:</strong> languages: en, ur (ur greets with "Assalam-o-Alaikum").</li><li><strong>Thinking questions:</strong> When are two overloads better than one default? Which design scales to three languages with less edit risk?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Both compile; the difference is at the call site and in maintenance.</li><li>A third language under design (b) means another overload; under (a), another branch.</li><li>Branching inside one function centralizes policy — usually the winner here.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-038-scope-detective">PF-CS-038 · Scope Detective</h3>
+<ul><li><strong>Tier:</strong> 2 Foundational · <strong>Lecture:</strong> L15 · Module 8</li><li><strong>Context:</strong> A student's program prints the "wrong" number and swears it is a compiler bug.</li><li><strong>Problem:</strong> Presented with a short program that shadows a global total with a local one inside a function, predict the exact output <em>before</em> running it, name the rule that explains it, and state the two remedies (rename; scope resolution) plus when each is appropriate.</li><li><strong>Input:</strong> the listed program. <strong>Output:</strong> predicted output + the rule.</li><li><strong>Constraints:</strong> —</li><li><strong>Thinking questions:</strong> Which declaration wins inside the function? What does ::total refer to?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>The innermost declaration wins name lookup.</li><li>Shadowing is legal but a readability hazard.</li><li>:: reaches the global — a band-aid; renaming is the cure.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-039-menu-loop-with-function-dispatch">PF-CS-039 · Menu Loop with Function Dispatch</h3>
+<ul><li><strong>Tier:</strong> 2 Foundational · <strong>Lecture:</strong> L16 · Module 8</li><li><strong>Context:</strong> An ATM simulator offers 4 operations in a loop.</li><li><strong>Problem:</strong> Design the main loop: display menu, read choice, dispatch to one of four void functions, exit cleanly on 5, reject invalid choices with a message. Specify which loop form and how invalid input returns to the menu without crashing.</li><li><strong>Input:</strong> menu choices until 5. <strong>Output:</strong> menu + operation results + rejection lines.</li><li><strong>Constraints:</strong> choices 1–5; anything else must not terminate the loop.</li><li><strong>Thinking questions:</strong> Which control structure fits "repeat until exit"? Where is the invalid-input branch placed?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>A while-loop around menu+dispatch; the exit is a condition, not a break-by-default.</li><li>switch inside the loop; default handles garbage.</li><li>Keep the menu printing inside the loop so every path re-displays it.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-040-recursive-binary-strings">PF-CS-040 · Recursive Binary Strings</h3>
+<ul><li><strong>Tier:</strong> 2 Foundational · <strong>Lecture:</strong> L16 · Module 8</li><li><strong>Context:</strong> A hardware course enumerates switch settings.</li><li><strong>Problem:</strong> Design printPatterns(n) that prints all 2ⁿ strings of n bits in order (n=2: 00, 01, 10, 11), recursively. Identify the base case (n == 0) and the two recursive choices. Then state the output size for n = 20 and whether printing it is reasonable.</li><li><strong>Input:</strong> n. <strong>Output:</strong> all bit strings.</li><li><strong>Constraints:</strong> 1 ≤ n ≤ 10 for printing; n = 20 answered analytically.</li><li><strong>Thinking questions:</strong> What are the two branches at each position? How does the recursion's depth relate to n?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>At each position: append '0' or '1', recurse, undo.</li><li>Depth = n; the tree has 2ⁿ leaves.</li><li>2²⁰ ≈ 10⁶ lines — printable but pointless; the analysis is the answer.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

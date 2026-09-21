@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lab 5 · Loops · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/labs/lab_05.html">
+<link rel="stylesheet" href="../styles.css">
+<script src="../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../index.html">Home</a></li><li><a href="../overview.html">Overview</a></li><li><a href="../outcomes.html">Outcomes</a></li><li><a href="../schedule.html">Schedule</a></li><li><a href="../lectures.html">Lectures</a></li><li><a href="../labs.html" aria-current="page">Labs</a></li><li><a href="../cases.html">Case Studies</a></li><li><a href="../exercises.html">Exercises</a></li><li><a href="../assignments.html">Assignments</a></li><li><a href="../projects.html">Projects</a></li><li><a href="../resources.html">Resources</a></li><li><a href="../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="narrow">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../index.html">Home</a> › Lab 5 · Loops</nav>
+<h1 class="page-title">Lab 5 · Loops</h1>
+<p><strong>Module 5 · Lectures L09–L10 · Week 5 · 120 minutes · guided/independent 60/40</strong></p>
+<p>Prerequisites: completion of Labs 1–4 (Lab 1: none). Bring your laptop with the course toolchain verified (see § 3) and your exercise notebook.</p>
+<h2 id="2-learning-objectives">2. Learning objectives</h2>
+<p>By the end of this lab you can:</p>
+<ul><li>Choose loop form deliberately (count known vs unknown)</li><li>Write sentinel loops with the priming read</li><li>Accumulate sum/min/max/count in one pass</li><li>Use break/continue without breaking structure</li></ul>
+<p>These deliver the module's outcomes (PF codes in <a href="../outcomes.html">../../LEARNING_OUTCOMES.md</a>).</p>
+<h2 id="3-required-software-and-compiler">3. Required software and compiler</h2>
+<ul><li><strong>Compiler contract:</strong> <code>g++ -std=c++17 -Wall -Wextra -pedantic</code> (GCC 13+ via MSYS2/MinGW-w64 on Windows; GCC or clang++ on macOS/Linux — see <a href="../resources.html#toolchain-setup">../../docs/TOOLCHAIN.md</a>).</li><li><strong>Editor:</strong> any (VS Code + C/C++ extension recommended; debugger optional until Lab 4).</li><li><strong>Verify before starting:</strong></li></ul>
+<pre><code class="language-bash">  g++ --version</code></pre>
+<ul><li>Starter files for this lab live in <code>starter_code/</code> next to this manual; they compile warning-free under the contract (see <code>../../../docs/LAB_AUDIT.md</code>).</li></ul>
+<h2 id="4-relevant-theory">4. Relevant theory</h2>
+<p>loop form selection, sentinel discipline, accumulators — full treatment in the <a href="../lectures.html">lecture notes</a>; the lab applies it, the lecture explains it.</p>
+<h2 id="5-pre-lab-questions">5. Pre-lab questions</h2>
+<p>Answer in your notebook BEFORE the session; the TA checks them at entry:</p>
+<ol><li>Where does the priming read go in a sentinel loop?</li><li>for (int i = 0; i &lt; n; ++i) — how many iterations?</li><li>What repeats forever in while (i &lt; 10) if the update is missing?</li></ol>
+</ol>
+<h2 id="6-instructor-demonstration-15-min">6. Instructor demonstration (15 min)</h2>
+<p>The instructor or TA demonstrates: <strong>while/do-while/for, sentinels, accumulation</strong>. Watch for the <em>workflow</em> (how errors are read and fixed), not just the final code. The demo ends with the checkpoints you must hit in § 7.</p>
+<h2 id="7-guided-coding-tasks">7. Guided coding tasks</h2>
+<ol><li>guided: three-forms-of-one-loop conversion exercise</li><li>guided: running max/min/count pass over inputs</li><li>independent: sentinel-driven statistics reporter</li><li>independent: multiplication table grid with nested loops</li></ol>
+</ol>
+<p><strong>Checkpoint rule:</strong> show each guided result to the TA before moving on. TAs give <em>guidance, not solutions</em> (<a href="../instructor.html">../../TEACHING_GUIDE.md</a> § 5).</p>
+<h2 id="8-independent-programming-exercises">8. Independent programming exercises</h2>
+<p>Complete the tasks labeled <em>independent</em> in § 7 <strong>without</strong> step-by-step help. You may consult lecture notes and this manual — not a neighbor's screen. The TA records who completes what.</p>
+<h2 id="9-debugging-task">9. Debugging task</h2>
+<p><strong>A missing-update infinite loop — spot it BEFORE running (then run)</strong></p>
+<p>Use the five-step debug loop (reproduce, isolate, hypothesize, test, fix-and-verify) and record it in your debug log (<a href="../resources.html#lab-templates">../../labs/resources/debug_log_template.md</a>) from Lab 4 onward. Identify the <em>stage</em> of each defect (compile, link, runtime, logic).</p>
+<h2 id="10-test-cases">10. Test cases</h2>
+<p>Your program must pass at minimum:</p>
+<ul><li>Boundary values (0, 1, maximum legal input).</li><li>Normal cases from the task descriptions.</li><li>At least one invalid input handled gracefully (from Lab 4 onward).</li></ul>
+<p>Record results in the test-evidence table (<a href="../resources.html#lab-templates">../../labs/resources/submission_template.md</a>): input, expected, actual, verdict.</p>
+<h2 id="11-expected-learning-outcomes">11. Expected learning outcomes</h2>
+<p>After this lab, verified by the checkpoints and your submission, you can reliably choose loop form deliberately (count known vs unknown); write sentinel loops with the priming read; accumulate sum/min/max/count in one pass; use break/continue without breaking structure. This maps to the module's PF outcomes and feeds the next lab's prerequisites.</p>
+<h2 id="12-submission-requirements">12. Submission requirements</h2>
+<p>Submit via the course LMS before <strong>the start of next week's lab</strong>:</p>
+<ol><li>Source file(s) named per the task list (snake_case).</li><li>Test-evidence table (completed template).</li><li>Debug log for the § 9 task (Lab 4 onward).</li><li>Pre-lab answers (photo or scan is fine).</li></ol>
+</ol>
+<p>Code must compile <strong>warning-free</strong> under the course contract — a warning costs the compile check (§ 13).</p>
+<h2 id="13-assessment-rubric-10-points">13. Assessment rubric (10 points)</h2>
+<table><thead><tr><th>Criterion</th><th>Points</th><th>Evidence</th></tr></thead><tbody><tr><td>Pre-lab completed</td><td>1</td><td>notebook check at entry</td></tr><tr><td>Guided checkpoints</td><td>3</td><td>TA sign-offs during session</td></tr><tr><td>Independent tasks correct</td><td>3</td><td>code + test evidence</td></tr><tr><td>Debug task diagnosed (not just fixed)</td><td>2</td><td>debug log with stage + cause</td></tr><tr><td>Compiles warning-free + naming/format</td><td>1</td><td>build log, file names</td></tr></tbody></table>
+<p>Total 10, scaled to the 10 % course component. Labs 1–15 count the best 12 of 15 (drop-lowest); Lab 16 is graded as the project milestone with the same rubric plus the demo (see the instructor notes).</p>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Case Studies · Tier 5 · Expert Introductory · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/cases/tier5_expert_introductory.html">
+<link rel="stylesheet" href="../styles.css">
+<script src="../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../index.html">Home</a></li><li><a href="../overview.html">Overview</a></li><li><a href="../outcomes.html">Outcomes</a></li><li><a href="../schedule.html">Schedule</a></li><li><a href="../lectures.html">Lectures</a></li><li><a href="../labs.html">Labs</a></li><li><a href="../cases.html" aria-current="page">Case Studies</a></li><li><a href="../exercises.html">Exercises</a></li><li><a href="../assignments.html">Assignments</a></li><li><a href="../projects.html">Projects</a></li><li><a href="../resources.html">Resources</a></li><li><a href="../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../index.html">Home</a> › Case Studies · Tier 5 · Expert Introductory</nav>
+<h1 class="page-title">Case Studies · Tier 5 · Expert Introductory</h1>
+<p><strong>Lectures L29–L32 · Modules 15–16</strong> · think ~5 minutes · paper only. Cases ascend in difficulty within the tier. Worked solutions: instructor area only. These cases synthesize files, validation, records, and classes — the capstone tier.</p>
+<hr>
+<h3 id="pf-cs-081-the-attendance-register-file">PF-CS-081 · The Attendance Register File</h3>
+<ul><li><strong>Tier:</strong> 5 Expert · <strong>Lecture:</strong> L29 · Module 15</li><li><strong>Context:</strong> A tutor's attendance app persists one line per student.</li><li><strong>Problem:</strong> Design the file format (fields, separator, header row or not) and the loader that reports: total lines, loaded records, skipped lines with reasons. Decide what the loader does with an empty file and with a file that has <em>only</em> a header.</li><li><strong>Input:</strong> format spec + sample file. <strong>Output:</strong> load report.</li><li><strong>Constraints:</strong> ≤ 200 lines; fields: name, weeks present (0–16).</li><li><strong>Thinking questions:</strong> What makes a line "skippable"? Should the header be data or metadata?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Skip reasons: empty line, wrong field count, out-of-range count.</li><li>Metadata lines are detected and consumed before the data loop.</li><li>Every skip increments a counter <em>and</em> names its reason.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-082-sensor-log-to-summary-report">PF-CS-082 · Sensor Log to Summary Report</h3>
+<ul><li><strong>Tier:</strong> 5 Expert · <strong>Lecture:</strong> L29 · Module 15</li><li><strong>Context:</strong> A data-science mini-pipeline: raw log in, summary out.</li><li><strong>Problem:</strong> Design the two-file pipeline: read <code>sensor.log</code> (timestamp, value), compute min/max/mean/count, write <code>summary.txt</code> with aligned columns. Specify behavior for a missing input file and for zero valid records. Which errors are <em>fatal</em> and which are <em>data quality</em> notes?</li><li><strong>Input:</strong> log format spec. <strong>Output:</strong> summary file contents.</li><li><strong>Constraints:</strong> values −40…125; ≤ 10⁴ lines.</li><li><strong>Thinking questions:</strong> What must open-failure do that bad-data must not? Where is the report written vs printed?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Cannot open input = fatal (print + exit); bad lines = count and continue.</li><li>Zero valid records: the summary says so — never divide by zero.</li><li>The output file is created only if the pipeline succeeded... or always? Decide.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-083-the-deduplicating-saver">PF-CS-083 · The Deduplicating Saver</h3>
+<ul><li><strong>Tier:</strong> 5 Expert · <strong>Lecture:</strong> L29 · Module 15</li><li><strong>Context:</strong> A mailing list must never contain a duplicate email.</li><li><strong>Problem:</strong> Design the loader-saver: read emails (one per line), keep first occurrences in input order, write the cleaned list back. Specify the comparison (exact? case-insensitive?) and what the report shows (in, kept, dropped).</li><li><strong>Input:</strong> email list file. <strong>Output:</strong> cleaned file + counts.</li><li><strong>Constraints:</strong> ≤ 500 lines; emails ≤ 40 chars.</li><li><strong>Thinking questions:</strong> What structure answers "have I seen this?" fast — at this scale? Does order survive your plan?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>A seen-list of kept emails, scanned linearly: fine at 500.</li><li>Case policy must be explicit — pick one and state it in the report.</li><li>Keep-first preserves order; the drop counter tells the rest.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-084-the-rolling-grade-book">PF-CS-084 · The Rolling Grade Book</h3>
+<ul><li><strong>Tier:</strong> 5 Expert · <strong>Lecture:</strong> L29 · Module 15</li><li><strong>Context:</strong> An instructor appends marks weekly to one file.</li><li><strong>Problem:</strong> Design the two modes: APPEND (add <code>name score</code> to the file) and REPORT (read all, compute per-student averages from possibly multiple lines). Specify what APPEND does if the file doesn't exist yet, and what REPORT does with a student whose scores differ wildly across weeks.</li><li><strong>Input:</strong> mode + records. <strong>Output:</strong> file changes or report.</li><li><strong>Constraints:</strong> scores 0…100; names unique per week only.</li><li><strong>Thinking questions:</strong> Which open mode preserves prior content? Who aggregates — the writer or the reader?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Append mode creates-or-continues; truncation is the danger to avoid.</li><li>REPORT aggregates at read time; the file stays raw.</li><li>Multiple lines per student: accumulate per name as you read.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-085-retry-safe-config-loader">PF-CS-085 · Retry-Safe Config Loader</h3>
+<ul><li><strong>Tier:</strong> 5 Expert · <strong>Lecture:</strong> L30 · Module 15</li><li><strong>Context:</strong> A kiosk boots from a config file that users may corrupt.</li><li><strong>Problem:</strong> Design the loader with fallbacks: missing file → built-in defaults; partial file → defaults for missing keys; corrupt values → defaults per key with a warning log. Specify the <em>order</em> of checks and what the boot log prints for a brand-new installation.</li><li><strong>Input:</strong> config scenarios (missing, partial, corrupt). <strong>Output:</strong> effective config + log.</li><li><strong>Constraints:</strong> three keys with defaults; ≤ 20 lines.</li><li><strong>Thinking questions:</strong> Which failure is invisible without logging? What makes a default "safe"?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Three layers: file exists? key present? value valid?</li><li>Corrupt-but-present is the sneaky case — validate, don't just read.</li><li>New installation: every default fires; the log must say so explicitly.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-086-the-error-message-designer">PF-CS-086 · The Error-Message Designer</h3>
+<ul><li><strong>Tier:</strong> 5 Expert · <strong>Lecture:</strong> L30 · Module 15</li><li><strong>Context:</strong> A beginner program prints <code>Error</code> for every failure; users are lost.</li><li><strong>Problem:</strong> Redesign the error reporting for a marks-file app: enumerate the failure modes (cannot open, empty, bad line, out-of-range score, duplicate student) and write the exact message for each, including line numbers and the offending content. Then decide the exit-code discipline (0 = ok, 1 = usage, 2 = data).</li><li><strong>Input:</strong> the failure-mode list. <strong>Output:</strong> message table + exit codes.</li><li><strong>Constraints:</strong> messages ≤ 80 chars; user-facing (no jargon).</li><li><strong>Thinking questions:</strong> What does a user need to <em>fix</em> the problem? Which failures are recoverable in the same run?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Message = what failed + where + what was found.</li><li>Recoverable data errors warn and continue; structural ones stop.</li><li>Exit codes let scripts react — but only if the discipline is consistent.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-087-transaction-log-replay">PF-CS-087 · Transaction Log Replay</h3>
+<ul><li><strong>Tier:</strong> 5 Expert · <strong>Lecture:</strong> L30 · Module 15</li><li><strong>Context:</strong> A wallet app reconstructs its balance from a transaction log.</li><li><strong>Problem:</strong> Design the replay: read <code>T depos|withdraw amount</code> lines in order, apply to a starting balance, and produce an audit trail (running balance per line). Specify the two halt-worthy anomalies (overdraft attempt, malformed line) versus continue-worthy ones, and the final verdict line.</li><li><strong>Input:</strong> log format + starting balance. <strong>Output:</strong> audit trail + verdict.</li><li><strong>Constraints:</strong> amounts in paisa (integer cents); balance ≥ 0 invariant.</li><li><strong>Thinking questions:</strong> Why does order matter absolutely? What does the audit trail add that the final balance does not?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Replay is sequential: each line's verdict depends on all before it.</li><li>Skip-and-note for malformed; halt or guard for overdrafts — pick a policy and defend it.</li><li>The trail is the evidence; the verdict is the conclusion.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-088-multi-file-merger-with-cross-checks">PF-CS-088 · Multi-File Merger with Cross-Checks</h3>
+<ul><li><strong>Tier:</strong> 5 Expert · <strong>Lecture:</strong> L30 · Module 15</li><li><strong>Context:</strong> Two branches both edited the roster; a merge is needed.</li><li><strong>Problem:</strong> Design the merge of <code>roster_a.txt</code> and <code>roster_b.txt</code> (same format): union by id, report conflicts (same id, different data) and files-only entries. Specify the conflict policy (keep A? keep B? reject both?) and the summary counts. What is the output if the files are identical?</li><li><strong>Input:</strong> two file formats. <strong>Output:</strong> merged file + report.</li><li><strong>Constraints:</strong> ids unique within a file; ≤ 100 records each.</li><li><strong>Thinking questions:</strong> What is the merge key? Which report counters must sum to the total union?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Index one file by id as you read the other.</li><li>Every record lands in exactly one bucket: kept-A, kept-B, conflict, new.</li><li>Identical inputs → all records "kept", zero conflicts — verify that.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-089-the-cli-calculator-object">PF-CS-089 · The CLI Calculator Object</h3>
+<ul><li><strong>Tier:</strong> 5 Expert · <strong>Lecture:</strong> L31 · Module 16</li><li><strong>Context:</strong> A course project wraps a calculator in a class.</li><li><strong>Problem:</strong> Design class Calculator: private accumulator, public reset(), apply(op, operand) for + − * /, and value() accessor. Specify the failure policy for /0 and for unknown ops (rejected with a reason, accumulator untouched). Why is the accumulator private — what misuse does that prevent?</li><li><strong>Input:</strong> operation sequences. <strong>Output:</strong> accumulator state after each apply.</li><li><strong>Constraints:</strong> doubles; ≤ 100 ops per session.</li><li><strong>Thinking questions:</strong> What state must survive between calls? Which public method could corrupt it if public?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>One data member: the accumulator; methods are the only writers.</li><li>apply returns bool (or reason): rejected ops change nothing.</li><li>Private + accessors means no external code can bypass the /0 guard.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-090-bank-account-invariants">PF-CS-090 · Bank Account Invariants</h3>
+<ul><li><strong>Tier:</strong> 5 Expert · <strong>Lecture:</strong> L31 · Module 16</li><li><strong>Context:</strong> A teaching example: why free-floating variables cause chaos.</li><li><strong>Problem:</strong> Design class Account with private cents (long long) and methods deposit, withdraw, balance. Every method must preserve the invariant: cents ≥ 0 and no partial application on failure. Trace three attempted violations through your design. What does "invariant" buy that comments cannot?</li><li><strong>Input:</strong> method call sequences including violations. <strong>Output:</strong> verdicts + final balance.</li><li><strong>Constraints:</strong> amounts ≥ 0; withdraw &gt; balance rejected.</li><li><strong>Thinking questions:</strong> Which single entry point could break the invariant if public? What must deposit(−5) do?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>All writes flow through two methods: small attack surface.</li><li>Negative amounts are rejected: deposit(−5) returns false, changes nothing.</li><li>The invariant holds <em>after every method</em> — that is the contract tests verify.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-091-playlist-with-history">PF-CS-091 · Playlist with History</h3>
+<ul><li><strong>Tier:</strong> 5 Expert · <strong>Lecture:</strong> L31 · Module 16</li><li><strong>Context:</strong> A music app remembers what played.</li><li><strong>Problem:</strong> Design class Playlist: private vector of tracks and a play index; methods add (reject duplicates), next (advances, wraps), current. Specify what next() returns at the wrap point and what current() returns for an empty playlist. Which method is the only one allowed to touch the index?</li><li><strong>Input:</strong> command sequences. <strong>Output:</strong> per-command results.</li><li><strong>Constraints:</strong> ≤ 100 tracks; names ≤ 30 chars.</li><li><strong>Thinking questions:</strong> Which member is state, which is cache? What breaks if add() also resets the index?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>State: tracks + index; everything else derives.</li><li>Only next() mutates the index — single-writer rule.</li><li>Empty playlist: current() reports it explicitly, never indexes.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-092-the-thermometer-class-ladder">PF-CS-092 · The Thermometer Class Ladder</h3>
+<ul><li><strong>Tier:</strong> 5 Expert · <strong>Lecture:</strong> L31 · Module 16</li><li><strong>Context:</strong> A lab app stores temperatures in one unit, reports in three.</li><li><strong>Problem:</strong> Design class Temperature storing private celsius; setCelsius with validation (≥ −273.15), and accessors celsius(), fahrenheit(), kelvin(). Decide: one setter or three (setC, setF, setK)? Defend with the conversion-rounding problem when setting via F then reading C.</li><li><strong>Input:</strong> set/read sequences in mixed units. <strong>Output:</strong> reported values.</li><li><strong>Constraints:</strong> 1 dp output; internal storage full precision.</li><li><strong>Thinking questions:</strong> Where should the absolute-zero check live? Does setting by F and reading C lose precision — and is that acceptable?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Convert F/K to C at the boundary; store one truth.</li><li>Validation lives in setters — the only doors in.</li><li>F→C→F round trips are exact at full precision; decide the display policy for 1 dp.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-093-composing-a-garage-has-a">PF-CS-093 · Composing a Garage (Has-A)</h3>
+<ul><li><strong>Tier:</strong> 5 Expert · <strong>Lecture:</strong> L32 · Module 16</li><li><strong>Context:</strong> A garage object contains car objects.</li><li><strong>Problem:</strong> Design Car (private model, km; drive(km) validates km &gt; 0) and Garage containing an array of Cars with park(car, slot), totalKm(). Specify what totalKm() does with an empty slot and why Garage never touches Car's km directly — through which method does it read?</li><li><strong>Input:</strong> park/drive sequences. <strong>Output:</strong> per-op verdicts + totalKm.</li><li><strong>Constraints:</strong> 5 slots; slot may be empty.</li><li><strong>Thinking questions:</strong> What does Garage <em>own</em>? Which Car methods are its legal interface?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Has-a: Garage has Cars; it uses their public methods only.</li><li>Empty slots contribute 0 km but must be skipped, not indexed.</li><li>totalKm() sums via km() accessor — never reaches into data.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-094-the-registry-class-aggregation">PF-CS-094 · The Registry Class (aggregation)</h3>
+<ul><li><strong>Tier:</strong> 5 Expert · <strong>Lecture:</strong> L32 · Module 16</li><li><strong>Context:</strong> A club registers members and must answer queries.</li><li><strong>Problem:</strong> Design class Registry: private vector of Member structs; add (id-unique), remove (by id, report missing), findById, averageAge. Specify each method's failure verdict and which two methods are const. What does the class guarantee about id-uniqueness that plain arrays never could?</li><li><strong>Input:</strong> command sequences. <strong>Output:</strong> per-command verdicts + query results.</li><li><strong>Constraints:</strong> ≤ 200 members; ages 15–99.</li><li><strong>Thinking questions:</strong> Where does uniqueness live — data or method? Which methods only <em>read</em>?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>add() enforces uniqueness; nothing else can insert.</li><li>findById and averageAge are const: they promise no mutation.</li><li>averageAge on empty registry: define the verdict, don't divide by zero.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-095-files-to-objects-student-roster">PF-CS-095 · Files to Objects: Student Roster</h3>
+<ul><li><strong>Tier:</strong> 5 Expert · <strong>Lecture:</strong> L32 · Module 16</li><li><strong>Context:</strong> The capstone seam: file I/O feeding a class.</li><li><strong>Problem:</strong> Design the loader that fills a class Roster from <code>students.txt</code> (name, id, gpa) using Roster::load(path), then Roster::report() prints ranked stats. Decide the class interface first (what would a <em>user</em> of Roster want?), then implement load against it. What must load() return for a missing file vs partial garbage?</li><li><strong>Input:</strong> file format + sample. <strong>Output:</strong> report + return-code spec.</li><li><strong>Constraints:</strong> ≤ 300 records; gpa 0.0–4.0 validated.</li><li><strong>Thinking questions:</strong> Which design comes first — file parsing or class interface? What does the caller need to distinguish failures?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Interface first: load(path) → bool/int code; report() const.</li><li>Missing file and bad-data are different results — two channels.</li><li>load uses the same validated intake as the manual path: one door.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-096-the-undo-stack-text-editor">PF-CS-096 · The Undo Stack Text Editor</h3>
+<ul><li><strong>Tier:</strong> 5 Expert · <strong>Lecture:</strong> L31 · Module 16</li><li><strong>Context:</strong> A mini-editor supports one-level or multi-level undo.</li><li><strong>Problem:</strong> Design class Editor over a single string: insert(pos, text), delete_(pos, len), undo(). For one-level undo, specify what must be saved before each mutation and the failure verdict for undo() with an empty history. Then argue what changes for k-level undo.</li><li><strong>Input:</strong> edit sequences. <strong>Output:</strong> string state per step + undo results.</li><li><strong>Constraints:</strong> positions validated; text ≤ 200 chars.</li><li><strong>Thinking questions:</strong> What is the minimal history record? What does undo() restore — state or inverse operation?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Save the whole string before each edit: simple, correct, memory-heavy.</li><li>Inverse operations (re-insert the deleted text) are the memory-cheap alternative — compare.</li><li>Empty history: undo() reports and changes nothing.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-097-vending-machine-state-machine">PF-CS-097 · Vending Machine State Machine</h3>
+<ul><li><strong>Tier:</strong> 5 Expert · <strong>Lecture:</strong> L32 · Module 16</li><li><strong>Context:</strong> A vending machine is a state machine wearing a class.</li><li><strong>Problem:</strong> Design class VendingMachine: states IDLE → PAID → DISPENSED, methods insertCoin(5/10/25), select(item), refund(). Specify the legal transitions and each method's verdict in the wrong state (e.g., select before payment). What is the state variable's role in preventing invalid sequences?</li><li><strong>Input:</strong> coin/selection sequences. <strong>Output:</strong> per-op verdicts + state trace.</li><li><strong>Constraints:</strong> one item type, price 45; ≤ 20 coins per session.</li><li><strong>Thinking questions:</strong> Which methods change state? What makes "select while IDLE" impossible to <em>act on</em> wrongly?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>insertCoin moves IDLE→PAID (and stays PAID on overpay); select moves PAID→DISPENSED.</li><li>Wrong-state calls: rejected with a reason, state unchanged.</li><li>The state member <em>is</em> the guard: every method checks it first.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-098-grade-analyzer-with-tiered-reports">PF-CS-098 · Grade Analyzer with Tiered Reports</h3>
+<ul><li><strong>Tier:</strong> 5 Expert · <strong>Lecture:</strong> L32 · Module 16</li><li><strong>Context:</strong> The term project skeleton: data in, statistics out.</li><li><strong>Problem:</strong> Design the synthesis: class GradeBook (private records vector) with load from file, band counting (A–F ladder from CS-005), highest/lowest, and a histogram printer. Specify the interface <em>before</em> the implementation and identify which methods are const, which mutate. What does load() do on its <em>second</em> call — replace or append, and why must that be explicit?</li><li><strong>Input:</strong> marks file + report spec. <strong>Output:</strong> full report.</li><li><strong>Constraints:</strong> ≤ 300 records; ladder thresholds fixed.</li><li><strong>Thinking questions:</strong> Which public methods would a test harness call first? What does append-vs-replace change for the caller?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>load, bandCounts, extremes, histogram: name them, then build.</li><li>Readers are const; only load mutates state.</li><li>Second load: replace (fresh object per file) — document the choice in the header.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-099-the-persisted-inventory-files-class">PF-CS-099 · The Persisted Inventory (files + class)</h3>
+<ul><li><strong>Tier:</strong> 5 Expert · <strong>Lecture:</strong> L32 · Module 16</li><li><strong>Context:</strong> An inventory class must survive program restarts.</li><li><strong>Problem:</strong> Design class Inventory with save(path) and load(path) mirroring its private vector of Item{sku, qty}. Specify the file format you choose and why, the behavior when load reads a file the class itself did not write (foreign format), and what save() does to an existing file. Which method is the class's single source of truth for the format?</li><li><strong>Input:</strong> command sessions incl. save/load. <strong>Output:</strong> file contents + verdicts.</li><li><strong>Constraints:</strong> ≤ 100 items; qty ≥ 0.</li><li><strong>Thinking questions:</strong> Who owns format knowledge — the caller or the class? What breaks if load trusts the file blindly?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Format lives in save/load only: change it in one place.</li><li>load validates every field; foreign/garbage lines are rejected with reasons.</li><li>save() truncates deliberately — state that in its contract comment.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-100-the-checkout-queue-simulator">PF-CS-100 · The Checkout Queue Simulator</h3>
+<ul><li><strong>Tier:</strong> 5 Expert · <strong>Lecture:</strong> L32 · Module 16</li><li><strong>Context:</strong> A data-science question: how long is the queue after n customers?</li><li><strong>Problem:</strong> Design the simulation: customers arrive with service times (from a file), one cashier serves FIFO; compute each customer's wait and the average. Specify the event order (arrival vs service completion) and the tie rule when both happen at the same minute. What does the model <em>assume</em> that real queues violate?</li><li><strong>Input:</strong> arrival+service pairs. <strong>Output:</strong> per-customer wait + average.</li><li><strong>Constraints:</strong> ≤ 100 customers; integer minutes.</li><li><strong>Thinking questions:</strong> What two times determine a wait? Where does the queue live in your data structures?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>wait = service start − arrival; start = max(arrival, prev finish).</li><li>One running "cashier free at" time suffices — no real queue needed.</li><li>Assumptions to name: no balking, no service interruptions, FIFO fairness.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-101-the-audit-safe-ledger-class">PF-CS-101 · The Audit-Safe Ledger Class</h3>
+<ul><li><strong>Tier:</strong> 5 Expert · <strong>Lecture:</strong> L31 · Module 16</li><li><strong>Context:</strong> A ledger must answer "what did I do?" after the fact.</li><li><strong>Problem:</strong> Design class Ledger: private cents balance plus a private history vector; deposit/withdraw return verdicts <em>and</em> append to history only on success. Specify audit(...) reports: full trail, net, and rejected-count. What breaks if history is public — and what does "history only on success" make the audit mean?</li><li><strong>Input:</strong> operation sequences. <strong>Output:</strong> per-op verdicts + audit reports.</li><li><strong>Constraints:</strong> integer cents; overdrafts rejected.</li><li><strong>Thinking questions:</strong> Which two states grow together — and who keeps them consistent? What is a rejected operation's footprint?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Balance and history must agree: both private, both touched by the same methods.</li><li>Rejected ops: zero footprint — audit shows only real money.</li><li>net() derives from history; balance() from cents: a consistency check between them.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-102-weather-station-class-file-roundtrip">PF-CS-102 · Weather Station Class + File Roundtrip</h3>
+<ul><li><strong>Tier:</strong> 5 Expert · <strong>Lecture:</strong> L32 · Module 16</li><li><strong>Context:</strong> A station stores readings in a class and persists them.</li><li><strong>Problem:</strong> Design class WeatherLog: add(reading) validates −40…125, daily summary() (min/max/avg), save/load to file. Trace a full roundtrip: add five, save, clear, load, summary — what must match exactly? Specify what load does with a file containing 200 (out of range): accept, reject, or truncate the load?</li><li><strong>Input:</strong> add/save/load/summary sequences. <strong>Output:</strong> summaries + roundtrip verdict.</li><li><strong>Constraints:</strong> ≤ 1000 readings; 1 dp output.</li><li><strong>Thinking questions:</strong> Which invariant must survive the roundtrip? Is a partially valid file loaded fully, partially, or not at all?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Summary before save == summary after load: the test.</li><li>All-or-nothing load (validate first, then commit) is simplest to reason about.</li><li>The file format is the class's private affair — like PF-CS-099.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-103-the-two-class-report-pipeline">PF-CS-103 · The Two-Class Report Pipeline</h3>
+<ul><li><strong>Tier:</strong> 5 Expert · <strong>Lecture:</strong> L32 · Module 16</li><li><strong>Context:</strong> A sales office wants daily reports from raw tickets.</li><li><strong>Problem:</strong> Design two cooperating classes: TicketParser (file → records, with validation report) and SalesStats (records → totals, top item, hourly histogram). Specify the hand-off type between them (vector of struct?) and where each validation error lives. Why is splitting the work better than one god-class?</li><li><strong>Input:</strong> ticket file format. <strong>Output:</strong> report + validation summary.</li><li><strong>Constraints:</strong> ≤ 500 tickets; fields: item, qty, minute-of-day.</li><li><strong>Thinking questions:</strong> What is the contract at the seam? Which class is reusable tomorrow?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Parser knows files; Stats knows numbers: one job each.</li><li>Hand-off: vector&lt;Sale&gt; — plain data, no I/O types cross the seam.</li><li>Reusability test: can Stats run on data from anywhere else? Then the seam is right.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-104-the-integrity-checked-config">PF-CS-104 · The Integrity-Checked Config</h3>
+<ul><li><strong>Tier:</strong> 5 Expert · <strong>Lecture:</strong> L30 · Module 15</li><li><strong>Context:</strong> Config files get edited by hand; formats drift.</li><li><strong>Problem:</strong> Design the loader that validates <em>structure</em> (key count, ordering, no duplicates) before <em>values</em>, and reports the first structural error with its line number, refusing the whole file. Contrast with per-key fallback (PF-CS-085): when is all-or-nothing the right policy? Trace a file with a duplicate key.</li><li><strong>Input:</strong> config scenarios. <strong>Output:</strong> accept/reject + first error.</li><li><strong>Constraints:</strong> 5 required keys in fixed order.</li><li><strong>Thinking questions:</strong> What does "first error" cost the user vs "all errors"? Who benefits from strictness?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Structural pass: exactly the 5 keys, in order, once each.</li><li>Value validation runs only after structure passes.</li><li>Strict suits machine-written files; fallback suits human-edited ones — say which this is.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-105-student-records-the-composite-challenge">PF-CS-105 · Student Records: The Composite Challenge</h3>
+<ul><li><strong>Tier:</strong> 5 Expert · <strong>Lecture:</strong> L32 · Module 16</li><li><strong>Context:</strong> The capstone: struct-in-class-in-file.</li><li><strong>Problem:</strong> Design the full stack: struct Module { code, marks }; class Student (private modules vector; addModule validates unique codes and 0–100 marks; average()); then persist/load a vector of Students. Specify the file format for nested records and the loader's verdict for a module line with an unknown student id. What makes this case "composite"?</li><li><strong>Input:</strong> persistence format spec + commands. <strong>Output:</strong> records + averages + load report.</li><li><strong>Constraints:</strong> ≤ 50 students; ≤ 8 modules each.</li><li><strong>Thinking questions:</strong> Which layers validate which rules? What does "unknown id" mean for load order?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Student validates its own modules; the vector-of-students loader validates references.</li><li>Two-pass load: students first, then modules — or reject orphan ids.</li><li>Composite = three layers, each with a contract: struct, class, file.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-106-the-exam-seating-optimizer">PF-CS-106 · The Exam Seating Optimizer</h3>
+<ul><li><strong>Tier:</strong> 5 Expert · <strong>Lecture:</strong> L32 · Module 16</li><li><strong>Context:</strong> An exam hall must separate classmates to deter copying.</li><li><strong>Problem:</strong> Given students (name, section) and a hall grid (rows × cols), design the seating that ensures no two adjacent seats (left/right, front/back) share a section when possible, reporting the unseatable leftovers. Specify "when possible" precisely — what makes an arrangement impossible? Trace a 2×4 hall with sections A:5, B:3.</li><li><strong>Input:</strong> student list + hall dims. <strong>Output:</strong> seating grid + leftovers.</li><li><strong>Constraints:</strong> ≤ 40 students; halls ≤ 8×8.</li><li><strong>Thinking questions:</strong> What is the greedy rule, and when does it strand a student? Which data structure holds the grid?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Alternate sections row by row; snake direction to avoid vertical repeats.</li><li>Impossibility = one section outnumbers the rest by more than the checker pattern allows.</li><li>Leftovers are reported, never dropped silently.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-107-the-library-fine-calculator-full-spec">PF-CS-107 · The Library Fine Calculator (full spec)</h3>
+<ul><li><strong>Tier:</strong> 5 Expert · <strong>Lecture:</strong> L32 · Module 16</li><li><strong>Context:</strong> A library charges fines with overlapping rules.</li><li><strong>Problem:</strong> Design the fine computation: base per-day rate, doubled for "reserved" books, capped at the book's replacement cost, waived when the library was closed (given closure dates). Given due/return dates + flags, compute the fine and produce the itemized receipt. Which rule wins when two caps interact? Trace three conflicting scenarios.</li><li><strong>Input:</strong> due date, return date, flags, closure list. <strong>Output:</strong> itemized fine.</li><li><strong>Constraints:</strong> ≤ 60 days late; dates within one year.</li><li><strong>Thinking questions:</strong> What is the <em>order</em> of rule application? Which days count — and do closures shorten or shift?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Compute per-day charges first, then caps, then waivers — pick and defend an order.</li><li>Closures remove chargeable days: subtract, don't freeze.</li><li>The receipt must show each rule's contribution — no silent arithmetic.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-108-the-capstone-mini-system">PF-CS-108 · The Capstone Mini-System</h3>
+<ul><li><strong>Tier:</strong> 5 Expert · <strong>Lecture:</strong> L32 · Module 16</li><li><strong>Context:</strong> The course's final synthesis: a small but complete system.</li><li><strong>Problem:</strong> Design "CampusCafe": class Menu (items, prices), class Order (items + qty), class Register (balances, receipts to file), and a menu-driven session that validates every input, persists receipts, and prints a shift report. Specify the class responsibilities, the file formats, and the failure policy for every input path. Which single design decision would you revisit first after user testing — and why?</li><li><strong>Input:</strong> interactive session script. <strong>Output:</strong> receipts file + shift report.</li><li><strong>Constraints:</strong> ≤ 20 menu items; money in integer paisa; session ends with <code>shutdown</code>.</li><li><strong>Thinking questions:</strong> What does each class <em>own</em>? Where do the three modules meet — what crosses each boundary?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Menu knows items; Order knows quantities; Register knows money and files.</li><li>Boundaries: Menu→Order (price lookup), Order→Register (charged amounts).</li><li>The revisit candidate: whatever the user-testing transcript shows users fumbling — predict it.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

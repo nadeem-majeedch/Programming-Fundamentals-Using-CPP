@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Exercises · T11 file handling · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/exercises/T11_file_handling.html">
+<link rel="stylesheet" href="../styles.css">
+<script src="../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../index.html">Home</a></li><li><a href="../overview.html">Overview</a></li><li><a href="../outcomes.html">Outcomes</a></li><li><a href="../schedule.html">Schedule</a></li><li><a href="../lectures.html">Lectures</a></li><li><a href="../labs.html">Labs</a></li><li><a href="../cases.html">Case Studies</a></li><li><a href="../exercises.html" aria-current="page">Exercises</a></li><li><a href="../assignments.html">Assignments</a></li><li><a href="../projects.html">Projects</a></li><li><a href="../resources.html">Resources</a></li><li><a href="../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../index.html">Home</a> › Exercises · T11 file handling</nav>
+<h1 class="page-title">Exercises · T11 file handling</h1>
+<p>Covers: <code>ifstream</code>/<code>ofstream</code>, open modes, read-as-test loops, record round-trips, robust processing (skip-and-report), append, tokenizing file data. Lectures L29–L30. Outcomes PF-15.1–15.4.</p>
+<p>10 exercises · ladder 🟢 → 🔴.</p>
+<hr>
+<h3 id="pf-e-122-write-and-read-back-lines">PF-E-122 · Write and Read Back Lines</h3>
+<p><strong>Difficulty:</strong> Beginner · <strong>Lecture:</strong> L29 · <strong>Outcomes:</strong> PF-15.1 <strong>Prerequisites:</strong> E-079 <strong>Problem:</strong> Read 3 lines of text; write them to <code>notes.txt</code> (one per line, numbered inside the file as <code>1. …</code> etc.). Reopen and print the file's contents. Verify (comment) what the file contains. <strong>Input:</strong> three lines · <strong>Output:</strong> the re-read file. <strong>Sample:</strong> input <code>alpha beta</code> → file line <code>1. alpha beta</code>, echoed back. <strong>Hints:</strong> write, close (let scope do it), reopen — three phases.</p>
+<h3 id="pf-e-123-copy-file-line-by-line">PF-E-123 · Copy File (line by line)</h3>
+<p><strong>Difficulty:</strong> Beginner · <strong>Lecture:</strong> L29 · <strong>Outcomes:</strong> PF-15.1 <strong>Prerequisites:</strong> E-122 <strong>Problem:</strong> Copy <code>notes.txt</code> (from E-122, or create it) to <code>notes_copy.txt</code> with the read-as-test <code>getline</code> loop. Print the number of lines copied. Handle the missing source with an error message and non-zero exit. <strong>Input:</strong> none · <strong>Output:</strong> copy confirmation + line count. <strong>Sample:</strong> — → <code>copied 3 lines</code> <strong>Hints:</strong> <code>while (std::getline(in, line))</code> — never test <code>eof()</code> first.</p>
+<h3 id="pf-e-124-number-file-statistics">PF-E-124 · Number File Statistics</h3>
+<p><strong>Difficulty:</strong> Foundational · <strong>Lecture:</strong> L29 · <strong>Outcomes:</strong> PF-15.1, PF-15.2 <strong>Prerequisites:</strong> E-123 <strong>Problem:</strong> Read integers from <code>numbers.txt</code> (whitespace-separated, count unknown). Print count, sum, min, max, mean (2 decimals). Missing file → <code>cannot open</code> + exit 1. Empty file → print that report explicitly. <strong>Input:</strong> file · <strong>Output:</strong> five statistics (or messages). <strong>Sample:</strong> file <code>10 20 30</code> → <code>count: 3</code> / <code>mean: 20.00</code> <strong>Hints:</strong> seed min/max with the <em>first successful read</em> (L11's seeding lesson).</p>
+<h3 id="pf-e-125-append-diary-with-timestamp-count">PF-E-125 · Append Diary with Timestamp Count</h3>
+<p><strong>Difficulty:</strong> Foundational · <strong>Lecture:</strong> L29 · <strong>Outcomes:</strong> PF-15.1 <strong>Prerequisites:</strong> E-124 <strong>Problem:</strong> Read lines until an empty line; append each to <code>diary.txt</code> in append mode. Then report the total number of entries the file now holds (re-read and count). Demonstrate (comment) what would happen without <code>std::ios::app</code>. <strong>Input:</strong> lines until empty · <strong>Output:</strong> appended confirmation + total count. <strong>Sample:</strong> two new entries → <code>appended: 2</code> / <code>total entries now: 5</code> <strong>Hints:</strong> append mode preserves; plain output mode truncates — the L29 horror demo.</p>
+<h3 id="pf-e-126-student-record-file-round-trip">PF-E-126 · Student Record File Round-Trip</h3>
+<p><strong>Difficulty:</strong> Foundational · <strong>Lecture:</strong> L29 · <strong>Outcomes:</strong> PF-15.2, PF-15.3 <strong>Prerequisites:</strong> E-125, E-113 <strong>Problem:</strong> Write n students (name, id, gpa) to <code>students.txt</code> as <code>name id gpa</code> lines; then load them back into a <code>std::vector&lt;Student&gt;</code> and print the roster with average GPA. State the format contract in a comment at both writer and reader. <strong>Input:</strong> n + records · <strong>Output:</strong> loaded roster + average. <strong>Sample:</strong> 2 students → roster lines + <code>average gpa: 3.55</code> <strong>Hints:</strong> one record per line; the reader mirrors the writer field-for-field.</p>
+<h3 id="pf-e-127-skip-and-report-loader">PF-E-127 · Skip-and-Report Loader</h3>
+<p><strong>Difficulty:</strong> Intermediate · <strong>Lecture:</strong> L30 · <strong>Outcomes:</strong> PF-15.3, PF-15.4 <strong>Prerequisites:</strong> E-126 <strong>Problem:</strong> <code>scores.txt</code> contains lines like <code>Ayesha,88</code> — but some lines are malformed (missing comma, non-numeric score, empty). Load with skip-and-report: print each bad line number with a reason, load the good ones, print final good/bad counts and the average of loaded scores. <strong>Input:</strong> file (create it from a provided pattern) · <strong>Output:</strong> per-line reports + summary. <strong>Sample:</strong> → <code>line 2: skipped (no comma)</code> / <code>loaded 4, skipped 2</code> / <code>average: 81.25</code> <strong>Hints:</strong> <code>getline</code> + <code>istringstream</code> per line (L30's separation trick).</p>
+<h3 id="pf-e-128-word-frequency-from-file">PF-E-128 · Word Frequency from File</h3>
+<p><strong>Difficulty:</strong> Intermediate · <strong>Lecture:</strong> L30 · <strong>Outcomes:</strong> PF-15.2, PF-11.4 <strong>Prerequisites:</strong> E-127 <strong>Problem:</strong> Read <code>story.txt</code> (several lines of lowercase words). Count word frequencies with parallel arrays (no map), print the top 3 words by count (ties: alphabetical) and the total word count. <strong>Input:</strong> file · <strong>Output:</strong> top-3 + total. <strong>Sample:</strong> → <code>the: 12</code> / <code>a: 9</code> / <code>cat: 5</code> / <code>total: 87</code> <strong>Hints:</strong> read with <code>while (in &gt;&gt; word)</code>; reuse E-090's table logic per word.</p>
+<h3 id="pf-e-129-two-file-merge-sorted-score-files">PF-E-129 · Two-File Merge (sorted score files)</h3>
+<p><strong>Difficulty:</strong> Intermediate · <strong>Lecture:</strong> L30 · <strong>Outcomes:</strong> PF-15.2, PF-9.4 <strong>Prerequisites:</strong> E-128 <strong>Problem:</strong> <code>a.txt</code> and <code>b.txt</code> each hold ascending integers (unknown counts). Merge into <code>merged.txt</code> preserving order <em>without loading both fully into arrays</em> — stream merge with two input streams (peek one value ahead per file). <strong>Input:</strong> two files · <strong>Output:</strong> <code>merged.txt</code> + line count printed. <strong>Sample:</strong> a = <code>1 4</code>, b = <code>2 3 9</code> → merged <code>1 2 3 4 9</code> <strong>Hints:</strong> keep one <em>pending</em> value per stream; take the smaller; refill from that stream.</p>
+<h3 id="pf-e-130-config-reader-with-defaults">PF-E-130 · Config Reader with Defaults</h3>
+<p><strong>Difficulty:</strong> Advanced Introductory · <strong>Lecture:</strong> L30 · <strong>Outcomes:</strong> PF-15.3, PF-15.4 <strong>Prerequisites:</strong> E-129 <strong>Problem:</strong> Read <code>config.txt</code> with lines <code>key value</code> (keys: <code>theme</code>, <code>volume</code>, <code>difficulty</code>). Unknown keys are skipped with a report; missing file or missing keys fall back to defaults (<code>dark</code>, 50, <code>normal</code>). Print the effective configuration and each anomaly found. <strong>Input:</strong> file (possibly missing/malformed) · <strong>Output:</strong> effective config + anomaly list. <strong>Sample:</strong> → <code>theme=light</code> / <code>volume=50 (default)</code> / <code>anomaly: line 3 unknown key 'lang'</code> <strong>Hints:</strong> per line: <code>istringstream</code> → key + value; a small <code>if/else</code> chain maps keys; track which keys were seen.</p>
+<h3 id="pf-e-131-transaction-log-audit">PF-E-131 · Transaction Log Audit</h3>
+<p><strong>Difficulty:</strong> Advanced Introductory · <strong>Lecture:</strong> L30 · <strong>Outcomes:</strong> PF-15.3, PF-15.4, PF-14.4 <strong>Prerequisites:</strong> E-130 <strong>Problem:</strong> <code>transactions.txt</code> holds lines <code>account action amount</code> (action ∈ deposit, withdraw). Audit: apply valid transactions to a starting-balance table for 3 accounts (A101, A102, A103 — read initial balances first), skip-and-report malformed lines and overdrafts, then print each account's final balance, total processed amount, and anomaly count. <strong>Input:</strong> file + initial balances · <strong>Output:</strong> per-account report + anomaly count. <strong>Sample:</strong> → <code>A101: 4500 (12 processed)</code> / <code>A102: 0 (overdraft attempt on line 7)</code> / <code>anomalies: 3</code> <strong>Hints:</strong> reuse E-118's deposit/withdraw logic over file records; the audit summary is the deliverable.</p>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

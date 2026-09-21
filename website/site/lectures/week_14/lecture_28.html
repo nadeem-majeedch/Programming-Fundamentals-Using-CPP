@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L28 · Structures: `struct` Definition, Members, Nesting, Arrays/Files of Records · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/lectures/week_14/lecture_28.html">
+<link rel="stylesheet" href="../../styles.css">
+<script src="../../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../../index.html">Home</a></li><li><a href="../../overview.html">Overview</a></li><li><a href="../../outcomes.html">Outcomes</a></li><li><a href="../../schedule.html">Schedule</a></li><li><a href="../../lectures.html" aria-current="page">Lectures</a></li><li><a href="../../labs.html">Labs</a></li><li><a href="../../cases.html">Case Studies</a></li><li><a href="../../exercises.html">Exercises</a></li><li><a href="../../assignments.html">Assignments</a></li><li><a href="../../projects.html">Projects</a></li><li><a href="../../resources.html">Resources</a></li><li><a href="../../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="narrow">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../../index.html">Home</a> › L28 · Structures: `struct` Definition, Members, Nesting, Arrays/Files of Records</nav>
+<h1 class="page-title">L28 · Structures: `struct` Definition, Members, Nesting, Arrays/Files of Records</h1>
+<p><strong>Module 14 — Dynamic Memory and Structures · Week 14 · Lecture 28 of 32 · 120 minutes</strong> <strong>Outcomes:</strong> CLO-7 · PF-14.3, PF-14.4 · <a href="../../outcomes.html">LEARNING_OUTCOMES.md</a> · <strong>Project milestone week</strong></p>
+<h2 id="learning-objectives">Learning objectives</h2>
+<ol><li>Define <code>struct</code> types with appropriate members, initialize them (brace form), and access/modify members with <code>.</code> (including through references and pointers with <code>-&gt;</code>) (PF-14.3).</li><li>Implement functions that take and return structs (by value, <code>const T&amp;</code>, and <code>T&amp;</code> for write-back), justifying each passing mode per the L26 checklist (PF-14.3).</li><li>Build a records-in-collection application — arrays/<code>std::vector</code> of structs with aggregate computations (average, max-by-field, search by field) — the architecture of the capstone project (PF-14.4).</li></ol>
+</ol>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>L26 (passing-mode checklist); M9–M12 (collections + algorithms — now applied to records); L25 (<code>-&gt;</code> preview: <code>(*p).member</code> vs <code>p-&gt;member</code>).</p>
+<h2 id="concept-sequence">Concept sequence</h2>
+<ol><li>Parallel arrays don't scale: the records motivation</li><li><code>struct</code> definition, member declaration, brace initialization</li><li>Member access <code>.</code>, through references, and <code>-&gt;</code> through pointers</li><li>Structs with functions: passing modes revisited for real data</li><li>Nested structs and struct assignments (whole-object copy)</li><li>Collections of records: the capstone architecture</li></ol>
+</ol>
+<h2 id="teaching-topics-detailed">Teaching topics (detailed)</h2>
+<ul><li><strong>Motivation:</strong> three parallel arrays (<code>names/ids/gpas</code>) break the moment one row is inserted — invariant maintenance fails; <code>struct Student { std::string name; int id; double gpa; };</code> makes <em>one row one value</em>.</li><li><strong>Definition/init/access:</strong> type definition ends with <code>;</code> (the classic missing-semicolon error); brace init <code>Student s{"Ayesha", 101, 3.8};</code> — member order matters; <code>s.gpa = 3.9;</code>; nested: <code>Student::address.city</code>; whole-struct assignment copies all members (<code>Student t = s;</code>).</li><li><strong>Structs + functions:</strong> <code>void print(const Student&amp; s)</code> (read-only, no copy); <code>void promote(Student&amp; s)</code> (write-back); <code>Student make_student(...)</code> (factory return); arrow access when holding a pointer: <code>Student* p{&amp;s}; p-&gt;gpa</code> ≡ <code>(*p).gpa</code> — both forms shown, <code>-&gt;</code> preferred.</li><li><strong>Records in collections:</strong> <code>Student roster[120];</code> /  <code>std::vector&lt;Student&gt; roster;</code> — row-wise traversal (M10 skill), aggregate algorithms (average GPA = L18 accumulate; highest GPA <em>with who</em> = L18 min/max-with-index; find-by-id = L23 linear search — three prior algorithms re-instantiated on records in one program).</li><li><strong>Capstone architecture preview:</strong> the five project topics (<a href="../../projects.html">projects/README.md</a>) are all <em>vector-of-struct + file load/save (M15) + menu (M5)</em> — this lecture's pattern is the capstone skeleton; milestone check (week 14) references it.</li><li><strong>Style:</strong> <code>PascalCase</code> type names; no member functions yet (that's Module 16 — structs here are pure data; the OOP bridge is explicit).</li></ul>
+<h2 id="c-examples-required">C++ examples required</h2>
+<table><thead><tr><th>File</th><th>Role</th></tr></thead><tbody><tr><td><code>struct_records.cpp</code> ✅</td><td>Student struct: init, print/promote/factory functions, nested address, vector-of-Student with three aggregate algorithms</td></tr><tr><td>(live) <code>roster_stats.cpp</code></td><td>capstone-skeleton: load-able roster + menu-less analytics build (M15 adds the file part)</td></tr></tbody></table>
+<h2 id="common-student-misconceptions">Common student misconceptions</h2>
+<ul><li>"<code>struct</code> creates a variable." (It defines a <em>type</em>; variables come after.)</li><li>"Structs are copied member-by-member expensively." (Yes member-wise — but that's exactly why big structs pass by <code>const&amp;</code> per L26.)</li><li>"<code>p.gpa</code> works on a struct pointer." (<code>.</code> requires an object; <code>p-&gt;gpa</code> or <code>(*p).gpa</code>.)</li><li>"Vectors of structs need special syntax." (Element type is a type — everything from M9–M12 applies unchanged.)</li><li>"Structs with data are OOP." (Data-only structs are records; <em>behavior + access control</em> is Module 16's line of demarcation.)</li></ul>
+<h2 id="conceptual-explanation-beginner-first">Conceptual explanation (beginner-first)</h2>
+<p>Arrays taught you to group many values of <em>one</em> type. Real records mix types: a student has a name (string), an ID (int), a GPA (double). Parallel arrays (<code>string names[50]; int ids[50]; double gpas[50];</code>) "work" — until one sort reorders one array and not the others, and the records shred. A <strong><code>struct</code></strong> bundles the fields of one record into a single user-defined <strong>type</strong>: <code>struct Student { ... };</code> — and from that line on, <code>Student</code> behaves like a first-class type you can declare, copy, pass, and collect into vectors.</p>
+<p>Three mechanical facts organize the lecture. First, define the type <em>before</em> use (types go at the top of the file). Second, access fields with the dot operator: <code>s.gpa</code>. Third, a struct variable passed by value is copied member-by-member — exactly why big records travel by <code>const&amp;</code> (L26's rule, now with a reason students can <em>see</em>). A struct pointer uses <code>-&gt;</code> ("arrow") instead of <code>.</code>: <code>p-&gt;gpa</code> means <code>(*p).gpa</code>.</p>
+<p>The payoff is data design: functions like <code>printStudent(const Student&amp;)</code> and <code>findByGpa(const std::vector&lt;Student&gt;&amp;, double)</code> make programs read like the domain. And the horizon: a struct is the class-object <em>without</em> behavior — Module 16 adds functions inside and access control on top.</p>
+<h2 id="terminology-and-definitions">Terminology and definitions</h2>
+<table><thead><tr><th>Term</th><th>Definition</th></tr></thead><tbody><tr><td><code>struct</code></td><td>A user-defined type bundling named members (fields)</td></tr><tr><td>Member / field</td><td>One named value inside the record</td></tr><tr><td>Member access</td><td>Dot operator: <code>student.gpa</code></td></tr><tr><td>Struct pointer + arrow</td><td><code>p-&gt;gpa</code> — shorthand for <code>(*p).gpa</code></td></tr><tr><td>Member-wise copy</td><td>Assignment copies every field (in declaration order)</td></tr><tr><td>Nested struct</td><td>A struct with a struct-typed member (<code>Student</code> has <code>Address</code>)</td></tr><tr><td>Record design</td><td>Choosing fields, types, and the functions a record needs</td></tr><tr><td><code>std::vector&lt;Student&gt;</code></td><td>A collection of records — every M9–M12 pattern applies</td></tr><tr><td>Parallel arrays</td><td>Same data split across equal-length arrays — fragile anti-pattern</td></tr><tr><td>Data-only type</td><td>Struct without member functions; OOP (M16) adds behavior + access control</td></tr></tbody></table>
+<h2 id="syntax-and-c-examples">Syntax and C++ examples</h2>
+<pre><code class="language-cpp">struct Student            // the TYPE — define before use, note the semicolon
+{
+    std::string name;
+    int    id;
+    double gpa;
+};                        // &lt;- semicolon is mandatory and famously forgotten
+
+Student s{&quot;Ada&quot;, 1001, 3.9};        // brace-init in member order
+Student t{};                        // zero/empty by member
+
+std::cout &lt;&lt; s.name &lt;&lt; &#x27; &#x27; &lt;&lt; s.gpa &lt;&lt; &#x27;\n&#x27;;
+s.gpa = 4.0;                        // fields are ordinary variables
+
+// records + functions (big records travel by const&amp;)
+void printStudent(const Student&amp; s)
+{
+    std::cout &lt;&lt; s.id &lt;&lt; &quot;  &quot; &lt;&lt; s.name &lt;&lt; &quot;  &quot; &lt;&lt; s.gpa &lt;&lt; &#x27;\n&#x27;;
+}
+
+Student makeStudent(const std::string&amp; name, int id, double gpa)
+{
+    return Student{name, id, gpa};   // return by value: safe copy-out
+}
+
+// pointer access: arrow
+Student* p{&amp;s};
+std::cout &lt;&lt; p-&gt;gpa &lt;&lt; &#x27;\n&#x27;;        // same as (*p).gpa
+p-&gt;gpa = 4.0;
+
+// a collection of records
+std::vector&lt;Student&gt; roster{
+    {&quot;Ada&quot;, 1001, 3.9}, {&quot;Grace&quot;, 1002, 3.8}, {&quot;Alan&quot;, 1003, 4.0}
+};</code></pre>
+<h2 id="line-by-line-code-explanation">Line-by-line code explanation</h2>
+<p><code>examples/struct_records.cpp</code>:</p>
+<ol><li>The <code>struct</code> block ends in <code>;</code> — the demo file includes the compile error its omission produces ("expected ';' after struct").</li><li>Brace initialization maps values to members <strong>in declaration order</strong> — reorder the braces and the name becomes a GPA; the printed roster exposes it.</li><li><code>printStudent</code> takes <code>const Student&amp;</code>: no copy (L26), no mutation (the promise). Passing by value would copy every string field.</li><li><code>promote(Student&amp; s)</code> — an in-place mutator via reference: the record version of L26's bump.</li><li>The vector section runs three aggregate algorithms: average GPA, highest-GPA student (value-and-index via L18's pattern), count of students on the dean's list — every Module 9 pattern reused unchanged on records.</li><li>The nested <code>Address</code> struct shows composition: a record whose member is itself a record; access chains: <code>s.home.city</code>.</li></ol>
+</ol>
+<h2 id="output-prediction-questions-with-answers">Output prediction questions (with answers)</h2>
+<ol><li><code>Student a{"Ada", 1, 3.9}; Student b{a}; b.gpa = 2.0;</code> — what is <code>a.gpa</code>? — 3.9: member-wise copy, independent records.</li><li><code>p-&gt;name</code> where <code>p = &amp;a</code> — ? — <code>"Ada"</code>; <code>(*p).name</code> is identical.</li><li>After <code>promote(a)</code> (bumps GPA by 0.1) — does the caller's <code>a</code> change? — Yes: reference parameter, in-place update.</li><li><code>roster.size()</code> for the three-student roster — ? — 3; vector operations are record-agnostic.</li><li>Forgetting the struct's closing <code>;</code> — ? — Compile error on the <em>next</em> line — the infamous misleading-message bug.</li></ol>
+</ol>
+<h2 id="common-errors-and-debugging-examples">Common errors and debugging examples</h2>
+<table><thead><tr><th>Error</th><th>Symptom</th><th>Fix</th></tr></thead><tbody><tr><td>Missing <code>;</code> after the struct block</td><td>Error reported at the following line</td><td>Memorize the semicolon</td></tr><tr><td><code>p.gpa</code> on a pointer</td><td>Compile error: <code>.</code> needs an object</td><td><code>p-&gt;gpa</code> or <code>(*p).gpa</code></td></tr><tr><td>Parallel-array sorts</td><td>Records shred (name list misaligns)</td><td>One <code>vector&lt;Student&gt;</code> instead</td></tr><tr><td>Big struct by value</td><td>Silent copy cost everywhere</td><td><code>const Student&amp;</code> for read-only</td></tr><tr><td>Brace-init order mismatch</td><td>Fields silently crossed</td><td>Follow declaration order; verify by print</td></tr><tr><td>Struct used before definition</td><td>"Unknown type" error</td><td>Types at the top of the file</td></tr></tbody></table>
+<h2 id="classroom-demonstrations">Classroom demonstrations</h2>
+<ol><li><strong>The shred:</strong> sort a parallel-arrays gradebook by GPA — names no longer match IDs; then the <code>vector&lt;Student&gt;</code> sort that keeps records whole. The struct earns itself.</li><li><strong>Copy vs alias:</strong> assign <code>b = a</code> then mutate <code>b</code> — the member-wise copy is visible; then <code>Student&amp; alias = a</code> — mutation shows through.</li><li><strong>Arrow vs dot:</strong> compile <code>p.gpa</code> with a pointer; the error message teaches; fix with <code>-&gt;</code>.</li></ol>
+</ol>
+<h2 id="guided-student-activities">Guided student activities</h2>
+<p><strong>Record-design workshop (20 min):</strong> teams design structs for three domains (bank account, library book, game character) — members, types, which functions (print, search-by, aggregate) the record needs; designs exchange for the "one row one value" test (would parallel arrays be worse here?).</p>
+<h2 id="practice-problems">Practice problems</h2>
+<ul><li>Define <code>struct Book { std::string title; std::string author; double price; int stock; };</code> + functions: <code>print</code>, <code>restock</code> (write-back), <code>total_value</code> (vector aggregate).</li><li>Implement find-by-id over a vector of Student (return index or −1) and highest-GPA-with-name.</li><li>Nested struct trace: address change through a reference parameter.</li><li>(🟡 stretch) Explain why <code>Student make(std::string name)</code> returning by value is safe even though locals "die at <code>}</code>" (copy-out semantics — precise return-value reasoning, M13 contrast).</li></ul>
+<h2 id="summary">Summary</h2>
+<p>A <code>struct</code> bundles fields into a new type; dot for objects, arrow for pointers, member-wise copies, <code>const&amp;</code> for big records, and <code>vector&lt;Student&gt;</code> where every array pattern applies unchanged. Records turn parallel arrays into coherent data — and set up Module 16, where structs gain behavior. Next (L29): files — making data outlive the program.</p>
+<h2 id="exit-ticket-formative-assessment">Exit ticket / formative assessment</h2>
+<ol><li>Write the definition line for a struct type <code>Point</code> with two doubles.</li><li><code>Student* p = &amp;s;</code> — two ways to read <code>gpa</code> through <code>p</code>.</li><li>Which passing mode for a <code>print</code> function over <code>Student</code>? Why?</li></ol>
+</ol>
+<h2 id="estimated-time-allocation-120-min">Estimated time allocation (120 min)</h2>
+<table><thead><tr><th>Segment</th><th>Minutes</th></tr></thead><tbody><tr><td>Recall (RAII quiz) + parallel-arrays failure</td><td>10</td></tr><tr><td>struct definition/init/access + nesting</td><td>35</td></tr><tr><td>Break</td><td>10</td></tr><tr><td>Structs + functions + collections (capstone skeleton)</td><td>40</td></tr><tr><td>Record-design workshop</td><td>20</td></tr><tr><td>Exit ticket + Module 15 preview</td><td>5</td></tr></tbody></table>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L24 · Selection Sort and Bubble Sort: Tracing, Swapping, Complexity Intuition · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/lectures/week_12/lecture_24.html">
+<link rel="stylesheet" href="../../styles.css">
+<script src="../../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../../index.html">Home</a></li><li><a href="../../overview.html">Overview</a></li><li><a href="../../outcomes.html">Outcomes</a></li><li><a href="../../schedule.html">Schedule</a></li><li><a href="../../lectures.html" aria-current="page">Lectures</a></li><li><a href="../../labs.html">Labs</a></li><li><a href="../../cases.html">Case Studies</a></li><li><a href="../../exercises.html">Exercises</a></li><li><a href="../../assignments.html">Assignments</a></li><li><a href="../../projects.html">Projects</a></li><li><a href="../../resources.html">Resources</a></li><li><a href="../../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="narrow">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../../index.html">Home</a> › L24 · Selection Sort and Bubble Sort: Tracing, Swapping, Complexity Intuition</nav>
+<h1 class="page-title">L24 · Selection Sort and Bubble Sort: Tracing, Swapping, Complexity Intuition</h1>
+<p><strong>Module 12 — Searching and Sorting · Week 12 · Lecture 24 of 32 · 120 minutes</strong> <strong>Outcomes:</strong> CLO-6 · PF-12.3, PF-12.4 · <a href="../../outcomes.html">LEARNING_OUTCOMES.md</a> · <strong>Lab 6 week · Project proposal due</strong></p>
+<h2 id="learning-objectives">Learning objectives</h2>
+<ol><li>Implement selection sort and bubble sort (with the early-exit optimization) using a <code>swap</code> helper, and trace passes/iterations with array snapshots (PF-12.3).</li><li>State each algorithm's invariant ("first i positions final" vs "largest bubbles to the end each pass") and verify it on traces (PF-12.3).</li><li>Compare both algorithms by comparison/exchange counts (O(n²) growth), and decide sort-then-search vs linear search for a given scenario (PF-12.4).</li></ol>
+</ol>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>L23 (search costs — sorting buys faster searches); L18 (min/min-index pattern — selection sort <em>is</em> repeated min-selection); L15 (reference parameters — the <code>swap</code> function).</p>
+<h2 id="concept-sequence">Concept sequence</h2>
+<ol><li>Why sort: binary search's precondition, human-readable reports</li><li>Swap as a function (references from L15 at work)</li><li>Selection sort: select-min, place — repeated L18 pattern</li><li>Bubble sort: adjacent compares, early-exit flag</li><li>Invariants + pass-by-pass traces of both on one array</li><li>O(n²) intuition and the sort-then-search decision rule</li></ol>
+</ol>
+<h2 id="teaching-topics-detailed">Teaching topics (detailed)</h2>
+<ul><li><strong><code>swap</code> by references:</strong> <code>void swap(int&amp; a, int&amp; b)</code> — the canonical first use of output parameters; temp-variable necessity re-proven (failed one-liner without temp).</li><li><strong>Selection sort:</strong> outer i from 0..n-2: find min index in <code>i..n-1</code> (inner j from i+1), swap into position i; invariant: prefix <code>[0, i)</code> is final and sorted; comparisons always n(n−1)/2 (data-independent), swaps ≤ n−1 (few writes — its practical virtue).</li><li><strong>Bubble sort:</strong> adjacent pairs, swap if out of order; after pass k, last k elements final ("largest bubbles up"); optimized: shrink inner bound (<code>j &lt; n-1-k</code>) + <code>swapped</code> flag for early exit → best case O(n) on already-sorted input; comparisons worst n(n−1)/2.</li><li><strong>Side-by-side trace:</strong> same 6-element array through both, snapshot after each pass; invariant check row; comparison/exchange counts totaled — evidence for the O(n²) claim (L12 evidence format).</li><li><strong>Decision rule (PF-12.4):</strong> search once on unsorted n → linear O(n); search k times → sort once (n²) + k binary searches (k·log n) — break-even reasoning with concrete n/k numbers; growth-curve table (n, n log n mentioned, n²).</li></ul>
+<h2 id="c-examples-required">C++ examples required</h2>
+<table><thead><tr><th>File</th><th>Role</th></tr></thead><tbody><tr><td><code>sorting_traced.cpp</code> ✅</td><td>both sorts with per-pass snapshot printing and comparison/exchange counters</td></tr><tr><td>(live) <code>sort_then_search.cpp</code></td><td>k-search cost model demo: linear vs sort+binary at k = 1, 10, 1000</td></tr></tbody></table>
+<h2 id="common-student-misconceptions">Common student misconceptions</h2>
+<ul><li>"Bubble sort's early exit changes worst-case complexity." (Worst case stays O(n²); only the <em>best</em> case improves.)</li><li>"Selection and bubble sort produce different results." (Same sorted output; different work distribution.)</li><li>"Sorted output means the algorithm is O(n)." (Output sortedness ≠ cost; counters prove the work.)</li><li>"The invariant is optional commentary." (It's <em>the</em> correctness argument — exam trace questions require naming it.)</li></ul>
+<h2 id="conceptual-explanation-beginner-first">Conceptual explanation (beginner-first)</h2>
+<p>Sorting means rearranging a collection so its elements run in order — and it's the step that <em>earns</em> binary search's precondition. Two classic algorithms teach opposite lessons about doing the same job.</p>
+<p><strong>Selection sort</strong> finds the smallest remaining element and moves it to the front, then repeats on the rest. Its invariant is crisp: after pass <em>k</em>, the first <em>k</em> positions hold the <em>k</em> smallest elements in final order. It always does about n²/2 comparisons — it doesn't care whether the input was already sorted.</p>
+<p><strong>Bubble sort</strong> walks the array comparing neighbors and swapping those out of order; each pass "bubbles" the largest remaining element to the end. Its invariant: after pass <em>k</em>, the last <em>k</em> positions are correct. It also does ~n² comparisons — but with an early-exit flag (pass with zero swaps = sorted) its <em>best</em> case on already-sorted data drops to n−1 comparisons.</p>
+<p>Neither is the fastest sort known — the course says so honestly (O(n log n) sorts exist but need Module 13/16 machinery). Their value is that every step is traceable by hand, their invariants are provable with L09's discipline, and their counters make the O(n²) growth rate <em>measurable</em> rather than quoted.</p>
+<h2 id="terminology-and-definitions">Terminology and definitions</h2>
+<table><thead><tr><th>Term</th><th>Definition</th></tr></thead><tbody><tr><td>Selection sort</td><td>Repeatedly select the minimum of the unsorted part into place</td></tr><tr><td>Bubble sort</td><td>Repeatedly swap out-of-order neighbors; extremes float to the end</td></tr><tr><td>Pass</td><td>One full sweep of the algorithm's comparison structure</td></tr><tr><td>Invariant (selection)</td><td>First k positions hold the k smallest, in final order</td></tr><tr><td>Invariant (bubble)</td><td>Last k positions are the k largest, in final order</td></tr><tr><td>Early exit</td><td>A no-swap pass proves sortedness — best case becomes O(n)</td></tr><tr><td>Swap</td><td>Three-assignment exchange via a temporary (Module 9)</td></tr><tr><td>Comparison/exchange counter</td><td>Instrumentation measuring the cost claims</td></tr><tr><td>O(n²) vs O(n log n)</td><td>The growth-rate gap honest about what we're not teaching yet</td></tr></tbody></table>
+<h2 id="syntax-and-c-examples">Syntax and C++ examples</h2>
+<pre><code class="language-cpp">// selection sort — smallest of the remainder to the front
+void selectionSort(int a[], int n, long long&amp; comparisons, long long&amp; swaps)
+{
+    for (int i{0}; i &lt; n - 1; ++i)           // last element self-places
+    {
+        int minIdx{i};
+        for (int j{i + 1}; j &lt; n; ++j)
+        {
+            ++comparisons;
+            if (a[j] &lt; a[minIdx])
+                minIdx = j;                  // track, don&#x27;t swap yet
+        }
+        if (minIdx != i)                     // swap only when needed
+        {
+            int tmp{a[i]};  a[i] = a[minIdx];  a[minIdx] = tmp;
+            ++swaps;
+        }
+    }
+}
+
+// bubble sort with early exit — neighbors compared, swapped out of order
+void bubbleSort(int a[], int n, long long&amp; comparisons, long long&amp; swaps)
+{
+    for (int pass{0}; pass &lt; n - 1; ++pass)
+    {
+        bool swapped{false};
+        for (int j{0}; j &lt; n - 1 - pass; ++j)  // tail already correct
+        {
+            ++comparisons;
+            if (a[j] &gt; a[j + 1])
+            {
+                int tmp{a[j]};  a[j] = a[j + 1];  a[j + 1] = tmp;
+                ++swaps;
+                swapped = true;
+            }
+        }
+        if (!swapped)
+            break;                           // a clean pass: sorted, done
+    }
+}</code></pre>
+<h2 id="line-by-line-code-explanation">Line-by-line code explanation</h2>
+<p><code>examples/sorting_traced.cpp</code>:</p>
+<ol><li>Both functions print a <strong>snapshot after each pass</strong> (labelled) plus final comparison/exchange counts — the trace table the exams use, produced by the program itself.</li><li>Selection sort: the inner loop <em>only tracks</em> <code>minIdx</code>; the single swap after the loop is the "one exchange per pass" property — the cheap-swaps/expensive-comparisons profile discussed in topics.</li><li>Bubble sort's inner bound <code>n - 1 - pass</code> encodes its invariant: after <code>pass</code> rounds, the last <code>pass</code> cells are final, so don't re-touch them.</li><li>The early-exit <code>break</code> fires when a pass makes no swaps — on already-sorted input the counters show n−1 comparisons instead of ~n²/2: best case measured, worst case unchanged.</li><li><code>main</code> sorts the same array both ways, prints both traces, and compares counters — same output, different work distribution.</li></ol>
+</ol>
+<h2 id="output-prediction-questions-with-answers">Output prediction questions (with answers)</h2>
+<ol><li>Selection sort on <code>[5, 2, 9, 1, 7]</code> — pass-1 result? — <code>[1, 2, 9, 5, 7]</code> (1 swapped into position 0).</li><li>Bubble sort, same array, pass 1 — ? — <code>[2, 5, 1, 7, 9]</code> (9 bubbled to the end).</li><li>Comparisons for selection sort, n = 5 — ? — 4+3+2+1 = 10, always.</li><li>Bubble sort on already-sorted <code>[1,2,3,4,5]</code> — passes and comparisons? — 1 pass, 4 comparisons, 0 swaps, early exit.</li><li>Which does fewer swaps on reverse-sorted input, and why? — selection (n−1 or fewer) vs bubble (~n²/2) — the work-distribution lesson in numbers.</li></ol>
+</ol>
+<h2 id="common-errors-and-debugging-examples">Common errors and debugging examples</h2>
+<table><thead><tr><th>Error</th><th>Symptom</th><th>Fix</th></tr></thead><tbody><tr><td>Inner loop to <code>j &lt; n</code> (bubble)</td><td>Re-compares the sorted tail</td><td><code>j &lt; n - 1 - pass</code></td></tr><tr><td>Selection inner from <code>j = i</code></td><td>Compares element with itself</td><td><code>j = i + 1</code></td></tr><tr><td>Swapping inside the inner selection loop</td><td>n² swaps — the expensive-swap bug</td><td>Track <code>minIdx</code>, swap once per pass</td></tr><tr><td>Early-exit flag never reset per pass</td><td>Exits after pass 1 always</td><td>Reset <code>swapped = false</code> each pass</td></tr><tr><td><code>pass &lt; n</code> instead of <code>n - 1</code></td><td>One wasted pass (harmless but off-spec)</td><td>Know why n − 1 suffices</td></tr><tr><td>Sorting a copy, expecting the original sorted</td><td>Caller sees no change</td><td>Arrays pass by address — this bug is rarer; but passing by value <em>copies</em> for objects (M16 preview)</td></tr></tbody></table>
+<h2 id="classroom-demonstrations">Classroom demonstrations</h2>
+<ol><li><strong>Human selection sort (Lab 6 opener):</strong> students hold number cards; the class "runs" selection sort by pointing — the minimum-hunt is visible before any code.</li><li><strong>Counter showdown:</strong> sort the same random array both ways; the printed comparison/exchange tallies make O(n²) concrete and show the swaps profile difference.</li><li><strong>Early exit on demand:</strong> feed bubble sort sorted input — one pass, zero swaps, stop: the flag does what the slide claims.</li></ol>
+</ol>
+<h2 id="guided-student-activities">Guided student activities</h2>
+<p><strong>Lab 6 (2 h, this lecture slot):</strong> <a href="../../labs.html">labs/README.md</a> — human selection sort (students as elements), traced implementations of both sorts with counter verification, sort-then-search break-even worksheet. Lecture hour 2 = lab launch; project proposals (due this week) reference search/sort needs in the capstone menu.</p>
+<h2 id="practice-problems">Practice problems</h2>
+<ul><li>Trace both sorts on <code>[5, 2, 9, 1, 7]</code> — snapshots + invariant rows.</li><li>Implement both with counters; verify counts equal theory for n = 8.</li><li>Add early-exit bubble sort; show best-case comparison count on sorted input.</li><li>(🟡 stretch) Sort a parallel array of names by paired scores (stable-pair swap discipline) — Module 14 records foreshadowed.</li></ul>
+<h2 id="summary">Summary</h2>
+<p>Selection sort locks the smallest remaining element into place (one swap per pass, invariant at the front); bubble sort floats extremes to the back (many swaps, early exit on clean passes). Both are O(n²) in the worst case — verified by counters — and their invariants are the exam's trace-table backbone. Sorting is the gate binary search needs; next (L25) the course turns to memory itself: pointers.</p>
+<h2 id="exit-ticket-formative-assessment">Exit ticket / formative assessment</h2>
+<ol><li>State each sort's invariant in one sentence.</li><li>n = 100: how many comparisons does selection sort always make?</li><li>Scenario: 1,000 searches over 50,000 records — linear or sort+binary? Why (one number each)?</li></ol>
+</ol>
+<h2 id="estimated-time-allocation-120-min">Estimated time allocation (120 min)</h2>
+<table><thead><tr><th>Segment</th><th>Minutes</th></tr></thead><tbody><tr><td>Recall (search quiz) + why sort</td><td>10</td></tr><tr><td>Swap + selection sort + invariant</td><td>30</td></tr><tr><td>Break</td><td>10</td></tr><tr><td>Bubble sort + traces + O(n²) + decision rule</td><td>35</td></tr><tr><td><strong>Lab 6 launch</strong> (human sort + traced implementations)</td><td>25</td></tr><tr><td>Exit ticket + project proposal reminder</td><td>10</td></tr></tbody></table>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

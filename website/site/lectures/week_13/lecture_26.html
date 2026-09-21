@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L26 · References, Pass-by-Value vs Pass-by-Reference, and Arrays as Pointers · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/lectures/week_13/lecture_26.html">
+<link rel="stylesheet" href="../../styles.css">
+<script src="../../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../../index.html">Home</a></li><li><a href="../../overview.html">Overview</a></li><li><a href="../../outcomes.html">Outcomes</a></li><li><a href="../../schedule.html">Schedule</a></li><li><a href="../../lectures.html" aria-current="page">Lectures</a></li><li><a href="../../labs.html">Labs</a></li><li><a href="../../cases.html">Case Studies</a></li><li><a href="../../exercises.html">Exercises</a></li><li><a href="../../assignments.html">Assignments</a></li><li><a href="../../projects.html">Projects</a></li><li><a href="../../resources.html">Resources</a></li><li><a href="../../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="narrow">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../../index.html">Home</a> › L26 · References, Pass-by-Value vs Pass-by-Reference, and Arrays as Pointers</nav>
+<h1 class="page-title">L26 · References, Pass-by-Value vs Pass-by-Reference, and Arrays as Pointers</h1>
+<p><strong>Module 13 — Pointers and References · Week 13 · Lecture 26 of 32 · 120 minutes</strong> <strong>Outcomes:</strong> CLO-7 · PF-13.3, PF-13.4 · <a href="../../outcomes.html">LEARNING_OUTCOMES.md</a> · <strong>Assignment 4 due</strong></p>
+<h2 id="learning-objectives">Learning objectives</h2>
+<ol><li>Distinguish reference semantics (bind once, no null, no arithmetic, no re-seating) from pointer semantics (re-seatable, nullable, arithmetic), and implement <code>swap</code>-class functions through both (PF-13.3).</li><li>Choose correct parameter passing — value, reference <code>T&amp;</code>, const-reference <code>const T&amp;</code>, array (<code>int a[]</code> ≡ <code>int* a</code>) — for each parameter of a designed function set, with one-line justifications (PF-13.3, PF-13.4).</li><li>Explain why a called function can modify an <em>array</em> argument but not a <em>scalar</em> argument passed by value (decay + copy semantics), and predict the resulting behavior in both directions (PF-13.4).</li></ol>
+</ol>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>L25 (addresses, dereference, decay); L13 (copy semantics — the failed swap comes home); L15 (<code>T&amp;</code>/<code>const T&amp;</code> patterns).</p>
+<h2 id="concept-sequence">Concept sequence</h2>
+<ol><li>The three passing modes on one table (copy / alias / address)</li><li>References vs pointers: the full contrast table</li><li>Why arrays "pass by reference" without syntax: decay in parameters</li><li><code>const</code> correctness across modes (protecting caller data)</li><li>The parameter-choice checklist (course standard)</li><li>A designed function set applying the checklist</li></ol>
+</ol>
+<h2 id="teaching-topics-detailed">Teaching topics (detailed)</h2>
+<ul><li><strong>Contrast table:</strong> re-bindable? null possible? arithmetic? must- initialize? syntax at use? — references (no/no/no/yes/transparent) vs pointers (yes/yes/yes/no/<code>*</code>-ful); when the course uses each: references by default (M8 rule), pointers where the <em>textbook model</em> of memory is the point (arrays, M14 dynamic memory).</li><li><strong>Arrays in parameters:</strong> <code>void fill(int a[], int n)</code> ≡ <code>void fill(int* a, int n)</code> — the parameter <em>decays</em>; no copy is made; callee writes reach the caller's array (demonstrated: fill in callee, print in caller); size always travels separately (the L17 discipline formalized); <code>const int a[]</code> for read-only traversals (L18–L24 signatures retroactively explained).</li><li><strong>Scalar vs array asymmetry:</strong> <code>void bump(int x)</code> never reaches the caller's int; <code>void bump(int a[])</code> modifies the caller's array — same call syntax, opposite effect; the mechanism (copy vs decay) explained with both diagrams side by side.</li><li><strong><code>const</code> discipline:</strong> <code>const T&amp;</code> for large read-only inputs (strings, future structs), <code>const int a[]</code> for read-only arrays, <code>T&amp;</code> only for write-back outputs — the full decision checklist students apply in the capstone (Module 14–16).</li><li><strong>Designed function set (worked):</strong> string statistics bundle — <code>int count_vowels(const std::string&amp;)</code>, <code>void min_max(const int a[], int n, int&amp; mn, int&amp; mx)</code>, <code>void normalize(double a[], int n)</code> — each parameter's mode justified aloud.</li></ul>
+<h2 id="c-examples-required">C++ examples required</h2>
+<table><thead><tr><th>File</th><th>Role</th></tr></thead><tbody><tr><td><code>passing_modes.cpp</code> ✅</td><td>scalar bump (fails), array bump (works), reference vs pointer swap, <code>const</code> variants — labeled sections with printed evidence</td></tr><tr><td>(live) <code>param_checklist_demo.cpp</code></td><td>the string-statistics function set written signatures-first</td></tr></tbody></table>
+<h2 id="common-student-misconceptions">Common student misconceptions</h2>
+<ul><li>"References are syntactic sugar for pointers, so they're the same thing." (Same <em>mechanism</em> at the machine level, different <em>rules</em>; the table's rows differ.)</li><li>"Arrays are copied into functions like ints." (They decay; no copy — this is why OOB writes inside callees damage caller data.)</li><li>"<code>int a[]</code> parameters know their length." (They don't; <code>n</code> travels separately — always.)</li><li>"<code>const int a[]</code> prevents all modification." (It prevents writes <em>through that parameter</em>; const-correctness is per-access-path — honest scope note.)</li></ul>
+<h2 id="conceptual-explanation-beginner-first">Conceptual explanation (beginner-first)</h2>
+<p>Every function parameter arrives by one of three modes, and picking the right one is a design skill. <strong>By value</strong> (the default): the argument is <em>copied</em> — safe for the caller, but expensive for big data and useless for sending results back. <strong>By pointer</strong>: you pass an <em>address</em> — the function can follow it and touch the original; the possible <code>nullptr</code> makes every use a guard-rail exercise. <strong>By reference</strong>: an alias — the function's name <em>is</em> the caller's variable; no copy, no <code>nullptr</code>, no <code>*</code> punctuation. <code>swap(int&amp; a, int&amp; b)</code> is the fix for L13's broken by-value swap.</p>
+<p>Last module's honest secret is settled here: when an array is passed, what travels is the <strong>address of element 0</strong> ("decay"). No copy is made — which is why <code>const int a[]</code> matters so much: the callee writes <em>through</em> to the caller's data unless you promise otherwise. And because an array parameter forgets its length, the size always travels as a second parameter.</p>
+<p>The design habit is <strong>const-correctness</strong>: every parameter is either <code>const</code> (I promise to read only) or deliberately mutable (I'm an output). Reading that decision off a function's signature — inputs first and <code>const</code>, outputs last — is how professionals read code.</p>
+<h2 id="terminology-and-definitions">Terminology and definitions</h2>
+<table><thead><tr><th>Term</th><th>Definition</th></tr></thead><tbody><tr><td>Pass by value</td><td>A copy arrives; the caller's original is untouchable</td></tr><tr><td>Pass by pointer</td><td>The address arrives; callee dereferences; <code>nullptr</code> possible</td></tr><tr><td>Pass by reference</td><td>An alias arrives; the callee's name <em>is</em> the caller's variable</td></tr><tr><td>Out parameter</td><td>A reference/pointer parameter used to deliver results back</td></tr><tr><td>Array decay</td><td>An array argument converts to a pointer to element 0</td></tr><tr><td><code>const</code> correctness</td><td>Every access path marked read-only unless deliberately writable</td></tr><tr><td>Read-only parameter</td><td><code>const T&amp;</code> or <code>const T[]</code> — the input promise</td></tr><tr><td>Signature-first design</td><td>Write all prototypes before any body — the L26 workflow</td></tr><tr><td>Overloading</td><td>Same name, different parameter lists (Module 8) — mode changes can overload</td></tr><tr><td>Rule of three modes</td><td>Value for small inputs; <code>const&amp;</code> for big inputs; <code>&amp;</code>/<code>*</code> for outputs</td></tr></tbody></table>
+<h2 id="syntax-and-c-examples">Syntax and C++ examples</h2>
+<pre><code class="language-cpp">// VALUE: copy arrives; caller&#x27;s x is safe (and unchanged)
+void bump(int x) { x = x + 1; }                  // useless for output!
+
+// POINTER: address arrives; guard then dereference
+void bumpByPtr(int* p)
+{
+    if (p != nullptr)
+        *p = *p + 1;
+}
+
+// REFERENCE: alias arrives; no copy, no nullptr, no *
+void swap(int&amp; a, int&amp; b)
+{
+    int tmp{a};  a = b;  b = tmp;                // the real swap, at last
+}
+
+// ARRAYS decay: these two headers are IDENTICAL to the compiler
+void sumAll(const int a[], int n);               // course style
+void sumAll(const int* a, int n);                // same function, spelled differently
+
+// BIG OBJECTS: string/vector by const reference — no copy, no mutation
+int countUpper(const std::string&amp; s);
+
+// OUT PARAMETERS: references deliver multiple results
+void minMax(const int a[], int n, int&amp; minOut, int&amp; maxOut);</code></pre>
+<h2 id="line-by-line-code-explanation">Line-by-line code explanation</h2>
+<p><code>examples/passing_modes.cpp</code> (labeled sections, printed evidence):</p>
+<ol><li><strong>Scalar bump:</strong> <code>bump(x)</code> runs; the printout proves <code>x</code> unchanged — the copy semantics made visible. Then <code>bumpByPtr(&amp;x)</code> — now the caller sees the change (address followed) — and <code>bumpRef(x)</code> — identical effect, cleaner syntax.</li><li><strong>Array bump:</strong> a function writes <code>a[0] = 99;</code> — the caller's array <em>did</em> change: arrays decay, no copy, <code>const</code> is the only shield.</li><li><strong>Reference vs pointer swap:</strong> both <code>swap(int&amp;, int&amp;)</code> and <code>pswap(int*, int*)</code> swap correctly; the call sites (<code>swap(a, b)</code> vs <code>pswap(&amp;a, &amp;b)</code>) show the ergonomic difference; the guard in the pointer version shows the nullability cost.</li><li><strong><code>const</code> variants:</strong> calling a <code>const</code>-parameter function with a normal array compiles; trying to pass a <code>const</code> array to a non-const-parameter function does not — the promise flows one way.</li></ol>
+</ol>
+<h2 id="output-prediction-questions-with-answers">Output prediction questions (with answers)</h2>
+<ol><li><code>void f(int x)</code> called as <code>f(a[3])</code> — can it modify <code>a[3]</code>? — No: the element was <em>copied</em>.</li><li><code>bump(x)</code> then <code>bumpByPtr(&amp;x)</code> starting from 5 — final <code>x</code>? — 5 then 6: mode decides fate.</li><li><code>swap(a, b)</code> with a=1, b=2 — ? — a=2, b=1: references reach the originals.</li><li><code>sumAll(data, 4)</code> where data has 6 elements — ? — compiles; sums only the first 4: the size parameter is the truth, not the array.</li><li><code>countUpper(name)</code> vs <code>countUpper(std::string copy = name)</code> — which copies? — only the by-value version; <code>const&amp;</code> borrows.</li></ol>
+</ol>
+<h2 id="common-errors-and-debugging-examples">Common errors and debugging examples</h2>
+<table><thead><tr><th>Error</th><th>Symptom</th><th>Fix</th></tr></thead><tbody><tr><td>By-value "output" parameter</td><td>Function "works" but caller sees nothing</td><td>Reference/pointer for outputs</td></tr><tr><td>Missing <code>&amp;</code> on big-object parameter</td><td>Slow copies (silent perf bug)</td><td><code>const std::string&amp;</code> / <code>const std::vector&lt;T&gt;&amp;</code></td></tr><tr><td>Missing <code>const</code> on array parameter</td><td>Accidental writes to caller data</td><td><code>const int a[]</code> for every read-only array</td></tr><tr><td>Size parameter forgotten</td><td>Function reads garbage beyond the data</td><td><code>int n</code> always travels with <code>a[]</code></td></tr><tr><td>Unchecked pointer dereference</td><td>Crash on <code>nullptr</code></td><td>Guard or take a reference instead</td></tr><tr><td>Returning a reference to a local</td><td>Dangling alias — UB</td><td>Return by value (copy-out is safe)</td></tr></tbody></table>
+<h2 id="classroom-demonstrations">Classroom demonstrations</h2>
+<ol><li><strong>The three bump calls:</strong> same variable, three modes, three printouts — the mode table built from evidence, not slides.</li><li><strong>Decay address probe:</strong> print <code>a</code> and <code>&amp;a[0]</code> inside the callee and the caller — identical addresses: nothing was copied.</li><li><strong>Tribunal preview:</strong> project one buggy signature; the class picks the mode fix in 30 seconds — the skill is signature-reading.</li></ol>
+</ol>
+<h2 id="guided-student-activities">Guided student activities</h2>
+<p><strong>Passing-modes tribunal (20 min):</strong> six buggy functions presented as "defendants" (scalar update that doesn't, array read missing <code>const</code>, string passed by value, array size omitted, swap via wrong mode, pointer not checked for nullptr); student prosecutors argue the defect, defense proposes the minimal signature fix; class verdicts.</p>
+<h2 id="practice-problems">Practice problems</h2>
+<ul><li>Complete the passing-mode choice table for 10 function designs (justify each cell).</li><li>Fix six tribunal-style signatures + bodies.</li><li>Write <code>reverse(int a[], int n)</code> (in place) and <code>reversed(const int a[], int n, int out[])</code> — contrast the two contracts.</li><li>(🟡 stretch) Explain, with one diagram each, why <code>swap(int&amp; , int&amp;)</code> and <code>pswap(int*, int*)</code> produce identical memory effects.</li></ul>
+<h2 id="summary">Summary</h2>
+<p>Three modes, three jobs: value for small inputs, <code>const</code>-marked for read-only access (mandatory for arrays and big objects, which decay and borrow), references/pointers for outputs. Signature-first design plus const-correctness makes every function's contract readable from its header. Next (L27): dynamic memory — where pointers earn their keep and their dangers.</p>
+<h2 id="exit-ticket-formative-assessment">Exit ticket / formative assessment</h2>
+<ol><li><code>void f(int x)</code> called with an array element <code>f(a[3])</code> — can it modify <code>a[3]</code>?</li><li>Two reference properties that pointers lack.</li><li>Choose modes: (a) 5000-element vector, read-only; (b) min/max outputs; (c) single <code>char</code>.</li></ol>
+</ol>
+<h2 id="estimated-time-allocation-120-min">Estimated time allocation (120 min)</h2>
+<table><thead><tr><th>Segment</th><th>Minutes</th></tr></thead><tbody><tr><td>Recall (pointer quiz) + the three modes</td><td>10</td></tr><tr><td>References vs pointers + decay in parameters</td><td>40</td></tr><tr><td>Break</td><td>10</td></tr><tr><td><code>const</code> discipline + designed function set</td><td>30</td></tr><tr><td>Tribunal activity</td><td>20</td></tr><tr><td>Assignment 4 hand-in + exit ticket</td><td>10</td></tr></tbody></table>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

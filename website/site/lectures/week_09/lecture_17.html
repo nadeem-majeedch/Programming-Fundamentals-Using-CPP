@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L17 · 1-D Arrays: Declaration, Indexing, Bounds, and the Array–Memory Model · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/lectures/week_09/lecture_17.html">
+<link rel="stylesheet" href="../../styles.css">
+<script src="../../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../../index.html">Home</a></li><li><a href="../../overview.html">Overview</a></li><li><a href="../../outcomes.html">Outcomes</a></li><li><a href="../../schedule.html">Schedule</a></li><li><a href="../../lectures.html" aria-current="page">Lectures</a></li><li><a href="../../labs.html">Labs</a></li><li><a href="../../cases.html">Case Studies</a></li><li><a href="../../exercises.html">Exercises</a></li><li><a href="../../assignments.html">Assignments</a></li><li><a href="../../projects.html">Projects</a></li><li><a href="../../resources.html">Resources</a></li><li><a href="../../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="narrow">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../../index.html">Home</a> › L17 · 1-D Arrays: Declaration, Indexing, Bounds, and the Array–Memory Model</nav>
+<h1 class="page-title">L17 · 1-D Arrays: Declaration, Indexing, Bounds, and the Array–Memory Model</h1>
+<p><strong>Module 9 — One-Dimensional Arrays · Week 9 · Lecture 17 of 32 · 120 minutes</strong> <strong>Outcomes:</strong> CLO-6 · PF-9.1, PF-9.2 · <a href="../../outcomes.html">LEARNING_OUTCOMES.md</a></p>
+<h2 id="learning-objectives">Learning objectives</h2>
+<ol><li>Declare, initialize, and index 1-D arrays of any built-in type, and explain their contiguous memory layout with a box-address diagram (PF-9.1).</li><li>Predict the (dangerous) behavior of out-of-bounds indexing and off-by-one loops, and apply the course discipline (<code>const int N{...}; arr[N]</code>, valid indices <code>0..N-1</code>) (PF-9.2).</li><li>Choose between full initialization, partial initialization, and size-from-initializer forms, stating the consequences of each (PF-9.1).</li></ol>
+</ol>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>M5 (loops — arrays are processed with them); L03 (types, <code>const</code>); Module 6 (trace discipline for array algorithms).</p>
+<h2 id="concept-sequence">Concept sequence</h2>
+<ol><li>The limitation motivating arrays: 30 scores = 30 variables?</li><li>Declaration + memory diagram (contiguous boxes with addresses)</li><li>Indexing: zero-based, <code>arr[i]</code> as a <em>variable you can read and write</em></li><li>Initialization forms and their exact semantics</li><li>Traversal idioms with <code>for</code>; <code>const int N</code> size discipline</li><li>Out-of-bounds: why C++ doesn't check, and what discipline replaces it</li></ol>
+</ol>
+<h2 id="teaching-topics-detailed">Teaching topics (detailed)</h2>
+<ul><li><strong>Memory model:</strong> <code>int scores[5];</code> → 5 adjacent 4-byte boxes, address of first + index × size — the diagram reused for pointer arithmetic (M13); array name as address-of-first-element (mentioned here, formalized L26).</li><li><strong>Zero-based indexing:</strong> valid indices <code>0..N-1</code>; the fence-post argument; <code>arr[N]</code> is one past the end — legal-looking, undefined behavior.</li><li><strong>Initialization forms:</strong> <code>int a[3] = {10, 20, 30};</code> · <code>int b[3] = {10};</code> (rest zero!) · <code>int c[] = {1, 2, 3};</code> (size 3) · <code>int d[3]{};</code> all zero — semantics contrasted in one demo program.</li><li><strong>Course discipline:</strong> size as <code>const int N{5};</code>, loops <code>for (int i{0}; i &lt; N; ++i)</code>; why <code>sizeof(a)/sizeof(a[0])</code> is <em>shown once, then replaced by the N-discipline</em> (works only in the declaring scope — decay surprise foreshadowed).</li><li><strong>OOB reality check:</strong> demo reading <code>arr[5]</code> — compiles, prints garbage or crashes <em>unreliably</em>; C++ trusts you; the checker is discipline + tests (M6 evidence format).</li></ul>
+<h2 id="c-examples-required">C++ examples required</h2>
+<table><thead><tr><th>File</th><th>Role</th></tr></thead><tbody><tr><td><code>array_basics.cpp</code> ✅</td><td>all four init forms printed; traversal idioms; commented OOB demonstration</td></tr><tr><td>(live) <code>array_memory.cpp</code></td><td>prints element addresses to <em>show</em> contiguity (4-byte steps)</td></tr></tbody></table>
+<h2 id="conceptual-explanation-beginner-first">Conceptual explanation (beginner-first)</h2>
+<p>So far, "text" was a <code>std::string</code> — a comfortable object that grows, knows its length, and handles memory for us. But underneath, C++ (like C) stores text the old way: as an <strong>array of <code>char</code> ending with the null character <code>'\0'</code></strong>. You will meet this style in textbooks, legacy code, and APIs — so you must be able to read it. The rules: the terminator occupies one slot, string literals like <code>"hi"</code> already carry it (so they need two chars of room plus the terminator), and a <code>char</code> array that fills completely has <strong>no terminator</strong> — printing it runs off the end into whatever bytes sit next door.</p>
+<p>This lecture is deliberately hands-off-<code>std::string</code>: we write the loops ourselves, because the loops <em>are</em> the lesson. Walking a C-string until <code>s[i] != '\0'</code> is the same scan pattern as searching an array — with a terminator standing in for the size parameter. The terminator is the string's own "size parameter," stored in the data itself.</p>
+<h2 id="terminology-and-definitions">Terminology and definitions</h2>
+<table><thead><tr><th>Term</th><th>Definition</th></tr></thead><tbody><tr><td>C-string</td><td>A <code>char</code> array whose last character is <code>'\0'</code></td></tr><tr><td>Null terminator</td><td><code>'\0'</code> — the byte marking the end</td></tr><tr><td>String literal</td><td><code>"text"</code> — has <code>strlen(text) + 1</code> bytes; already terminated</td></tr><tr><td>Buffer</td><td>A fixed-size <code>char</code> array a string is read into</td></tr><tr><td>Buffer overflow</td><td>Writing past the buffer's end — the classic security bug</td></tr><tr><td><code>std::size_t</code></td><td>The unsigned type of sizes and indices</td></tr><tr><td><code>&lt;cctype&gt;</code> functions</td><td><code>isalpha</code>, <code>isdigit</code>, <code>toupper</code>, <code>isspace</code> — per-character tests and maps</td></tr><tr><td>Per-character loop</td><td>The standard scan: <code>for (std::size_t i{0}; s[i] != '\0'; ++i)</code></td></tr></tbody></table>
+<h2 id="syntax-and-c-examples">Syntax and C++ examples</h2>
+<pre><code class="language-cpp">char word[]{&quot;hi&quot;};            // size 3: &#x27;h&#x27;, &#x27;i&#x27;, &#x27;\0&#x27; — literal adds it
+char buf[8]{};                // all zeros: an empty C-string from the start
+
+std::cin &gt;&gt; buf;              // reads ONE word into the buffer
+
+// the canonical C-string walk — no size needed, terminator says stop
+for (std::size_t i{0}; word[i] != &#x27;\0&#x27;; ++i)
+    std::cout &lt;&lt; word[i] &lt;&lt; &#x27; &#x27;;          // h i
+
+// count digits using &lt;cctype&gt;
+int digits{0};
+for (std::size_t i{0}; buf[i] != &#x27;\0&#x27;; ++i)
+    if (std::isdigit(static_cast&lt;unsigned char&gt;(buf[i])))
+        ++digits;
+
+// std::string still exists — .size() and [] are our friends
+std::string s{&quot;A1b2&quot;};
+for (char ch : s)             // range-for: no indices at all
+    if (std::isdigit(static_cast&lt;unsigned char&gt;(ch))) ++digits;</code></pre>
+<ul><li>"Arrays start at 1." (Zero-based; fence-post error follows.)</li><li>"<code>arr[5]</code> on a 5-element array is an error the compiler catches." (It isn't — undefined behavior, no diagnostic.)</li><li>"The array knows its own size." (It doesn't; the <em>programmer's</em> discipline carries it — <code>std::vector</code> in L27 fixes this properly.)</li></ul>
+<h2 id="line-by-line-code-explanation">Line-by-line code explanation</h2>
+<p>The C-string mechanics program (per <code>examples/array_basics.cpp</code>'s char section):</p>
+<ol><li><code>char word[]{"hi"};</code> — the compiler counts: 'h', 'i', and the terminator the literal supplies → size 3. Writing <code>char word[2]</code> would <em>drop the terminator</em> — the bug demo below.</li><li><code>char buf[8]{};</code> — brace-init zeroes all 8 bytes, so buf is an empty C-string before any input (a terminated empty string, never garbage).</li><li><code>for (std::size_t i{0}; word[i] != '\0'; ++i)</code> — the walk: no size variable, the terminator is the stop sign. Compare with the array loop <code>i &lt; n</code> from the previous lecture: same scan pattern, sentinel instead of bound.</li><li><code>std::isdigit(static_cast&lt;unsigned char&gt;(buf[i]))</code> — the <code>&lt;cctype&gt;</code> functions are defined for the unsigned char range; the cast is the documented, portable way to pass a plain char safely. (Standard C++ everywhere; no compiler-specific behavior.)</li><li>The <code>std::string</code> version with range-for is shown as the contrast: same logic, no terminator management — why we default to <code>std::string</code>.</li></ol>
+</ol>
+<h2 id="output-prediction-questions-with-answers">Output prediction questions (with answers)</h2>
+<ol><li><code>char w[]{"cat"}; std::cout &lt;&lt; sizeof(w);</code> — ? — <strong>3</strong> bytes: 'c', 'a', 't', <code>'\0'</code> (sizeof counts the terminator; <code>strlen</code> would say 2).</li><li><code>char b[4]{}; std::cin &gt;&gt; b;</code> with input <code>hello</code> — ? — undefined behavior: 5 chars + terminator exceed 4 — the overflow demo.</li><li><code>char t[3]{"abc"};</code> — ? — compile error (needs 4 including <code>'\0'</code>); with <code>char t[3] = "abc";</code> (no braces) it is also rejected — the language protects literal-to-array sizing.</li><li>Walk output for <code>word = "A1"</code> in the digit-count loop — ? — prints <code>A 1 </code>, digits == 1.</li><li><code>char e[4]{};</code> before any input, printed — ? — nothing: element 0 is <code>'\0'</code>, so the string is empty, not garbage.</li></ol>
+</ol>
+<h2 id="common-errors-and-debugging-examples">Common errors and debugging examples</h2>
+<table><thead><tr><th>Error</th><th>Symptom</th><th>Fix</th></tr></thead><tbody><tr><td>Buffer exactly fits the text</td><td>No room for <code>'\0'</code> → runs past the end when printed</td><td>Size = longest text + 1</td></tr><tr><td>Copying arrays with <code>=</code></td><td>Arrays don't assign element-wise</td><td>Copy in a loop (or <code>std::strcpy</code> with care)</td></tr><tr><td>Comparing C-strings with <code>==</code></td><td>Compares addresses, always false-ish</td><td><code>std::strcmp == 0</code> (shown, flagged as legacy)</td></tr><tr><td>Reading with <code>cin &gt;&gt; buf</code> into a small buffer</td><td>Overflow on long input</td><td>Prefer <code>std::string</code> + <code>getline</code></td></tr><tr><td>Forgetting the terminator when building by hand</td><td>Print runs into garbage bytes</td><td>Terminate manually: <code>s[n] = '\0';</code></td></tr><tr><td><code>char</code> vs <code>int</code> in <code>&lt;cctype&gt;</code> calls</td><td>Works usually, UB on negative chars</td><td>Cast to <code>unsigned char</code> first</td></tr></tbody></table>
+<h2 id="common-student-misconceptions">Common student misconceptions</h2>
+<ul><li><strong>"Array bounds are checked at runtime."</strong> C++ performs no bounds checking on <code>a[i]</code> — out-of-range access is undefined behavior, not a catchable exception; discipline (size constants, loop bounds) is the safety net.</li><li><strong>"<code>int a[10]</code> contains ten useful values right away."</strong> The ten ints are <em>uninitialized</em>; using them before assigning is undefined — show <code>int a[10]{};</code> as the zero-initialized habit.</li><li><strong>"<code>a[10]</code> is the last element."</strong> For size 10, valid indexes are <code>0..9</code>; <code>a[10]</code> is one past the last — the off-by-one that follows students for weeks.</li><li><strong>"The array knows its own length."</strong> <code>sizeof a / sizeof a[0]</code> works only where the <em>array type</em> is visible; once passed to a function the array decays and the size must travel separately.</li><li><strong>"Assigning arrays copies them (<code>b = a;</code>)."</strong> Arrays are not assignable; element-wise copying needs a loop (or <code>std::copy</code> later).</li></ul>
+<h2 id="classroom-demonstrations">Classroom demonstrations</h2>
+<ol><li><strong>The overflow that "works":</strong> print an unterminated buffer — garbage-or-nothing output differs between runs/machines: undefined behavior made visceral.</li><li><strong>Terminator surgery:</strong> set <code>word[1] = '\0'</code> on <code>"hi"</code> → prints <code>h</code> only: the terminator <em>is</em> the string's end, data after it is ignored.</li><li><strong>sizeof vs strlen:</strong> same array, two answers (3 vs 2) — memory size vs text length, permanently distinguished.</li></ol>
+</ol>
+<h2 id="guided-student-activities">Guided student activities</h2>
+<p><strong>Human array (15 min):</strong> 8 students become elements (holding numbered cards); commands like <code>a[3] = 99</code>, <code>for i in 0..7: a[i] *= 2</code> executed physically; the student asked for <code>a[8]</code> dramatizes the OOB read.</p>
+<h2 id="practice-problems">Practice problems</h2>
+<ul><li>Draw box-address diagrams for 3 array declarations (with addresses).</li><li>Predict output of 5 traversal/initialization programs (incl. partial-init trick).</li><li>Fix 3 programs with off-by-one and OOB bugs (trace-table first).</li><li>(🟡 stretch) Show <code>sizeof(a)/sizeof(a[0])</code> succeeding in the declaring function and failing (decayed) in a function receiving the array.</li></ul>
+<h2 id="practice-problems">Practice problems</h2>
+<ul><li>Convert the three prediction programs above into runnable files under <code>exercises/in_class/</code> at authoring time; the stretch item becomes the lab extension.</li></ul>
+<h2 id="summary">Summary</h2>
+<p>C-strings are <code>char</code> arrays with a <code>'\0'</code> terminator standing in for a size; the walk-until-terminator loop is the scan pattern with the terminator as its own sentinel. <code>std::string</code> remains the default tool — but reading C-string style code is a required literacy, and buffer sizes are the origin of the overflow bugs we will keep naming. Next (L18): the array-algorithm workshop — fill, print, sum, min/max, count, and linear search written as proper functions.</p>
+<h2 id="exit-ticket-formative-assessment">Exit ticket / formative assessment</h2>
+<ol><li>How many bytes does <code>char w[]{"cat"}</code> occupy, and what is in the last one?</li><li>Write the <code>for</code> header that walks a C-string <code>s</code> without a size variable.</li><li>Why is <code>char tiny[3]{"abc"}</code> a bug, and what symptom would you expect when printing <code>tiny</code>?</li></ol>
+</ol>
+<h2 id="estimated-time-allocation-120-min">Estimated time allocation (120 min)</h2>
+<table><thead><tr><th>Segment</th><th>Minutes</th></tr></thead><tbody><tr><td>Recall (midterm debrief) + motivation</td><td>10</td></tr><tr><td>Memory model + indexing + init forms</td><td>40</td></tr><tr><td>Break</td><td>10</td></tr><tr><td>Traversal discipline + OOB reality</td><td>30</td></tr><tr><td>Human-array activity</td><td>15</td></tr><tr><td>Exit ticket + L18 preview</td><td>15</td></tr></tbody></table>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

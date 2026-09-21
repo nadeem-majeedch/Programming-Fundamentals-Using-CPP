@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L32 · From Structs to Classes, Course Synthesis · **FINAL EXAM** · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/lectures/week_16/lecture_32.html">
+<link rel="stylesheet" href="../../styles.css">
+<script src="../../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../../index.html">Home</a></li><li><a href="../../overview.html">Overview</a></li><li><a href="../../outcomes.html">Outcomes</a></li><li><a href="../../schedule.html">Schedule</a></li><li><a href="../../lectures.html" aria-current="page">Lectures</a></li><li><a href="../../labs.html">Labs</a></li><li><a href="../../cases.html">Case Studies</a></li><li><a href="../../exercises.html">Exercises</a></li><li><a href="../../assignments.html">Assignments</a></li><li><a href="../../projects.html">Projects</a></li><li><a href="../../resources.html">Resources</a></li><li><a href="../../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="narrow">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../../index.html">Home</a> › L32 · From Structs to Classes, Course Synthesis · **FINAL EXAM**</nav>
+<h1 class="page-title">L32 · From Structs to Classes, Course Synthesis · **FINAL EXAM**</h1>
+<p><strong>Module 16 — Introduction to Object-Oriented Programming · Week 16 · Lecture 32 of 32 · 120 minutes</strong> <strong>Outcomes:</strong> CLO-1–CLO-8 · PF-16.3, PF-16.4 · <a href="../../outcomes.html">LEARNING_OUTCOMES.md</a> · <strong>FINAL EXAM (120 min) · Capstone demo week</strong></p>
+<h2 id="learning-objectives">Learning objectives</h2>
+<ol><li>Evolve a struct-based records program into a class-based design, defending the interface (what becomes private, which functions become members, where validation lives) — the capstone's final refinement (PF-16.3).</li><li>Synthesize Modules 1–16 outcomes in an integrated exam: trace, predict, write, debug, and design across the full semester map (PF-16.4).</li><li>Present the capstone project with a code walk-through answering line-by-line viva questions (PF-16.4, PF-G3).</li></ol>
+</ol>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>All Modules 1–15; L31 (classes); capstone milestone (week 14) complete.</p>
+<h2 id="concept-sequence-hour-1-synthesis-teaching">Concept sequence (hour 1 — synthesis teaching)</h2>
+<ol><li>The struct→class refactor checklist (worked on the roster program)</li><li>Semester map: 16 modules → 8 CLOs, one slide of truth</li><li>Exam strategy per question family</li><li>Capstone demo protocol &amp; viva rubric</li><li>Where to go next: OOP course, data structures, DS pipeline courses</li></ol>
+</ol>
+<h2 id="teaching-topics-detailed">Teaching topics (detailed)</h2>
+<ul><li><strong>Refactor checklist (applied live to L28's roster):</strong> (1) state the invariant; (2) privatize the data; (3) promote the record functions to members (<code>print</code>, <code>promote</code> → member functions; free <code>find_by_id</code> stays free or becomes static-ish — discuss); (4) constructor validates at birth; (5) <code>const</code>-mark the readers; result diff shown — <em>same algorithms (M9–M12), new guard rails (L30–L31)</em>; the semester's arc in one refactor.</li><li><strong>Semester synthesis map:</strong> pipeline (M1) → types (M2–3) → control (M4–5) → design (M6) → abstraction (M7–8) → collections (M9–12) → machine (M13–14) → robustness (M15) → objects (M16) — each node named with its CLO and its exam question family.</li><li><strong>Exam strategy:</strong> predict-output → trace, don't run; trace-table → fill every variable column; write-a-function → signature first, edge cases second; find-the-bug → hypotheses ranked by L16 loop; design → IPO + invariants.</li><li><strong>Capstone viva protocol:</strong> 5-minute demo, 5-minute code walk, PF-G3 line-by-line explanation; rubric per <a href="../../projects.html">projects/README.md</a>; demos scheduled this week (separate session per <a href="../../schedule.html">COURSE_SCHEDULE.md</a>).</li><li><strong>Forward map:</strong> OOP course (inheritance/polymorphism from L31's bridge slide), data structures (vector→STL containers), DS pipeline (M15's skip-and-report → real data cleaning).</li></ul>
+<h2 id="c-examples-required">C++ examples required</h2>
+<table><thead><tr><th>File</th><th>Role</th></tr></thead><tbody><tr><td><code>struct_to_class.cpp</code> ✅</td><td>L28 roster as struct version vs L31-style class version, refactor checklist annotated inline</td></tr><tr><td>(live) final review set</td><td>12 integrated questions covering all 8 CLOs (mirrors <a href="../../assignments/final-review.html">exams/final/review_guide.md</a>)</td></tr></tbody></table>
+<h2 id="common-student-misconceptions">Common student misconceptions</h2>
+<ul><li>"The final is about Module 16 only." (Cumulative with weeks 9–16 emphasis per <a href="../../assignments.html">exams/README.md</a>; the synthesis map exists to prevent cramming-on-the-last-module.)</li><li>"Refactoring to a class means rewriting the algorithms." (The algorithms survive; only the <em>ownership of data</em> changes — the demo shows 80% code reuse.)</li><li>"The viva is a formality." (PF-G3: students must explain their own code — authored-understanding is the integrity check.)</li></ul>
+<h2 id="conceptual-explanation-beginner-first">Conceptual explanation (beginner-first)</h2>
+<p>Hour 1 is the whole course as one map. Sixteen modules in one arc: <strong>values and control</strong> (M1–M5: data, decisions, repetition), <strong>design</strong> (M6–M8: problem-solving, functions, passing modes), <strong>data structures and algorithms</strong> (M9–M12: arrays, strings, search, sort), <strong>the machine</strong> (M13–M14: pointers, heap, structs), and <strong>integration</strong> (M15–M16: files, robustness, classes). Every module supplied a <em>pattern</em> (accumulate, find-first, two-pointer, invariant, RAII, encapsulation) — the synthesis quiz is a rapid-fire tour of exactly those patterns.</p>
+<p>The struct→class refactor shows the arc's payoff concretely: the L28 roster (records + free functions) becomes a class whose data protects itself — same algorithms, changed <em>ownership of data</em>, and a compile error where corruption used to live. That single transformation is the difference the course has been building toward since week 1: you no longer only write correct programs; you design types that make incorrect programs refuse to exist.</p>
+<p>Hour 2 is the final exam (cumulative, weeks 9–16 emphasis per the blueprint) — or, in the separate-exam-period variant, the full synthesis lecture plus capstone demonstrations and vivas.</p>
+<h2 id="terminology-and-definitions">Terminology and definitions</h2>
+<table><thead><tr><th>Term</th><th>Definition</th></tr></thead><tbody><tr><td>Synthesis map</td><td>The five-stage arc (values→control→design→data→machine→integration)</td></tr><tr><td>Pattern inventory</td><td>The named skeletons: ACCUMULATE, COUNT-IF, FIND-FIRST, two-pointer, state machine, invariant, RAII, encapsulation</td></tr><tr><td>Refactor checklist</td><td>The ordered struct→class steps (define private data → constructors → validated setters → const getters → move free functions)</td></tr><tr><td>Ownership of data</td><td>Who guards the invariant: free functions (struct) vs the type itself (class)</td></tr><tr><td>Viva</td><td>The oral defense of one's own capstone code — authored-understanding check</td></tr><tr><td>Demo script</td><td>The 5-minute capstone walkthrough: run, explain, answer</td></tr><tr><td>Cumulative emphasis</td><td>Weeks 9–16 weighted per the final blueprint</td></tr><tr><td>Course-end reflection</td><td>Self-assessment against chosen CLOs with submission evidence</td></tr></tbody></table>
+<h2 id="syntax-and-c-examples">Syntax and C++ examples</h2>
+<p>The refactor checklist, applied live (per <code>examples/struct_to_class.cpp</code>):</p>
+<pre><code class="language-cpp">// STEP 0 — the struct version (M28): data public, free functions guard
+struct StudentR { std::string name; double gpa; };   // anyone can corrupt
+
+// STEP 1 — privatize the data
+class StudentC { public: /* interface next */ private: std::string name_; double gpa_; };
+
+// STEP 2 — constructor establishes the invariant at birth
+StudentC(const std::string&amp; name, double gpa) { set_gpa(gpa); /* name_ init */ }
+
+// STEP 3 — validated setters are the only write paths
+void set_gpa(double g) { gpa_ = (g &gt;= 0.0 &amp;&amp; g &lt;= 4.0) ? g : gpa_; }
+
+// STEP 4 — const getters report safely
+double get_gpa() const { return gpa_; }
+
+// STEP 5 — free functions become members (or stay free, taking const&amp;)
+void print() const { /* was: print_student(const StudentR&amp;) */ }</code></pre>
+<p>Each step compiles and runs — the checklist is incremental by design, so no step leaves the program broken.</p>
+<h2 id="line-by-line-code-explanation">Line-by-line code explanation</h2>
+<p><code>examples/struct_to_class.cpp</code>:</p>
+<ol><li>Both versions exist side by side with the <em>same</em> <code>main</code> logic body — the diff is ownership, not algorithms: roughly 80% of the code survives untouched (the demo prints the identical analytics from both).</li><li>The corruption line works on the struct (silently) and fails to compile on the class — the two outcomes are printed as labeled evidence in the file's comments.</li><li>The checklist is annotated inline at each step, matching the terminology table — the file doubles as the review handout.</li><li>The final review set (12 integrated questions, live) mirrors <code>exams/final/review_guide.md</code> — one drill block per module plus integrative ones, each tagged with its CLO.</li></ol>
+</ol>
+<h2 id="output-prediction-questions-with-answers">Output prediction questions (with answers)</h2>
+<ol><li>Same corruption write, struct vs class — ? — Struct: accepted, invariant broken. Class: compile error — corruption can't exist.</li><li>Refactoring to a class rewrites what fraction of the algorithms? — None: only data ownership and access paths change.</li><li>Which modules own each pattern: two-pointer (M11), invariant (M16), RAII (M14/15), FIND-FIRST (M9/12)? — Rapid-fire map.</li><li>Why does the class version need no validation at call sites? — Validation lives in the setter/constructor: the <em>only</em> write paths.</li><li>Which weeks does the final emphasize? — Cumulative with weeks 9–16 emphasis, per the blueprint.</li></ol>
+</ol>
+<h2 id="common-errors-and-debugging-examples">Common errors and debugging examples</h2>
+<table><thead><tr><th>Error</th><th>Symptom</th><th>Fix</th></tr></thead><tbody><tr><td>Cramming module 16 only</td><td>Cumulative items collapse</td><td>Synthesis map + review set coverage</td></tr><tr><td>Refactoring all at once</td><td>Half-class, half-struct chaos</td><td>The five-step checklist, compiling each step</td></tr><tr><td>Setters that skip validation "temporarily"</td><td>The invariant hole reappears</td><td>Every write path validates, always</td></tr><tr><td>Demo scripts that only run</td><td>Viva exposes unexplained code</td><td>Script = run + explain + answer</td></tr><tr><td>Free functions left taking public data</td><td>Bypass path around encapsulation</td><td>Move in or take <code>const&amp;</code> of the <em>interface</em></td></tr></tbody></table>
+<h2 id="classroom-demonstrations">Classroom demonstrations</h2>
+<ol><li><strong>The 80% refactor:</strong> delete lines from the struct version as they are replaced; the surviving-code counter tells the reuse story better than claims.</li><li><strong>Pattern rapid-fire:</strong> 16 one-line snippets — the class names the pattern and module in under a minute each; the CLO map builds itself on the board.</li><li><strong>The corruption crossfade:</strong> run struct-corruption (silent), class-corruption (compile error) back to back — the course's thesis in two compile runs.</li></ol>
+</ol>
+<h2 id="guided-student-activities">Guided student activities</h2>
+<p><strong>Hour 1:</strong> struct→class live refactor + rapid-fire synthesis quiz (16 questions, one per module, teams shout the CLO). <strong>Hour 2: FINAL EXAM</strong> (120 min — institutions using a separate exam period run the full synthesis lecture in this slot; both variants in <a href="../../schedule.html">COURSE_SCHEDULE.md</a> § Scheduling notes).</p>
+<h2 id="practice-problems">Practice problems</h2>
+<ul><li>Complete the refactor checklist on your own capstone (if time-scope allows) or on the provided roster.</li><li>Final review set in <a href="../../assignments/final-review.html">exams/final/review_guide.md</a> — 24 questions mapped to CLOs.</li><li>Prepare the demo script (5 min) + anticipate 5 viva questions on your own code.</li></ul>
+<h2 id="practice-problems">Practice problems</h2>
+<ul><li>Complete the refactor checklist on your own capstone (if time-scope allows) or on the provided roster.</li><li>Final review set in <a href="../../assignments/final-review.html">exams/final/review_guide.md</a> — 24 questions mapped to CLOs.</li><li>Prepare the demo script (5 min) + anticipate 5 viva questions on your own code.</li></ul>
+<h2 id="summary">Summary</h2>
+<p>Sixteen modules, one arc: values → control → design → data → machine → integration; each contributed named patterns that the synthesis review strings together. The struct→class checklist compresses the course's destination into five compiling steps — the type now guards its own invariant. Next: the exam (and after it, the next course).</p>
+<h2 id="exit-ticket-formative-assessment">Exit ticket / formative assessment</h2>
+<p><em>(Course-end reflection, submitted with the exam:)</em></p>
+<ol><li>Name the one module that changed how you think about programs, and why.</li><li>Self-assess against two CLOs of your choice — evidence from your own submissions.</li></ol>
+</ol>
+<h2 id="estimated-time-allocation-120-min">Estimated time allocation (120 min)</h2>
+<table><thead><tr><th>Segment</th><th>Minutes</th></tr></thead><tbody><tr><td>Struct→class refactor + synthesis map</td><td>40</td></tr><tr><td>Exam strategy + viva protocol</td><td>15</td></tr><tr><td><strong>FINAL EXAM</strong></td><td>120*</td></tr></tbody></table>
+<p>*When the exam runs in this slot the total exceeds 2 hours; institutions therefore either (a) shorten hour 1 to 60 min and run the exam in a separate period, or (b) run the synthesis lecture earlier in week 16's first slot — both supported by <a href="../../schedule.html">COURSE_SCHEDULE.md</a>.</p>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L02 · Anatomy of a C++ Program: `main`, Statements, Compilation, and the Three Error Classes · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/lectures/week_01/lecture_02.html">
+<link rel="stylesheet" href="../../styles.css">
+<script src="../../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../../index.html">Home</a></li><li><a href="../../overview.html">Overview</a></li><li><a href="../../outcomes.html">Outcomes</a></li><li><a href="../../schedule.html">Schedule</a></li><li><a href="../../lectures.html" aria-current="page">Lectures</a></li><li><a href="../../labs.html">Labs</a></li><li><a href="../../cases.html">Case Studies</a></li><li><a href="../../exercises.html">Exercises</a></li><li><a href="../../assignments.html">Assignments</a></li><li><a href="../../projects.html">Projects</a></li><li><a href="../../resources.html">Resources</a></li><li><a href="../../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="narrow">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../../index.html">Home</a> › L02 · Anatomy of a C++ Program: `main`, Statements, Compilation, and the Three Error Classes</nav>
+<h1 class="page-title">L02 · Anatomy of a C++ Program: `main`, Statements, Compilation, and the Three Error Classes</h1>
+<p><strong>Module 1 — Introduction to Programming and C++ · Week 1 · Lecture 2 of 32 · 120 minutes</strong> <strong>Outcomes:</strong> CLO-1 · PF-1.3, PF-1.4 · <a href="../../outcomes.html">LEARNING_OUTCOMES.md</a></p>
+<h2 id="learning-objectives">Learning objectives</h2>
+<ol><li>Identify the structural parts of a minimal C++ program — preprocessor directive, <code>main</code> function, statements, return statement, comments — and predict the compile failure caused by removing each (PF-1.3).</li><li>Distinguish <code>'\n'</code> from <code>std::endl</code> and explain why output operators chain (PF-1.3).</li><li>Classify an error as <strong>syntax</strong>, <strong>runtime</strong>, or <strong>logic</strong> from either its compiler diagnostic or its symptom, and name the tool that catches each class (PF-1.4).</li></ol>
+</ol>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>L01 (toolchain pipeline; can build and run <code>hello_world.cpp</code>).</p>
+<h2 id="concept-sequence">Concept sequence</h2>
+<ol><li>Read <code>hello_world.cpp</code> line-by-line as a dissection</li><li>Statements, sequenced execution, and blocks</li><li>Comments (why-write vs what-happens)</li><li>Output details: chained <code>&lt;&lt;</code>, <code>'\n'</code> vs <code>endl</code></li><li>The three error classes, with one live demo of each</li><li>Reading a diagnostic top-down (file, line, message, caret)</li></ol>
+</ol>
+<h2 id="teaching-topics-detailed">Teaching topics (detailed)</h2>
+<ul><li><strong><code>#include &lt;iostream&gt;</code></strong> — a preprocessor paste, not a Python-style import; why the <code>;</code> after include would be wrong.</li><li><strong><code>int main()</code></strong> — the mandated entry point; exactly one per program; returns <code>int</code> (0 = success).</li><li><strong>Statements &amp; sequencing:</strong> each <code>;</code> ends a statement; execution is strictly top-to-bottom — no control flow yet (deliberately: decisions come in Module 4).</li><li><strong>Output chaining:</strong> <code>std::cout &lt;&lt; "a" &lt;&lt; 'b' &lt;&lt; 42 &lt;&lt; '\n';</code> — evaluate left to right, mix string literals, chars, numbers.</li><li><strong><code>'\n'</code> vs <code>std::endl</code>:</strong> newline vs newline+flush; habit: <code>\n</code> unless debugging timing.</li><li><strong>Error taxonomy with demos:</strong> missing <code>;</code> (syntax), divide-in-progress hang or <code>vector</code> OOB later (runtime), wrong-but-compiling average formula (logic — <em>the compiler's silence is the danger</em>).</li><li><strong>Diagnostic reading protocol:</strong> first error first, read message, go to the line, recompile after each fix.</li></ul>
+<h2 id="c-examples-required">C++ examples required</h2>
+<table><thead><tr><th>File</th><th>Role</th></tr></thead><tbody><tr><td><code>hello_world.cpp</code> ✅</td><td>dissection target</td></tr><tr><td>(live) <code>anatomy_break.cpp</code></td><td>instructor breaks it 4 ways: no <code>;</code>, missing <code>}</code>, wrong include, <code>main</code> renamed</td></tr></tbody></table>
+<h2 id="conceptual-explanation-beginner-first">Conceptual explanation (beginner-first)</h2>
+<p>Think of a program as a list of instructions for a very obedient but very literal worker. Every instruction is one <strong>statement</strong> — one complete command ending in a semicolon, like a sentence ending in a period. The worker reads them top to bottom and does exactly what each says, in order. If you want a different order, you write the lines in a different order; there is no magic.</p>
+<p>Three kinds of text live in a program: instructions (do things), comments (notes for humans — the worker skips them), and <strong>directives</strong> (instructions for the <em>translator</em>, not the worker, like <code>#include</code>, which pastes in a helper file before translation even starts).</p>
+<p>Why care about the three error classes now? Because each class has a different <em>fixing tool</em>, and beginners waste hours using the wrong tool:</p>
+<ul><li><strong>Syntax errors</strong>: your text breaks the grammar. The translator catches them and prints a diagnostic — you literally cannot run the program.</li><li><strong>Runtime errors</strong>: the text is grammatical, but an instruction fails <em>while running</em> (crash, hang).</li><li><strong>Logic errors</strong>: everything runs, and the answer is wrong. The translator is silent — this is why we trace and test (Modules 6, 8).</li></ul>
+<h2 id="terminology-and-definitions">Terminology and definitions</h2>
+<table><thead><tr><th>Term</th><th>Definition</th></tr></thead><tbody><tr><td>Statement</td><td>One complete instruction, ending with <code>;</code></td></tr><tr><td>Expression</td><td>A piece of code that produces a value (<code>2 + 3</code>)</td></tr><tr><td>Directive</td><td>An instruction for the preprocessor (<code>#include &lt;iostream&gt;</code>)</td></tr><tr><td>Comment</td><td>Text ignored by the compiler: <code>//</code> to end of line, <code>/<em> ... </em>/</code> ranges</td></tr><tr><td>Stream</td><td>A channel data flows through (<code>cout</code> = out to screen, <code>cin</code> = in from keyboard)</td></tr><tr><td>Operator</td><td>A symbol performing an action (<code>&lt;&lt;</code> inserts into a stream)</td></tr><tr><td>Syntax error</td><td>Grammar violation, caught at compile time</td></tr><tr><td>Runtime error</td><td>Failure while the program runs (crash, hang)</td></tr><tr><td>Logic error</td><td>Program runs to completion but produces wrong results</td></tr><tr><td>Diagnostic</td><td>The compiler's error message: file, line, explanation</td></tr><tr><td><code>std::endl</code></td><td>Newline <strong>plus</strong> a flush (forces pending output out now)</td></tr></tbody></table>
+<h2 id="syntax-and-c-examples">Syntax and C++ examples</h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;                 // directive for the preprocessor
+
+int main()                          // entry point: OS calls this
+{
+    std::cout &lt;&lt; &quot;Hello!\n&quot;;        // statement 1: print a line
+    std::cout &lt;&lt; 2 + 3 &lt;&lt; &#x27;\n&#x27;;     // statement 2: print an expression
+    std::cout &lt;&lt; &#x27;A&#x27; &lt;&lt; &quot;\n&quot;;       // statement 3: a char, in single quotes
+    return 0;                       // statement 4: success code to the OS
+}</code></pre>
+<table><thead><tr><th>Piece</th><th>Meaning</th></tr></thead><tbody><tr><td><code>std::cout</code></td><td>The standard output stream (from <code>&lt;iostream&gt;</code>)</td></tr><tr><td><code>&lt;&lt;</code></td><td>"insert into the stream"; chains left to right</td></tr><tr><td><code>"..."</code></td><td>A string literal (any text, double quotes)</td></tr><tr><td><code>'A'</code></td><td>A char literal — ONE character, single quotes</td></tr><tr><td><code>\n</code></td><td>Newline character (no flush) vs <code>std::endl</code> (newline + flush)</td></tr><tr><td><code>// text</code></td><td>Comment: for humans, skipped by the compiler</td></tr></tbody></table>
+<h2 id="line-by-line-code-explanation">Line-by-line code explanation</h2>
+<p>Walking <code>examples/hello_world.cpp</code> and the program above:</p>
+<ol><li><code>#include &lt;iostream&gt;</code> — not a Python-style import: the preprocessor <em>literally pastes</em> the declarations of <code>std::cout</code> here. No semicolon follows (it is not a statement).</li><li><code>int main() {</code> — every C++ program starts at <code>main</code>; the <code>{</code> opens its body; the matching <code>}</code> closes it. Exactly one <code>main</code> per program.</li><li><code>std::cout &lt;&lt; "Hello, world!\n";</code> — the <code>&lt;&lt;</code> evaluates left to right; first the stream, then the text. The <code>;</code> ends the statement.</li><li>Chaining: <code>std::cout &lt;&lt; "a" &lt;&lt; 'b' &lt;&lt; 42 &lt;&lt; '\n';</code> prints <code>ab42</code> then a newline — three inserts, one statement.</li><li><code>return 0;</code> — hand the value 0 back to the OS: "all good".</li><li><code>}</code> — end of <code>main</code>'s body; reaching it ends the program.</li></ol>
+</ol>
+<h2 id="output-prediction-questions-with-answers">Output prediction questions (with answers)</h2>
+<ol><li><code>std::cout &lt;&lt; "2+3";</code> — what prints? — The text <code>2+3</code> (inside quotes, nothing is computed).</li><li><code>std::cout &lt;&lt; 2 + 3 &lt;&lt; '\n';</code> — and now? — <code>5</code> (no quotes: an expression is evaluated first).</li><li><code>std::cout &lt;&lt; "A" &lt;&lt; 'A' &lt;&lt; '\n';</code> — ? — <code>AA</code> (a string of one letter and a char literal print identically, but they are different types).</li><li><em>Remove the <code>;</code> from line 3. Error class?</em> — Syntax; the diagnostic names the line, and no executable is produced.</li><li><em>Replace <code>'\n'</code> with <code>"\n"</code>. Behavior?</em> — Identical here (one-character string prints the same); the types differ, which matters from Module 11.</li></ol>
+</ol>
+<h2 id="common-errors-and-debugging-examples">Common errors and debugging examples</h2>
+<table><thead><tr><th>Error</th><th>Diagnostic / symptom</th><th>Fix</th></tr></thead><tbody><tr><td>Missing <code>;</code></td><td><code>error: expected ';' before '}' token</code></td><td>Read the FIRST diagnostic; add it</td></tr><tr><td>Missing <code>}</code></td><td><code>error: expected '}' at end of input</code></td><td>Match braces pairwise while writing</td></tr><tr><td><code>'A'</code> typed as <code>"A"</code> in a char slot</td><td>Usually compiles; wrong type bites later</td><td>Single quotes = char, double = string</td></tr><tr><td><code>std::count</code> instead of <code>std::cout</code></td><td><code>'count' is not a member of 'std'</code></td><td>Typo; re-read the diagnostic's name</td></tr><tr><td>Quotes: straight vs smart (from slides/chat)</td><td><code>stray '\\342' in program</code></td><td>Retype quotes as plain ASCII <code>"</code></td></tr><tr><td>Logic error: printing <code>2+3</code> as text</td><td>Compiles, prints <code>2+3</code></td><td>Quotes off when you want math</td></tr></tbody></table>
+<p>Debugging protocol (used every week): read the <strong>first</strong> diagnostic, go to that file:line, fix exactly that, recompile. One fix per compile.</p>
+<h2 id="classroom-demonstrations">Classroom demonstrations</h2>
+<ol><li><strong>Anatomy dissection:</strong> project <code>hello_world.cpp</code>; delete one part at a time (include, semicolon, closing brace), recompile each time, and read the diagnostic aloud — students see the compiler's precision.</li><li><strong>The silent error:</strong> change a correct formula to a plausible-but-wrong one; show it compiles and runs — logic errors give no warnings.</li><li><strong>Chain vs separate statements:</strong> print the same three items with one chained statement, then three statements — identical output.</li></ol>
+</ol>
+<h2 id="guided-student-activities">Guided student activities</h2>
+<p><strong>Diagnostic triage relay (20 min):</strong> teams rotate through 6 broken 5-line programs; each team classifies the error class, underlines the culprit token, and writes the one-character (or one-word) fix. Fastest correct team explains their reasoning.</p>
+<h2 id="practice-problems">Practice problems</h2>
+<ul><li>Annotate a printout of <code>hello_world.cpp</code> with the role of every token group.</li><li>Predict output of 3 chained-<code>&lt;&lt;</code> statements (including one with an arithmetic expression <code>2+3</code> — deliberate foreshadowing of Module 3).</li><li>Match 6 diagnostics (as printed text) to error classes and name the fix.</li><li>(🟡 stretch) Explain why <code>int Main()</code> fails but <code>int main()</code> works.</li></ul>
+<h2 id="common-student-misconceptions">Common student misconceptions</h2>
+<ul><li>"Errors are bad." → Reframe: diagnostics are the compiler <em>helping</em>; the dangerous error is the one it cannot see (logic).</li><li>"The last error message is the important one." (First one is.)</li><li>"Comments change program speed/behavior."</li><li>"<code>main</code> is a keyword." (It's a function <em>you</em> define; the OS calls it.)</li></ul>
+<h2 id="summary">Summary</h2>
+<p>A C++ program is statements (<code>;</code>-terminated) executed strictly top to bottom, inside the one required <code>main</code> function, with <code>#include</code> pasting in library declarations before compilation. Output flows through <code>std::cout</code> with chained <code>&lt;&lt;</code>; <code>\n</code> ends lines. Errors come in three classes — syntax (compiler catches), runtime (crash while running), logic (silent wrong answers) — and each class needs a different tool. Reading the first diagnostic carefully is the semester's first habit. Next (L03): giving names to values with variables and types.</p>
+<h2 id="exit-ticket-formative-assessment">Exit ticket / formative assessment</h2>
+<ol><li>Classify: <em>"Program compiles, runs, prints the average of 2 and 5 as 3."</em> (logic — integer division foreshadowing!)</li><li>What are the two jobs of <code>std::endl</code> that <code>'\n'</code> does not do?</li><li>Write the minimal legal C++ program from memory.</li></ol>
+</ol>
+<h2 id="estimated-time-allocation-120-min">Estimated time allocation (120 min)</h2>
+<table><thead><tr><th>Segment</th><th>Minutes</th></tr></thead><tbody><tr><td>Recall (L01 exit ticket) + pipeline warm-up</td><td>10</td></tr><tr><td>Anatomy dissection of <code>hello_world.cpp</code></td><td>30</td></tr><tr><td>Output details (chaining, <code>'\n'</code> vs <code>endl</code>)</td><td>20</td></tr><tr><td>Break</td><td>10</td></tr><tr><td>Three error classes — live break-and-fix demos</td><td>25</td></tr><tr><td>Diagnostic triage relay activity</td><td>15</td></tr><tr><td>Exit ticket + Module 2 preview</td><td>10</td></tr></tbody></table>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

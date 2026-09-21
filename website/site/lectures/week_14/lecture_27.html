@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L27 · Dynamic Memory: `new`, `delete`, Leaks, Dangling Pointers, `std::vector` as Managed Memory · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/lectures/week_14/lecture_27.html">
+<link rel="stylesheet" href="../../styles.css">
+<script src="../../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../../index.html">Home</a></li><li><a href="../../overview.html">Overview</a></li><li><a href="../../outcomes.html">Outcomes</a></li><li><a href="../../schedule.html">Schedule</a></li><li><a href="../../lectures.html" aria-current="page">Lectures</a></li><li><a href="../../labs.html">Labs</a></li><li><a href="../../cases.html">Case Studies</a></li><li><a href="../../exercises.html">Exercises</a></li><li><a href="../../assignments.html">Assignments</a></li><li><a href="../../projects.html">Projects</a></li><li><a href="../../resources.html">Resources</a></li><li><a href="../../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="narrow">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../../index.html">Home</a> › L27 · Dynamic Memory: `new`, `delete`, Leaks, Dangling Pointers, `std::vector` as Managed Memory</nav>
+<h1 class="page-title">L27 · Dynamic Memory: `new`, `delete`, Leaks, Dangling Pointers, `std::vector` as Managed Memory</h1>
+<p><strong>Module 14 — Dynamic Memory and Structures · Week 14 · Lecture 27 of 32 · 120 minutes</strong> <strong>Outcomes:</strong> CLO-7 · PF-14.1, PF-14.2 · <a href="../../outcomes.html">LEARNING_OUTCOMES.md</a></p>
+<h2 id="learning-objectives">Learning objectives</h2>
+<ol><li>Allocate and release heap memory with <code>new</code>/<code>delete</code> (scalar) and <code>new[]</code>/<code>delete[]</code> (arrays), matching forms exactly and explaining why mismatching forms is undefined behavior (PF-14.1).</li><li>Identify memory leaks, dangling pointers, and double-deletes in code, and repair each with the correct fix (PF-14.1).</li><li>Explain RAII and why <code>std::vector</code>/<code>std::string</code> are the course default, converting a leak-prone raw-memory program to a leak-free vector version (PF-14.2).</li></ol>
+</ol>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>L25 (pointers, addresses, state diagrams); L17 (array memory model); L03 (lifetime — stack objects die at scope end).</p>
+<h2 id="concept-sequence">Concept sequence</h2>
+<ol><li>The stack vs heap: two memory regions with different rules</li><li><code>new</code>/<code>delete</code>: explicit heap lifetime</li><li><code>new[]</code>/<code>delete[]</code> for dynamic arrays; runtime-sized allocation</li><li>The three failure modes: leak, dangling, double-delete</li><li>RAII: tying lifetime to scope (vector as the safe owner)</li><li>Conversion lab: raw → vector</li></ol>
+</ol>
+<h2 id="teaching-topics-detailed">Teaching topics (detailed)</h2>
+<ul><li><strong>Stack vs heap table:</strong> stack = automatic, scope-bound, fast, limited; heap = explicit, flexible lifetime, manual release; diagram of a pointer <em>on the stack</em> pointing to a block <em>on the heap</em>.</li><li><strong><code>new</code>/<code>delete</code>:</strong> <code>int* p{new int{42}}; ... delete p; p = nullptr;</code> — allocate-construct, use, release, null-out as the four-step discipline; why set <code>p = nullptr</code> after delete (turns dangling into checkable).</li><li><strong><code>new[]</code>:</strong> <code>int* data{new int[n]};</code> with runtime <code>n</code> (finally: size not known at compile time — the thing stack arrays cannot do); <code>delete[] data;</code> — bracket matching rule and the UB of mixing.</li><li><strong>Failure modes (each shown in code):</strong> <em>leak</em> — reassign <code>p</code> before delete: the block becomes unreachable; <em>dangling</em> — use after delete; <em>double-delete</em> — two <code>delete</code>s on one pointer; each labeled with the symptom (or silent lack thereof) and the one-line fix.</li><li><strong>RAII:</strong> the owner-object pattern — constructor acquires, destructor releases (mechanism named, not implemented); <code>std::vector&lt;int&gt; v(n);</code> replaces <code>new[]</code> + manual delete; "you never write delete for vector" — the course rule and its justification; <code>v.push_back</code> growth shown as the runtime-sizing win without leak risk.</li><li><strong>Conversion lab (live):</strong> the leak-prone <code>raw_stats.cpp</code> rewritten to <code>vector</code> in 5 edits; line-count and failure-mode count both drop.</li></ul>
+<h2 id="c-examples-required">C++ examples required</h2>
+<table><thead><tr><th>File</th><th>Role</th></tr></thead><tbody><tr><td><code>dynamic_memory_caution.cpp</code> ✅</td><td>three labeled failure modes (each reproducible-safe: leak via counter, dangling via re-set check, double-delete commented) + the corrected versions</td></tr><tr><td>(live) <code>raw_to_vector.cpp</code></td><td>side-by-side raw vs vector implementations of the same stats task</td></tr></tbody></table>
+<h2 id="common-student-misconceptions">Common student misconceptions</h2>
+<ul><li>"<code>delete</code> erases the pointer." (It releases the <em>pointed-to</em> block; the pointer variable survives — now dangling.)</li><li>"Leaks crash the program." (They don't — they silently consume memory; that's what makes them insidious.)</li><li>"<code>delete p;</code> needs repeating per element." (One <code>delete</code>/<code>delete[]</code> per allocation; matching the allocation form is the rule.)</li><li>"<code>new</code> is just C++ for <code>malloc</code>." (It constructs typed objects; the type-safe pairing is the point.)</li><li>"<code>std::vector</code> uses no heap." (It <em>manages</em> heap for you — RAII; students should understand what's being automated.)</li></ul>
+<h2 id="conceptual-explanation-beginner-first">Conceptual explanation (beginner-first)</h2>
+<p>Until now, every variable's size was fixed in the source code — <code>int scores[30];</code> is 30 forever. But programs often need memory whose size they only know <em>at run time</em> ("allocate room for n students"). The <strong>heap</strong> (or <em>free store</em>) is memory you request explicitly with <code>new</code> and release explicitly with <code>delete</code> — and that pair of responsibilities is the whole lesson: every <code>new</code> must be matched by exactly one <code>delete</code> (or <code>delete[]</code> for arrays), and failing to do so <em>leaks</em> memory silently.</p>
+<p>Three failure modes dominate, and all three are <em>silent or delayed</em>: the <strong>leak</strong> (allocated, never freed — the program slowly eats RAM), the <strong>dangling pointer</strong> (freed, but the pointer still points there — using it is undefined behavior), and <strong>double delete</strong> (freeing twice — corrupts the allocator). The disciplines that prevent them: null-check before use, null-out after delete, never dereference a freed pointer, and match allocation forms exactly.</p>
+<p>Then the professional punchline: modern C++ makes <code>new[]</code>/<code>delete[]</code> rare. <strong><code>std::vector&lt;int&gt;</code></strong> (a library array that grows and manages its own heap memory) handles allocation and release <em>automatically</em> — when the vector goes out of scope, its memory is freed. That pattern — resource release tied to object lifetime — is called <strong>RAII</strong>, and it is why the course default is vector, with raw <code>new</code> taught so the mechanism is understood, not feared.</p>
+<h2 id="terminology-and-definitions">Terminology and definitions</h2>
+<table><thead><tr><th>Term</th><th>Definition</th></tr></thead><tbody><tr><td>Stack</td><td>Automatic storage: locals and parameters; freed at scope exit</td></tr><tr><td>Heap / free store</td><td>Explicit memory: requested with <code>new</code>, released with <code>delete</code></td></tr><tr><td><code>new</code> / <code>delete</code></td><td>Allocate one object / release it</td></tr><tr><td><code>new[]</code> / <code>delete[]</code></td><td>Allocate an array / release it — forms must match</td></tr><tr><td>Memory leak</td><td>Allocated but never freed; invisible, cumulative</td></tr><tr><td>Dangling pointer</td><td>Points to freed memory; any use is undefined behavior</td></tr><tr><td>Double delete</td><td>Freeing the same block twice — allocator corruption</td></tr><tr><td><code>nullptr</code> reset</td><td><code>p = nullptr;</code> after delete; deleting null is a safe no-op</td></tr><tr><td><code>std::vector&lt;T&gt;</code></td><td>Library dynamic array; manages its own heap memory (RAII)</td></tr><tr><td>RAII</td><td>Resource acquisition tied to object lifetime — release happens automatically</td></tr><tr><td>Runtime sizing</td><td><code>int* data = new int[n];</code> where n is known only at run time</td></tr></tbody></table>
+<h2 id="syntax-and-c-examples">Syntax and C++ examples</h2>
+<pre><code class="language-cpp">// runtime-sized single value and array
+int n{};
+std::cin &gt;&gt; n;
+int* data{new int[n]{}};          // n zeros; size fixed AT RUN TIME
+
+for (int i{0}; i &lt; n; ++i)
+    data[i] = i * i;              // same indexing as a normal array
+
+long long total{0};
+for (int i{0}; i &lt; n; ++i)
+    total += data[i];
+
+delete[] data;                    // match the [] form — exactly once
+std::cout &lt;&lt; total &lt;&lt; &#x27;\n&#x27;;
+
+// single object
+int* p{new int{42}};
+std::cout &lt;&lt; *p &lt;&lt; &#x27;\n&#x27;;
+delete p;
+p = nullptr;                      // null-out: dangling becomes testable
+
+// the modern default: std::vector does all of this management itself
+#include &lt;vector&gt;
+std::vector&lt;int&gt; v(static_cast&lt;std::size_t&gt;(n));
+for (std::size_t i{0}; i &lt; v.size(); ++i)
+    v[i] = static_cast&lt;int&gt;(i) * static_cast&lt;int&gt;(i);
+// no delete — freed automatically when v leaves scope (RAII)</code></pre>
+<h2 id="line-by-line-code-explanation">Line-by-line code explanation</h2>
+<p><code>examples/dynamic_memory_caution.cpp</code> (three labeled failure modes, each followed by its corrected version):</p>
+<ol><li><strong>Leak mode:</strong> a loop allocates a fresh block each iteration and drops the only pointer into it — the old block becomes unreachable but is never freed. The corrected version frees (or reuses) before reallocating. Teaching point: the leak is <em>silent</em>; only a memory monitor would see it.</li><li><strong>Dangling mode:</strong> a pointer is deleted, then <em>read</em> — the program may print the old value, zeros, or crash: undefined behavior. The fix nulls the pointer after delete, making "is it valid?" answerable with <code>if (p != nullptr)</code>.</li><li><strong>Double-delete mode:</strong> <code>delete p;</code> twice — allocator corruption (presented as a commented demo; running it is not safe). The safe idiom: null-out after delete, because <code>delete nullptr</code> is defined as a no-op.</li><li>The corrected file finishes with the same task done by <code>std::vector&lt;int&gt;</code> — same results, zero management code: the RAII contrast is the closer.</li></ol>
+</ol>
+<h2 id="output-prediction-questions-with-answers">Output prediction questions (with answers)</h2>
+<ol><li><code>new int[10]</code> must be freed by — ? — <code>delete[]</code> (form must match).</li><li>Memory usage climbs every iteration — which failure mode? — Leak; suspect every allocation line not paired with a delete.</li><li><code>delete p; p = nullptr; delete p;</code> — ? — Safe: deleting null is a no-op.</li><li>Reading through a freed pointer — ? — Undefined behavior: possibly old value, possibly garbage, possibly a crash.</li><li>Why does the vector version have no <code>delete</code>? — RAII: the vector's destructor frees its heap block at scope exit.</li></ol>
+</ol>
+<h2 id="common-errors-and-debugging-examples">Common errors and debugging examples</h2>
+<table><thead><tr><th>Error</th><th>Symptom</th><th>Fix</th></tr></thead><tbody><tr><td><code>delete</code> on <code>new[]</code> memory</td><td>UB — wrong pairing</td><td><code>delete[]</code> matches <code>new[]</code></td></tr><tr><td>Leak in a loop</td><td>Slow RAM growth, no crash</td><td>Free before reallocating; or vector</td></tr><tr><td>Use after delete</td><td>Random garbage / crash</td><td>Null-out after delete; check before use</td></tr><tr><td>Double delete</td><td>Allocator corruption</td><td>Delete exactly once; null-out pattern</td></tr><tr><td>Losing the pointer (overwriting it)</td><td>Orphaned block — leak</td><td>Keep the pointer until deleted</td></tr><tr><td>Raw <code>new[]</code> where a vector fits</td><td>All of the above risks</td><td>Default to <code>std::vector</code> (course rule)</td></tr></tbody></table>
+<h2 id="classroom-demonstrations">Classroom demonstrations</h2>
+<ol><li><strong>The leak that "works":</strong> run the leaky loop — nothing crashes; show Task Manager/<code>top</code> climbing. Silence is the danger.</li><li><strong>Dangling roulette:</strong> print through a freed pointer a few times — differing outputs across runs demonstrate UB honestly.</li><li><strong>RAII relief:</strong> run the vector version of the same task — then delete the vector's cleanup line conceptually: there is none. That <em>is</em> the lesson.</li></ol>
+</ol>
+<h2 id="guided-student-activities">Guided student activities</h2>
+<p><strong>Failure-mode clinic (20 min):</strong> six short programs on cards (one leak, one dangling read, one double-delete, one mismatched delete form, one missing null-out, one correct); teams diagnose severity (crash now / crash later / silent), fix, and rank by real-world danger; debrief ranks silent leaks highest.</p>
+<h2 id="practice-problems">Practice problems</h2>
+<ul><li>Trace-and-label the three failure modes in given snippets; write the fix.</li><li>Implement <code>int* make_range(int lo, int hi)</code> with correct <code>new[]</code> + documented caller responsibility; then the vector version.</li><li>Convert a fixed 100-element stack program to runtime-size <code>n</code> (raw), then to vector — count failure modes removed.</li><li>(🟡 stretch) Explain why <code>delete p;</code> twice is UB but <code>p = nullptr; delete p;</code> twice is safe (delete on nullptr is a no-op).</li></ul>
+<h2 id="summary">Summary</h2>
+<p>The heap buys runtime sizing at the price of manual pairing: every <code>new[]</code> needs exactly one <code>delete[]</code>, and the three silent failure modes (leak, dangling, double delete) have three disciplines (match forms, null-out, never reuse freed memory). <code>std::vector</code> wraps the whole contract into RAII — which is why the course default is vector, and raw <code>new</code> is taught for understanding. Next (L28): structures — user-defined types that bundle data.</p>
+<h2 id="exit-ticket-formative-assessment">Exit ticket / formative assessment</h2>
+<ol><li>Which <code>delete</code> frees <code>new int[10]</code>?</li><li>A program's memory usage climbs every loop iteration. Which failure mode, and which line type is the suspect?</li><li>Why does the course default to <code>std::vector</code> over <code>new[]</code>? (One sentence, one keyword: RAII.)</li></ol>
+</ol>
+<h2 id="estimated-time-allocation-120-min">Estimated time allocation (120 min)</h2>
+<table><thead><tr><th>Segment</th><th>Minutes</th></tr></thead><tbody><tr><td>Recall (passing quiz) + stack vs heap</td><td>10</td></tr><tr><td>new/delete + dynamic arrays + disciplines</td><td>40</td></tr><tr><td>Break</td><td>10</td></tr><tr><td>Failure modes + RAII + vector conversion</td><td>35</td></tr><tr><td>Failure-mode clinic</td><td>20</td></tr><tr><td>Exit ticket + L28 preview</td><td>5</td></tr></tbody></table>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

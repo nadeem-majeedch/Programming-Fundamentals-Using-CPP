@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Assignment 5 · Sensor Array Analytics — 1-D Arrays · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/assignments/assignment_05.html">
+<link rel="stylesheet" href="../styles.css">
+<script src="../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../index.html">Home</a></li><li><a href="../overview.html">Overview</a></li><li><a href="../outcomes.html">Outcomes</a></li><li><a href="../schedule.html">Schedule</a></li><li><a href="../lectures.html">Lectures</a></li><li><a href="../labs.html">Labs</a></li><li><a href="../cases.html">Case Studies</a></li><li><a href="../exercises.html">Exercises</a></li><li><a href="../assignments.html" aria-current="page">Assignments</a></li><li><a href="../projects.html">Projects</a></li><li><a href="../resources.html">Resources</a></li><li><a href="../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="narrow">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../index.html">Home</a> › Assignment 5 · Sensor Array Analytics — 1-D Arrays</nav>
+<h1 class="page-title">Assignment 5 · Sensor Array Analytics — 1-D Arrays</h1>
+<p><strong>Module 9 (L17–L18) · 40 marks · due end of Week 10</strong> Outcomes: CLO-6 (PF-9.x)</p>
+<p>A weather station logs hourly readings. You will compute a small analytics report with fixed-size arrays and clean function decomposition.</p>
+<h2 id="input">Input</h2>
+<p>First an integer n (1 ≤ n ≤ 1000): the number of readings. Then n integers −50..60 (°C). Any reading outside −50..60 is <em>skipped</em> (still consumes input) and counted as invalid; n is the count of <em>all</em> readings, valid or not.</p>
+<h2 id="report-exact-labels">Report (exact labels)</h2>
+<pre><code>valid : V
+invalid: I
+min   : m
+max   : M
+mean  : x.x (1 decimal)
+above : A        (strictly greater than mean, among valid readings)</code></pre>
+<p>If there are no valid readings, print the <code>min/max/mean/above</code> block as <code>n/a</code> lines instead (four lines, each label followed by <code>n/a</code>).</p>
+<h2 id="required-functions">Required functions</h2>
+<ul><li><code>int readReadings(int a[], int cap);</code> — fills a, returns valid count (invalid skipped but counted via reference or second channel).</li><li><code>int minOf(const int a[], int n);</code> / <code>int maxOf(const int a[], int n);</code> — preconditions n ≥ 1.</li><li><code>double meanOf(const int a[], int n);</code></li><li><code>int countAbove(const int a[], int n, double threshold);</code></li></ul>
+<h2 id="sample-run">Sample run</h2>
+<p>Input <code>7 | 20 -99 22 19 999 22 21</code> → <code>-99</code> and <code>999</code> invalid →</p>
+<pre><code>valid : 5
+invalid: 2
+min   : 19
+max   : 22
+mean  : 20.8
+above : 3</code></pre>
+<p>(mean of 20,22,19,22,21 = 20.8; above = 22,22,21 → 3)</p>
+<h2 id="constraints">Constraints</h2>
+<ul><li>Fixed array <code>int readings[1000];</code> — no vectors yet (vectors enter in M14).</li><li>Every function takes the array with a <code>const</code> correctness where it does not modify.</li><li>No repeated passes over the data beyond the four required analytics (one fill, then each function once).</li></ul>
+<h2 id="deliverables">Deliverables</h2>
+<p><code>sensors.cpp</code> (contract, zero warnings) · <code>test_table.md</code> — all-invalid input, single valid, boundary values −50/60, mean exactly integer (e.g., 20 20 → 20.0), n = 1000 (fill test) · <code>postmortem.md</code> (10 marks).</p>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

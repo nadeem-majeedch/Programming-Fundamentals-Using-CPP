@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L12 · Desk-Checking, Trace Tables, and Test-Case Design · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/lectures/week_06/lecture_12.html">
+<link rel="stylesheet" href="../../styles.css">
+<script src="../../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../../index.html">Home</a></li><li><a href="../../overview.html">Overview</a></li><li><a href="../../outcomes.html">Outcomes</a></li><li><a href="../../schedule.html">Schedule</a></li><li><a href="../../lectures.html" aria-current="page">Lectures</a></li><li><a href="../../labs.html">Labs</a></li><li><a href="../../cases.html">Case Studies</a></li><li><a href="../../exercises.html">Exercises</a></li><li><a href="../../assignments.html">Assignments</a></li><li><a href="../../projects.html">Projects</a></li><li><a href="../../resources.html">Resources</a></li><li><a href="../../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="narrow">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../../index.html">Home</a> › L12 · Desk-Checking, Trace Tables, and Test-Case Design</nav>
+<h1 class="page-title">L12 · Desk-Checking, Trace Tables, and Test-Case Design</h1>
+<p><strong>Module 6 — Problem-Solving and Algorithm Design · Week 6 · Lecture 12 of 32 · 120 minutes</strong> <strong>Outcomes:</strong> CLO-4 · PF-6.3, PF-6.4 · <a href="../../outcomes.html">LEARNING_OUTCOMES.md</a> · <strong>Lab 3 week</strong></p>
+<h2 id="learning-objectives">Learning objectives</h2>
+<ol><li>Desk-check any straight-line, selection, or loop construct into a complete variable-state trace table, showing every variable's value before/after each step or iteration (PF-6.3).</li><li>Design a test plan with named classes — normal, boundary, invalid — and justify why each case can reveal a distinct failure (PF-6.4).</li><li>Report test evidence as expected-vs-actual with a one-line verdict, the format required in every lab and assignment for the rest of the semester (PF-6.4).</li></ol>
+</ol>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>L11 (IPO/design artifacts); L09–L10 (trace basics, loop patterns).</p>
+<h2 id="concept-sequence">Concept sequence</h2>
+<ol><li>Why tracing beats re-reading (attention lies; tables don't)</li><li>Trace-table mechanics: rows = steps/iterations, columns = variables</li><li>Tracing selection and nested structures</li><li>Test-case classes: normal, boundary, invalid (+ stress)</li><li>Boundary analysis: where do bugs actually live</li><li>Evidence reporting format (course standard)</li></ol>
+</ol>
+<h2 id="teaching-topics-detailed">Teaching topics (detailed)</h2>
+<ul><li><strong>Trace-table protocol:</strong> number every statement; one column per variable (+ output column); fill row-by-row <em>without running</em>; annotate the row where the bug manifests — the bug is usually <em>above</em> that row.</li><li><strong>Worked traces:</strong> the L09 digit-sum loop; an <code>if/else if</code> grade chain (trace across <em>branches</em>, marking the taken path); a nested pair loop (iteration-count column).</li><li><strong>Test classes (course vocabulary):</strong></li><li><em>normal:</em> typical valid values (2–3 cases),</li><li><em>boundary:</em> edges of validity — min, max, min−1, max+1, empty/zero,</li><li><em>invalid:</em> wrong type, out-of-range, sentinel-as-data.</li><li>Rule: <strong>every boundary in the IPO chart must appear in the test plan.</strong></li><li><strong>Expected-vs-actual tables:</strong> <code>input | expected | actual | pass/fail</code> — the exact format labs/assignments require; a bug fix needs a before/after row pair.</li><li><strong>Trace-then-test workflow:</strong> desk-check finds <em>logic</em> bugs before running; tests find them after; both are cheaper than debugging blind — the module's closing argument.</li></ul>
+<h2 id="c-examples-required">C++ examples required</h2>
+<table><thead><tr><th>File</th><th>Role</th></tr></thead><tbody><tr><td><code>buggy_off_by_one.cpp</code> ✅</td><td>3 seeded bugs (off-by-one, wrong boundary, inverted condition); students must find them by trace table first, then by test plan</td></tr><tr><td>(live) <code>test_evidence.md</code> template filled for the buggy program</td><td>expected-vs-actual table modeled live</td></tr></tbody></table>
+<h2 id="common-student-misconceptions">Common student misconceptions</h2>
+<ul><li>"Testing means trying it once with a normal value." (Normal cases are the <em>least</em> likely to reveal bugs — boundaries are.)</li><li>"Desk-checking is only for when the program doesn't compile." (It's for logic bugs, which <em>do</em> compile.)</li><li>"A passed test proves correctness." (It proves <em>this input</em> works; evidence accumulates, certainty doesn't.)</li><li>"Trace tables are busywork." (They are the exam format for control-flow questions — show the midterm blueprint connection.)</li></ul>
+<h2 id="conceptual-explanation-beginner-first">Conceptual explanation (beginner-first)</h2>
+<p>Last lecture planned programs on paper. Today: the two paper skills that catch bugs <em>before</em> and <em>after</em> running — the trace table and the test plan.</p>
+<p>A <strong>trace table</strong> is you, playing computer. One column per variable (plus an output column), one row per step or loop pass. You fill rows <em>without running anything</em>, and — the crucial habit — you mark the row where the output first goes wrong, because the bug almost always lives <em>above</em> that row: the wrong value was computed earlier and merely <em>showed up</em> here. Tracing beats re-reading because attention lies (you skim past the wrong bound; the table doesn't) — this is why exams use trace questions: they measure whether you actually simulate code.</p>
+<p>A <strong>test plan</strong> is the record of what you'll try <em>after</em> running: not random values, but named <strong>classes</strong> — normal (typical valid input), boundary (the edges: min, max, min−1, max+1, empty, zero), invalid (wrong type, out of range). The rule this course enforces: <em>every</em> boundary in your IPO chart must appear in your test plan. And the reporting format — input, expected, actual, verdict — becomes the evidence table in every lab and assignment from here to the final.</p>
+<h2 id="terminology-and-definitions">Terminology and definitions</h2>
+<table><thead><tr><th>Term</th><th>Definition</th></tr></thead><tbody><tr><td>Desk checking / trace table</td><td>Paper execution: rows = steps/passes, columns = variables</td></tr><tr><td>Manifestation row</td><td>Where the wrong output first appears — the bug is usually above it</td></tr><tr><td>Path marking</td><td>Annotating the trace with the branch taken at each decision</td></tr><tr><td>Test case</td><td>One input + its expected output, chosen in advance</td></tr><tr><td>Normal class</td><td>Typical valid inputs (2–3 cases)</td></tr><tr><td>Boundary class</td><td>Edges of validity: min, max, min−1, max+1, empty, zero</td></tr><tr><td>Invalid class</td><td>Wrong type, out of range, sentinel-as-data</td></tr><tr><td>Expected vs actual</td><td>The evidence table: input, expected, actual, pass/fail</td></tr><tr><td>Regression</td><td>A previously passing case broken by a change</td></tr><tr><td>Limits of testing</td><td>Passing tests ≠ correct; they prove behavior on those inputs only</td></tr></tbody></table>
+<h2 id="syntax-and-c-examples">Syntax and C++ examples</h2>
+<p>The worked trace (digit-sum loop, from L09):</p>
+<table><thead><tr><th>pass</th><th>work</th><th>digit</th><th>digitSum</th><th>note</th></tr></thead><tbody><tr><td>enter</td><td>907</td><td>—</td><td>0</td><td>invariant holds</td></tr><tr><td>1</td><td>90</td><td>7</td><td>7</td><td><code>work % 10</code>, then <code>work /= 10</code></td></tr><tr><td>2</td><td>9</td><td>0</td><td>7</td><td>zero digit — pass still runs</td></tr><tr><td>3</td><td>0</td><td>9</td><td>16</td><td>loop condition now false → exit</td></tr></tbody></table>
+<p>And a test plan for an "age 3–120" validator:</p>
+<table><thead><tr><th>input</th><th>class</th><th>expected</th></tr></thead><tbody><tr><td>25</td><td>normal</td><td>accepted</td></tr><tr><td>3 / 120</td><td>boundary</td><td>accepted</td></tr><tr><td>2 / 121</td><td>boundary</td><td>rejected</td></tr><tr><td>-1 / 1000</td><td>boundary</td><td>rejected</td></tr><tr><td><code>"abc"</code> / empty</td><td>invalid</td><td>rejected</td></tr></tbody></table>
+<pre><code class="language-cpp">// the seeded-bug program students trace and test:
+for (int i{1}; i &lt;= n; ++i)   // bug: should be i &lt; n (off-by-one)
+{
+    sum += a[i];
+}</code></pre>
+<h2 id="line-by-line-code-explanation">Line-by-line code explanation</h2>
+<p><code>examples/buggy_off_by_one.cpp</code> (three seeded bugs, found on paper first):</p>
+<ol><li><strong>Off-by-one:</strong> <code>i &lt;= n</code> — the trace table shows the extra pass reading <code>a[n]</code> (one past the end): garbage in, garbage summed.</li><li><strong>Wrong boundary:</strong> a parking-fee tier whose <code>else if (hours &gt; 3)</code> should be <code>&gt;= 3</code> — the boundary test case (exactly 3) exposes it; no normal case ever would.</li><li><strong>Inverted condition:</strong> <code>if (!(score &gt;= 60))</code> intended as "pass" — the path marking in the trace shows both branches firing in the wrong columns.</li><li>The lesson ordering: trace → diagnosis sentence → <em>then</em> run; the expected-vs-actual table documents what the fix changes.</li></ol>
+</ol>
+<h2 id="output-prediction-questions-with-answers">Output prediction questions (with answers)</h2>
+<ol><li>Trace <code>s += i * 2</code> for <code>i = 2..4</code> (s starts 0) — ? — rows (2, 4), (3, 10), (4, 18); final s = 18.</li><li>Age validator: which class catches <code>120</code> vs <code>121</code>? — Boundary class — normal cases never touch the edge.</li><li>Expected 8.5, actual 8 — what do you ask first? — "Is this integer division truncation?" (L05's lesson re-appearing as a debugging question).</li><li>Why mark the manifestation row? — The bug's <em>cause</em> computed an earlier wrong value; the symptom only shows it.</li><li>A program passes all six planned tests. Is it correct? — Unknown: tests prove behavior on those inputs only.</li></ol>
+</ol>
+<h2 id="common-errors-and-debugging-examples">Common errors and debugging examples</h2>
+<table><thead><tr><th>Error</th><th>Symptom</th><th>Fix</th></tr></thead><tbody><tr><td>Tracing from the symptom row</td><td>Wrong fix downstream of the cause</td><td>Start at row 1; mark the manifestation</td></tr><tr><td>One column for several variables</td><td>The table hides its own bug</td><td>One column per variable, always</td></tr><tr><td>Skipping the output column</td><td>Wrong answers go unnoticed mid-table</td><td>Add the output column and use it</td></tr><tr><td>Tests only normal cases</td><td>Boundaries silently broken</td><td>Every IPO boundary in the plan</td></tr><tr><td>"Fix first, diagnose later"</td><td>Shotgun editing (banned in L16)</td><td>Diagnosis sentence before any edit</td></tr><tr><td>Evidence without expected values</td><td>"It looked right" isn't evidence</td><td>Expected column filled <em>before</em> running</td></tr></tbody></table>
+<h2 id="classroom-demonstrations">Classroom demonstrations</h2>
+<ol><li><strong>The manifestation-row hunt:</strong> hand out a traced-wrong table; the class marks where output goes wrong, then walks <em>upward</em> to the causing line — the habit made physical.</li><li><strong>Boundary theatre:</strong> a fee program passes every normal case; input <code>3</code> (the boundary) breaks it — normal cases are the least informative, demonstrated live.</li><li><strong>Evidence formatting:</strong> fill the expected-vs-actual table on the board for the buggy program, before/after the one-line fix.</li></ol>
+</ol>
+<h2 id="guided-student-activities">Guided student activities</h2>
+<p><strong>Lab 3 (2 h, this lecture slot):</strong> <a href="../../labs.html">labs/lab_manuals/lab_03</a> — trace-table drills on loops and branches, then bug-hunt in <code>buggy_off_by_one.cpp</code> with mandatory test-evidence tables. Lecture hour 2 = lab launch + demonstration of the evidence format on the board.</p>
+<h2 id="practice-problems">Practice problems</h2>
+<ul><li>Full trace tables for 3 programs (loop, branch-chain, nested pairs).</li><li>Write test plans (≥ 6 cases with class labels) for: leap-year checker, parking-fee tiers, sentinel averager.</li><li>Find the seeded bugs in <code>buggy_off_by_one.cpp</code> — trace table first, run only after committing to a diagnosis.</li><li>(🟡 stretch) Construct an input that passes all <em>given</em> tests but is wrong — the limits-of-testing lesson.</li></ul>
+<h2 id="summary">Summary</h2>
+<p>Trace tables simulate code row by row; the manifestation row points <em>upward</em> to the cause. Test plans cover normal, boundary, and invalid classes — with every IPO boundary present — and report evidence as expected-vs-actual with a verdict. Both skills are exam formats <em>and</em> daily habits; L16 turns them into a debugging method. Next (L13): functions — the shape programs take when they grow.</p>
+<h2 id="exit-ticket-formative-assessment">Exit ticket / formative assessment</h2>
+<ol><li>Trace two iterations: <code>int s{0}; for (int i{2}; i &lt;= 4; ++i) s += i * 2;</code></li><li>Name the boundary cases for "valid age 3–120".</li><li>A test shows expected 8.5, actual 8. What single question do you ask first?</li></ol>
+</ol>
+<h2 id="estimated-time-allocation-120-min">Estimated time allocation (120 min)</h2>
+<table><thead><tr><th>Segment</th><th>Minutes</th></tr></thead><tbody><tr><td>Recall (IPO quiz) + why tracing</td><td>10</td></tr><tr><td>Trace-table mechanics with 2 worked examples</td><td>35</td></tr><tr><td>Break</td><td>10</td></tr><tr><td>Test-case classes + evidence format</td><td>25</td></tr><tr><td><strong>Lab 3 launch</strong> (trace + bug-hunt drills)</td><td>30</td></tr><tr><td>Exit ticket + Module 7 preview</td><td>10</td></tr></tbody></table>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L16 · Debugging Methodology and Midterm Review · **MIDTERM EXAM** · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/lectures/week_08/lecture_16.html">
+<link rel="stylesheet" href="../../styles.css">
+<script src="../../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../../index.html">Home</a></li><li><a href="../../overview.html">Overview</a></li><li><a href="../../outcomes.html">Outcomes</a></li><li><a href="../../schedule.html">Schedule</a></li><li><a href="../../lectures.html" aria-current="page">Lectures</a></li><li><a href="../../labs.html">Labs</a></li><li><a href="../../cases.html">Case Studies</a></li><li><a href="../../exercises.html">Exercises</a></li><li><a href="../../assignments.html">Assignments</a></li><li><a href="../../projects.html">Projects</a></li><li><a href="../../resources.html">Resources</a></li><li><a href="../../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="narrow">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../../index.html">Home</a> › L16 · Debugging Methodology and Midterm Review · **MIDTERM EXAM**</nav>
+<h1 class="page-title">L16 · Debugging Methodology and Midterm Review · **MIDTERM EXAM**</h1>
+<p><strong>Module 8 — Advanced Function Concepts · Week 8 · Lecture 16 of 32 · 120 minutes</strong> <strong>Outcomes:</strong> CLO-1–CLO-5 · PF-8.3, PF-8.4 · <a href="../../outcomes.html">LEARNING_OUTCOMES.md</a> · <strong>Lab 4 week · MIDTERM (90 min)</strong></p>
+<h2 id="learning-objectives">Learning objectives</h2>
+<ol><li>Execute the five-step debugging loop — reproduce, isolate, hypothesize, test, fix — on a seeded-bug program, and document each step (PF-8.3).</li><li>Choose the right first tool per error class: diagnostics (syntax), trace tables + prints (logic), systematics (runtime) (PF-8.3).</li><li>Synthesize Module 1–8 outcomes under exam conditions (PF-8.4).</li></ol>
+</ol>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>Modules 1–8 (all prior outcomes; the exam is cumulative to this point); L12 (trace tables and evidence format).</p>
+<h2 id="concept-sequence-hour-1-teaching">Concept sequence (hour 1 — teaching)</h2>
+<ol><li>Debugging as a discipline, not an art</li><li>The five-step loop with a full worked example</li><li>Tool selection by error class</li><li>Print-debugging done right (labeled, scoped, removable)</li><li>Debug log format (course standard for labs/assignments)</li><li>Exam technique briefing (hour 2 = the exam)</li></ol>
+</ol>
+<h2 id="teaching-topics-detailed">Teaching topics (detailed)</h2>
+<ul><li><strong>The five steps, demonstrated on one program:</strong> <em>reproduce</em> (exact command + input), <em>isolate</em> (shrink inputs / comment-out halves — binary search the code), <em>hypothesize</em> (one sentence, falsifiable: "total is stale because update is after print"), <em>test</em> (trace table or prints that confirm/refute), <em>fix</em> (smallest change + regression test row).</li><li><strong>Tool-by-error-class table:</strong> syntax → read the <em>first</em> diagnostic; logic → trace table, print-debug; runtime/crash → last print that appeared; linker → missing/renamed definition.</li><li><strong>Print-debugging rules:</strong> label every print (<code>[dbg] i=3 total=15</code>), print <em>before</em> and <em>after</em> suspicious regions, delete before submission (style guide: no debug output in deliverables).</li><li><strong>Debug log:</strong> steps taken, hypothesis, evidence, fix — the PF-8.3 documentation requirement; graded in labs from week 8 onward.</li><li><strong>Midterm briefing:</strong> blueprint per <a href="../../assignments.html">exams/README.md</a> — predict-output, trace-table, find-the-bug, write-a-function question forms; closed book; 90 min.</li></ul>
+<h2 id="c-examples-required">C++ examples required</h2>
+<table><thead><tr><th>File</th><th>Role</th></tr></thead><tbody><tr><td><code>buggy_off_by_one.cpp</code> ✅</td><td>re-used from L12 — now debugged with the <em>full documented loop</em> (log template filled live)</td></tr><tr><td>(live) <code>debug_log_template.md</code></td><td>worked log for one seeded bug</td></tr></tbody></table>
+<h2 id="common-student-misconceptions">Common student misconceptions</h2>
+<ul><li>"Debugging = changing random things until it works." (Shotgun debugging creates new bugs; the loop exists to prevent it.)</li><li>"If it compiles and runs once, it works." (Evidence vs anecdote — L12 payoff.)</li><li>"Removing debug prints is optional." (Style-guide violation; graders deduct.)</li></ul>
+<h2 id="conceptual-explanation-beginner-first">Conceptual explanation (beginner-first)</h2>
+<p>Modules 1–8 taught you to <em>write</em> programs. Today's hour 1 is about <em>repairing</em> them — the skill you'll actually use most — and hour 2 is the midterm, which measures all of it.</p>
+<p>Debugging is not luck; it's a loop with five steps. <strong>1. Reproduce</strong> — find the smallest input that makes the bug show up reliably. <strong>2. Locate</strong> — narrow where the bug lives (trace table, or prints between stages). <strong>3. Diagnose</strong> — state the cause in one sentence <em>before</em> touching code ("the loop runs one pass too many because the bound is <code>&lt;=</code>"). <strong>4. Fix</strong> — the smallest change that addresses that sentence. <strong>5. Test</strong> — the failing case <em>plus</em> the cases that used to pass (regression). Shotgun debugging — changing things until it happens to work — is banned because it creates new bugs while hiding the old one.</p>
+<p>The tool menu, in order of cost: your trace table (free, finds logic bugs before running), print debugging (<code>std::cout</code> of state at stage boundaries), the compiler's warnings (<code>-Wall</code> — read them <em>all</em>), then the debugger (breakpoints, stepping — for state inspection the prints can't reach). And the course's documentation habit: a <strong>debug log</strong> — symptom, smallest reproduction, diagnosis sentence, fix, test evidence. The exam and the labs grade the log, because the log <em>is</em> the skill.</p>
+<h2 id="terminology-and-definitions">Terminology and definitions</h2>
+<table><thead><tr><th>Term</th><th>Definition</th></tr></thead><tbody><tr><td>Reproduce</td><td>Make the failure happen on demand, smallest input first</td></tr><tr><td>Locate</td><td>Narrow the region of code that misbehaves</td></tr><tr><td>Diagnose</td><td>The one-sentence cause statement, written before fixing</td></tr><tr><td>Fix</td><td>The minimal change addressing the diagnosis</td></tr><tr><td>Regression test</td><td>Re-running previously passing cases after any fix</td></tr><tr><td>Shotgun debugging</td><td>Random edits without diagnosis — banned practice</td></tr><tr><td>Print debugging</td><td>Temporary <code>std::cout</code> of variables/state at stage boundaries</td></tr><tr><td>Breakpoint / step</td><td>Debugger controls for pausing and single-stepping execution</td></tr><tr><td>Debug log</td><td>Symptom → reproduction → diagnosis → fix → evidence (course template)</td></tr><tr><td>Compiler warning</td><td>Suspicious-but-legal code flagged by <code>-Wall</code>; treat all as errors</td></tr></tbody></table>
+<h2 id="syntax-and-c-examples">Syntax and C++ examples</h2>
+<pre><code class="language-cpp">// Stage-boundary print debugging (removed after diagnosis — style rule)
+int sum{0};
+for (int i{0}; i &lt; n; ++i)
+{
+    sum += a[i];
+    std::cout &lt;&lt; &quot;[dbg] i=&quot; &lt;&lt; i &lt;&lt; &quot; a[i]=&quot; &lt;&lt; a[i]
+              &lt;&lt; &quot; sum=&quot; &lt;&lt; sum &lt;&lt; &#x27;\n&#x27;;     // the trace, live
+}
+
+// A wrong-looking average: which stage lied?
+std::cout &lt;&lt; &quot;[dbg] sum=&quot; &lt;&lt; sum &lt;&lt; &quot; n=&quot; &lt;&lt; n &lt;&lt; &#x27;\n&#x27;;
+double avg{sum / n};        // suspect line — diagnose BEFORE editing</code></pre>
+<p>The worked example re-uses <code>buggy_off_by_one.cpp</code> from L12: this time the full debug log is filled in live — symptom, smallest repro, the diagnosis sentence, the one-line fix, and the before/after evidence rows — demonstrating the loop end to end.</p>
+<h2 id="line-by-line-code-explanation">Line-by-line code explanation</h2>
+<p>The debug-log walkthrough (on <code>buggy_off_by_one.cpp</code>):</p>
+<ol><li><strong>Symptom:</strong> "program prints one extra element" — quoted verbatim, no theories yet.</li><li><strong>Smallest reproduction:</strong> n = 1 already misbehaves → the bug is not about size; it's structural.</li><li><strong>Diagnosis (the sentence):</strong> "The final print executes because the loop bound is <code>i &lt;= n</code> instead of <code>i &lt; n</code>."</li><li><strong>Fix:</strong> change the bound — one line, matched to the sentence.</li><li><strong>Evidence:</strong> before/after rows for n = 1, 3, 5 plus the regression checks — the format required in every lab from now on.</li></ol>
+</ol>
+<h2 id="output-prediction-questions-with-answers">Output prediction questions (with answers)</h2>
+<ol><li>A bug shows only for n = 1000. Which step is failing to do its job before this point? — Reproduction: shrink the input first.</li><li>You changed three things and it now works. What's missing? — The diagnosis + evidence: which change fixed it? (Shotgun debugging's bill comes due.)</li><li>Which tool first: trace table, print debugging, or debugger? — Trace table: free, and logic bugs surface on paper.</li><li>After a fix, the old tests fail. Name the concept. — Regression; step 5 exists precisely for this.</li></ol>
+</ol>
+<h2 id="common-errors-and-debugging-examples">Common errors and debugging examples</h2>
+<table><thead><tr><th>Error</th><th>Symptom</th><th>Fix</th></tr></thead><tbody><tr><td>Shotgun debugging</td><td>"Works" but nobody knows why</td><td>Full five-step loop, every time</td></tr><tr><td>Fixing symptoms</td><td>The bug moves elsewhere</td><td>Diagnosis sentence before edits</td></tr><tr><td>No regression testing</td><td>Old features break quietly</td><td>Step 5 is not optional</td></tr><tr><td>Debug prints left in</td><td>Style-guide violation; noisy output</td><td>Remove at the end (or log cleanly)</td></tr><tr><td>Reading only the failing line</td><td>The cause is usually <em>above</em> the symptom</td><td>Trace upward from the manifestation</td></tr><tr><td>Treating warnings as noise</td><td>The real bugs hide behind them</td><td><code>-Wall -Wextra</code> clean, always</td></tr></tbody></table>
+<h2 id="classroom-demonstrations">Classroom demonstrations</h2>
+<ol><li><strong>The loop, live:</strong> run all five steps on the seeded bug — narrating each step aloud; the class sees diagnosis <em>precede</em> the edit.</li><li><strong>Shotgun vs. loop:</strong> a volunteer shotguns for 2 minutes; the class counts the new breakages introduced — then the loop fixes it in one pass.</li><li><strong>Log gallery:</strong> two filled debug logs projected; students grade them against the rubric before the midterm sees similar questions.</li></ol>
+</ol>
+<h2 id="guided-student-activities">Guided student activities</h2>
+<p><strong>Hour 1 lab segment (Lab 4):</strong> <a href="../../labs.html">labs/README.md</a> — debug-clinic: teams run the full documented loop on two seeded programs; graded on log quality, not just the fix. <strong>Hour 2: MIDTERM EXAM</strong> (90 min, Modules 1–8, see <a href="../../assignments.html">exams/README.md</a> blueprint).</p>
+<h2 id="practice-problems">Practice problems</h2>
+<ul><li>Complete a debug log for one seeded bug (submission artifact).</li><li>Write the 5 steps you <em>would</em> take for a described non-reproducible bug.</li><li>Midterm review set: 15 mixed questions from the four exam forms (posted in <a href="../../assignments/midterm-review.html">exams/midterm/review_guide.md</a>).</li></ul>
+<h2 id="summary">Summary</h2>
+<p>Debugging is the five-step loop — reproduce, locate, diagnose, fix, test — with a tool ladder (trace table → prints → warnings → debugger) and a documentation habit (the debug log) that makes the skill assessable. Then: midterm. Next (L17): arrays — the first data structure — begins the second half.</p>
+<h2 id="exit-ticket-formative-assessment">Exit ticket / formative assessment</h2>
+<p><em>(Post-exam reflection, submitted with the exam:)</em></p>
+<ol><li>Which question type cost you the most time, and what will you practice?</li><li>Name the five steps of the debugging loop from memory.</li></ol>
+</ol>
+<h2 id="estimated-time-allocation-120-min">Estimated time allocation (120 min)</h2>
+<table><thead><tr><th>Segment</th><th>Minutes</th></tr></thead><tbody><tr><td>Debugging loop lecture + worked example</td><td>40</td></tr><tr><td>Tool-selection table + debug log standard</td><td>15</td></tr><tr><td><strong>Lab 4 debug clinic (compressed, log-graded)</strong></td><td>5 (extended in lab slot)</td></tr><tr><td><strong>MIDTERM EXAM</strong></td><td>90*</td></tr></tbody></table>
+<p>*Institutions running the exam in a separate period deliver hour 1 as a full 2-hour lecture with the complete Lab 4 in the lab slot — both variants are supported by <a href="../../schedule.html">COURSE_SCHEDULE.md</a> § Scheduling notes.</p>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

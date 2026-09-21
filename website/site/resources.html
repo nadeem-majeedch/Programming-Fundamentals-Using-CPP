@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Resources · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/resources.html">
+<link rel="stylesheet" href="styles.css">
+<script src="site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="index.html">Home</a></li><li><a href="overview.html">Overview</a></li><li><a href="outcomes.html">Outcomes</a></li><li><a href="schedule.html">Schedule</a></li><li><a href="lectures.html">Lectures</a></li><li><a href="labs.html">Labs</a></li><li><a href="cases.html">Case Studies</a></li><li><a href="exercises.html">Exercises</a></li><li><a href="assignments.html">Assignments</a></li><li><a href="projects.html">Projects</a></li><li><a href="resources.html" aria-current="page">Resources</a></li><li><a href="instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="index.html">Home</a> › Resources</nav>
+<h1 class="page-title">Resources</h1>
+<p class="lede">Toolchain setup, the C++ standard contract, the glossary, the example program library, lab templates, and where to get help.</p>
+<h2 id="cpp-standard">The C++ standard and compiler contract</h2>
+<p><strong>Audience:</strong> everyone authoring content; quoted in every rubric.</p>
+<h2 id="1-decision">1. Decision</h2>
+<p>This course teaches <strong>C++17</strong> (ISO/IEC TS 21541:2017 era; formally ISO/IEC 14882:2017). All examples, solutions, and assessments target C++17 and must compile with:</p>
+<pre><code class="language-bash">g++ -std=c++17 -Wall -Wextra -pedantic</code></pre>
+<p>(equivalent flags for clang++/MSVC in <a href="resources.html#toolchain-setup">TOOLCHAIN.md</a>).</p>
+<h2 id="2-why-c-17-and-not-older-or-newer">2. Why C++17 and not older or newer</h2>
+<table><thead><tr><th>Considered</th><th>Verdict</th><th>Reason</th></tr></thead><tbody><tr><td>C++98/03</td><td>rejected</td><td>Pre-dates beginners' laptops; idioms (e.g. <code>std::auto_ptr</code>) are obsolete and actively harmful</td></tr><tr><td><strong>C++11</strong></td><td>strong candidate</td><td>The "modern baseline": <code>auto</code>, range-<code>for</code>, lambdas, <code>nullptr</code>, uniform initialization</td></tr><tr><td><strong>C++14/17</strong></td><td><strong>selected (C++17)</strong></td><td>Strict improvements over C++11 with no new beginner burden: structured bindings, <code>if</code>-with-initializer, <code>std::string_view</code> (deferred in teaching), fold expressions (not needed) — and it is the default on the toolchains students will install in 2026</td></tr><tr><td>C++20/23</td><td>rejected for v1</td><td>Concepts, modules, ranges are excellent but add cognitive load; a documented migration path is kept (§ 5)</td></tr></tbody></table>
+<p>C++17 is also the intersection point of the course's two goals: <em>portable standard C++</em> (compiles everywhere with a modern default toolchain) and <em>minimal beginner confusion</em> (no legacy idioms, no pre-standard quirks).</p>
+<h2 id="3-the-compile-contract">3. The compile contract</h2>
+<ol><li>Every <code>.cpp</code> file compiles <strong>warning-free</strong> with the flags above.</li><li><code>int main()</code> returns <code>int</code>; no platform-specific entry points.</li><li>No compiler extensions (<code>-pedantic</code> is part of the contract).</li><li>Undefined behavior is banned, full stop; implementation-defined behavior (e.g. <code>int</code> size) must be flagged in a comment when relevant.</li><li>The teaching subset below is authoritative: if a lecture uses a feature, the feature appears in § 4; if not, it must not appear.</li></ol>
+</ol>
+<h2 id="4-feature-policy-what-we-teach-what-we-defer">4. Feature policy — what we teach, what we defer</h2>
+<h3 id="4-1-taught-in-schedule-order">4.1 Taught (in schedule order)</h3>
+<p><code>main</code>, statements, comments · <code>int</code>, <code>double</code>, <code>char</code>, <code>bool</code>, <code>const</code>, brace initialization <code>{}</code> · operators &amp; precedence · <code>cin</code>/<code>cout</code> and stream state · <code>if/else</code>, <code>switch</code> · <code>while</code>, <code>do-while</code>, <code>for</code>, range-<code>for</code> · functions, overloading, default arguments, references (<code>T&amp;</code>, <code>const T&amp;</code>) · scope/lifetime · C-style arrays (as memory model + "why vector exists"), <code>std::vector</code>, <code>std::string</code> · <code>struct</code> · pointers, <code>new</code>/<code>delete</code> (briefly, conceptually) · <code>ifstream</code>/<code>ofstream</code> · selected <code>&lt;algorithm&gt;</code> functions · <code>enum class</code> · introduction to classes (constructor, members) · recursion.</p>
+<h3 id="4-2-explicitly-deferred-with-the-week-we-mention-them">4.2 Explicitly deferred (with the week we <em>mention</em> them)</h3>
+<table><thead><tr><th>Feature</th><th>Deferred to</th><th>Why</th></tr></thead><tbody><tr><td><code>auto</code> for locals</td><td>mentioned week 3, taught week 9</td><td>Safe only after types are understood</td></tr><tr><td>Lambdas</td><td>week 14 (demo only)</td><td>Needs algorithm context</td></tr><tr><td><code>std::string_view</code></td><td>not taught</td><td>Ownership subtleties exceed beginner scope</td></tr><tr><td>Move semantics / rvalue refs</td><td>not taught</td><td>OOP course material</td></tr><tr><td>Templates (writing)</td><td>not taught</td><td>Using <code>std::vector&lt;T&gt;</code> is; writing isn't</td></tr><tr><td>Exceptions</td><td>week 13 mention only</td><td>Stream checks cover error handling needs</td></tr><tr><td>Concurrency</td><td>not taught</td><td>Far beyond scope</td></tr><tr><td>Modules</td><td>not taught</td><td>C++20; build complexity</td></tr></tbody></table>
+<h3 id="4-3-banned-in-course-code-correctness-pedagogy">4.3 Banned in course code (correctness/pedagogy)</h3>
+<p><code>using namespace std;</code> in headers · <code>system("pause")</code> · <code>conio.h</code> · magic numbers without named constants · uninitialized variables · C-style casts · macros-as-constants.</p>
+<h2 id="5-migration-path-c-20-23">5. Migration path (C++20/23)</h2>
+<p>The course is written so that a C++20 adopter can upgrade with:</p>
+<ol><li>Replace flag <code>-std=c++17</code> with <code>-std=c++20</code> (no course code should break).</li><li>Introduce designated initializers and <code>std::span</code> in weeks 9–12 (optional enrichment boxes in lecture notes).</li><li>Adopt <code>import std;</code> only when institutional toolchains uniformly support it.</li></ol>
+</ol>
+<p>The roadmap tracks this as a non-goal for v1 — see <code>CONTENT_ROADMAP.md</code> § 5.</p>
+<h2 id="6-references-verified-no-invented-citations">6. References (verified, no invented citations)</h2>
+<ul><li>ISO C++ standard status and history: &lt;https://isocpp.org/std/status&gt;</li><li>C++17 feature summary (cppreference): &lt;https://en.cppreference.com/w/cpp/17&gt;</li><li>Compiler support tables (cppreference): &lt;https://en.cppreference.com/w/cpp/compiler_support&gt;</li><li>Core Guidelines (Bjarne Stroustrup &amp; Herb Sutter, isocpp.org): &lt;https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines&gt;</li></ul>
+<h2 id="toolchain-setup">Toolchain setup</h2>
+<p><strong>Audience:</strong> students (also used by instructors to prepare lab machines). <strong>Goal:</strong> from zero to a running C++17 program in under 30 minutes.</p>
+<h2 id="0-what-you-need">0. What you need</h2>
+<ol><li>A C++17 compiler (pick your OS below).</li><li>An editor — we standardize on <strong>VS Code</strong> with the Microsoft C/C++ extension (any editor works; the course shows VS Code).</li></ol>
+</ol>
+<h2 id="1-windows">1. Windows</h2>
+<p>Two supported options; pick <strong>one</strong>.</p>
+<h3 id="option-a-msys2-mingw-w64-recommended-for-this-course">Option A — MSYS2 / MinGW-w64 (recommended for this course)</h3>
+<ol><li>Install MSYS2 from &lt;https://www.msys2.org/&gt; following its steps 1–3.</li><li>In the <strong>MSYS2 UCRT64</strong> shell:</li></ol>
+</ol>
+<pre><code class="language-bash">   pacman -S --needed base-devel mingw-w64-ucrt-x86_64-toolchain</code></pre>
+<ol><li>Add <code>C:\msys64\ucrt64\bin</code> to your Windows <code>Path</code> (Settings → search "environment variables" → Path → New).</li><li>Open a <strong>new</strong> PowerShell/VS Code window and verify:</li></ol>
+</ol>
+<pre><code class="language-bash">   g++ --version</code></pre>
+<h3 id="option-b-visual-studio-community">Option B — Visual Studio (Community)</h3>
+<ol><li>Install Visual Studio Community from &lt;https://visualstudio.microsoft.com/&gt;.</li><li>In the installer, select the <strong>"Desktop development with C++"</strong> workload.</li><li>Build with the <em>x64 Native Tools Command Prompt</em>:</li></ol>
+</ol>
+<pre><code class="language-bash">   cl /std:c++17 /W4 /EHsc hello_world.cpp</code></pre>
+<p>MSVC flag mapping: <code>/std:c++17</code> ↔ <code>-std=c++17</code>, <code>/W4</code> ↔ <code>-Wall -Wextra</code>.</p>
+<h2 id="2-macos">2. macOS</h2>
+<ol><li>Install the command-line tools (Terminal):</li></ol>
+</ol>
+<pre><code class="language-bash">   xcode-select --install</code></pre>
+<ol><li>Verify:</li></ol>
+</ol>
+<pre><code class="language-bash">   clang++ --version</code></pre>
+<p>Apple clang understands <code>-std=c++17</code> directly.</p>
+<h2 id="3-linux-debian-ubuntu-example">3. Linux (Debian/Ubuntu example)</h2>
+<pre><code class="language-bash">sudo apt update
+sudo apt install -y build-essential gdb
+g++ --version</code></pre>
+<p>(Fedora: <code>sudo dnf install gcc-c++ gdb</code>; Arch: <code>sudo pacman -S gcc gdb</code>.)</p>
+<h2 id="4-editor-vs-code-in-4-steps">4. Editor: VS Code in 4 steps</h2>
+<ol><li>Install VS Code: &lt;https://code.visualstudio.com/&gt;.</li><li>Install the <strong>C/C++</strong> extension (publisher: Microsoft).</li><li>Open your course folder (<code>File → Open Folder</code>).</li><li>Create <code>hello_world.cpp</code>, press <strong>F5</strong>, choose <strong>C++ (GDB/LLDB)</strong> — the extension generates a build task. If you prefer the terminal:</li></ol>
+</ol>
+<pre><code class="language-bash">   g++ -std=c++17 -Wall -Wextra -pedantic hello_world.cpp -o hello
+   ./hello</code></pre>
+<h2 id="5-verify-your-setup-do-this-now">5. Verify your setup (do this now)</h2>
+<pre><code class="language-bash">g++ -std=c++17 -Wall -Wextra -pedantic hello_world.cpp -o hello
+./hello</code></pre>
+<p>Expected output ends with something like <code>Hello, world!</code>. If any step fails, check the troubleshooting table below or bring the exact error text to office hours — that text is the first debugging skill the course teaches.</p>
+<table><thead><tr><th>Symptom</th><th>Likely cause</th><th>Fix</th></tr></thead><tbody><tr><td><code>g++: command not found</code></td><td>PATH missing (Windows)</td><td>Redo Option A step 3; open a NEW terminal</td></tr><tr><td><code>'cl' is not recognized</code></td><td>Used plain terminal with VS</td><td>Use the x64 Native Tools prompt</td></tr><tr><td><code>undefined reference to main</code></td><td>Compiled the wrong/no file</td><td>Compile the file that has <code>main()</code></td></tr><tr><td>Program builds but window closes instantly</td><td>Some IDEs close console</td><td>Run from a terminal</td></tr></tbody></table>
+<h2 id="6-why-the-course-standardizes-the-command-line-first">6. Why the course standardizes the command line first</h2>
+<p>GUI build systems hide the three error classes the course teaches (compile/link/runtime). The one-line <code>g++</code> command keeps cause and effect visible; IDE projects are introduced as convenience, never as a prerequisite.</p>
+<h2 id="7-verify-a-compiler-matrix-instructors">7. Verify-a-compiler matrix (instructors)</h2>
+<table><thead><tr><th>OS</th><th>Default course compiler</th><th>C++17 flag</th></tr></thead><tbody><tr><td>Windows</td><td>g++ 13 (MSYS2 UCRT64)</td><td><code>-std=c++17</code></td></tr><tr><td>Windows (alt)</td><td>MSVC 19.x</td><td><code>/std:c++17</code></td></tr><tr><td>macOS</td><td>Apple clang 15+</td><td><code>-std=c++17</code></td></tr><tr><td>Linux</td><td>gcc 12+</td><td><code>-std=c++17</code></td></tr></tbody></table>
+<p>All course code compiles warning-free on every row of this matrix (see the compile contract in <a href="resources.html#cpp-standard">CPP_STANDARD.md</a> § 3).</p>
+<h2 id="example-program-library">Example program library</h2>
+<p>Every example compiles with the course contract. This table lists the full library; three complete programs are shown below.</p>
+<table><thead><tr><th>File</th><th>Teaches</th></tr></thead><tbody><tr><td><code>array_algorithms.cpp</code></td><td>the six core array algorithms as functions — fill/print, sum/</td></tr><tr><td><code>array_basics.cpp</code></td><td>array initialization forms, traversal discipline, contiguity of</td></tr><tr><td><code>buggy_off_by_one.cpp</code></td><td>SEEDED-BUG program for L12/L16 — students must find the three</td></tr><tr><td><code>conversion_demo.cpp</code></td><td>implicit promotion, assignment conversion, static_cast, and</td></tr><tr><td><code>decisions_grade.cpp</code></td><td>if / else-if chain design in three versions — naive (buggy),</td></tr><tr><td><code>dynamic_memory_caution.cpp</code></td><td>new/delete discipline, the three failure modes (leak, dangling,</td></tr><tr><td><code>file_read_write.cpp</code></td><td>text file I/O — token reading, line reading, record round-trip,</td></tr><tr><td><code>first_class.cpp</code></td><td>first class — private data, constructors, validated mutator,</td></tr><tr><td><code>functions_refactor.cpp</code></td><td>the flat gradebook program (before) and its decomposed version</td></tr><tr><td><code>grid_basics.cpp</code></td><td>2-D array declaration, row/column indexing, row-major memory</td></tr><tr><td><code>hello_world.cpp</code></td><td>the smallest complete C++ program — used in week 1 to introduce</td></tr><tr><td><code>io_age_check.cpp</code></td><td>prompt/read/echo a validated age — used in L04 to teach stream</td></tr><tr><td><code>loop_patterns.cpp</code></td><td>the six named loop patterns from L10, each as a small labeled</td></tr><tr><td><code>loops_sum_digits.cpp</code></td><td>sentinel-controlled while loop and digit-sum via % and / —</td></tr><tr><td><code>matrix_ops.cpp</code></td><td>2-D aggregations and operations — row totals, column totals,</td></tr><tr><td><code>overload_ref_demo.cpp</code></td><td>overload resolution, a working swap via references, and the</td></tr><tr><td><code>passing_modes.cpp</code></td><td>the three passing modes with printed evidence — scalar by value</td></tr><tr><td><code>pointer_basics.cpp</code></td><td>addresses, &amp; and *, nullptr discipline, and pointer arithmetic</td></tr><tr><td><code>precedence_demo.cpp</code></td><td>precedence, associativity, integer vs floating-point division,</td></tr><tr><td><code>robust_pipeline.cpp</code></td><td>robust input/file handling — the three error tiers, the</td></tr><tr><td><code>scope_lifetime_demo.cpp</code></td><td>block scope, shadowing, the global-mutable bug, and a static</td></tr><tr><td><code>search_compare.cpp</code></td><td>linear vs binary search with comparison counters, plus the</td></tr><tr><td><code>sorting_traced.cpp</code></td><td>selection sort and bubble sort with per-pass snapshots and</td></tr><tr><td><code>string_algorithms.cpp</code></td><td>per-character and word-level string algorithms — reverse,</td></tr><tr><td><code>string_processing.cpp</code></td><td>&lt;cctype&gt; classification, std::string operations, substr/find</td></tr><tr><td><code>struct_records.cpp</code></td><td>struct definition, brace initialization, member access (., -&gt;),</td></tr><tr><td><code>struct_to_class.cpp</code></td><td>the struct -&gt; class refactor checklist applied to the same</td></tr><tr><td><code>switch_menu.cpp</code></td><td>switch anatomy — grouped cases, default, and the same logic as</td></tr><tr><td><code>types_and_sizes.cpp</code></td><td>demonstrate every built-in type, brace initialization, and the</td></tr></tbody></table>
+<h2 id="three-complete-examples">Three complete examples</h2>
+<h3>array_algorithms.cpp</h3><p>the six core array algorithms as functions — fill/print, sum/</p><pre><code class="language-cpp">// purpose: the six core array algorithms as functions — fill/print, sum/
+//          average, min/max with index, count-if, reverse-in-place, linear
+//          search — used in L18 and re-used across Modules 12-14.
+// build:   g++ -std=c++17 -Wall -Wextra -pedantic array_algorithms.cpp -o arralg
+
+#include &lt;iostream&gt;
+
+// Print the array in one line.  Read-only: const array parameter.
+void print_array(const int a[], int n)
+{
+    for (int i{0}; i &lt; n; ++i)
+    {
+        std::cout &lt;&lt; a[i] &lt;&lt; &#x27; &#x27;;
+    }
+    std::cout &lt;&lt; &#x27;\n&#x27;;
+}
+
+// Sum of all elements (accumulator pattern).
+int sum(const int a[], int n)
+{
+    int total{};
+    for (int i{0}; i &lt; n; ++i)
+    {
+        total += a[i];
+    }
+    return total;
+}
+
+// Minimum value AND its index (two outputs -&gt; two int&amp; parameters).
+void min_with_index(const int a[], int n, int&amp; min_value, int&amp; min_index)
+{
+    min_value = a[0];
+    min_index = 0;
+    for (int i{1}; i &lt; n; ++i)
+    {
+        if (a[i] &lt; min_value)
+        {
+            min_value = a[i];
+            min_index = i;
+        }
+    }
+}
+
+// Count elements satisfying a property shown here as &quot;even&quot;.
+int count_even(const int a[], int n)
+{
+    int count{};
+    for (int i{0}; i &lt; n; ++i)
+    {
+        if (a[i] % 2 == 0)
+        {
+            ++count;
+        }
+    }
+    return count;
+}
+
+// Reverse IN PLACE: swap symmetric pairs (i, n-1-i).
+void reverse_in_place(int a[], int n)
+{
+    for (int i{0}; i &lt; n / 2; ++i)
+    {
+        int temp{a[i]};
+        a[i] = a[n - 1 - i];
+        a[n - 1 - i] = temp;
+    }
+}
+
+// Linear search: index of first occurrence, or -1.
+int linear_search(const int a[], int n, int key)
+{
+    for (int i{0}; i &lt; n; ++i)
+    {
+        if (a[i] == key)
+        {
+            return i;
+        }
+    }
+    return -1;
+}
+
+int main()
+{
+    const int N{6};
+    int data[N]{12, 5, 8, 21, 4, 8};
+
+    std::cout &lt;&lt; &quot;data            : &quot;;
+    print_array(data, N);
+
+    std::cout &lt;&lt; &quot;sum             : &quot; &lt;&lt; sum(data, N) &lt;&lt; &#x27;\n&#x27;;
+    std::cout &lt;&lt; &quot;average         : &quot;
+              &lt;&lt; static_cast&lt;double&gt;(sum(data, N)) / N &lt;&lt; &#x27;\n&#x27;;
+
+    int min_value{};
+    int min_index{};
+    min_with_index(data, N, min_value, min_index);
+    std::cout &lt;&lt; &quot;min             : &quot; &lt;&lt; min_value &lt;&lt; &quot; at index &quot;
+              &lt;&lt; min_index &lt;&lt; &#x27;\n&#x27;;
+
+    std::cout &lt;&lt; &quot;even count      : &quot; &lt;&lt; count_even(data, N) &lt;&lt; &#x27;\n&#x27;;
+
+    reverse_in_place(data, N);
+    std::cout &lt;&lt; &quot;reversed        : &quot;;
+    print_array(data, N);
+
+    std::cout &lt;&lt; &quot;search 21       : index &quot;
+              &lt;&lt; linear_search(data, N, 21) &lt;&lt; &#x27;\n&#x27;;
+    std::cout &lt;&lt; &quot;search 99       : index &quot;
+              &lt;&lt; linear_search(data, N, 99) &lt;&lt; &quot; (-1 = not found)\n&quot;;
+
+    return 0;
+}</code></pre><h3>array_basics.cpp</h3><p>array initialization forms, traversal discipline, contiguity of</p><pre><code class="language-cpp">// purpose: array initialization forms, traversal discipline, contiguity of
+//          memory, and the out-of-bounds reality — used in L17.
+// build:   g++ -std=c++17 -Wall -Wextra -pedantic array_basics.cpp -o arrbasic
+
+#include &lt;iostream&gt;
+
+int main()
+{
+    // --- Four initialization forms and their exact semantics ---
+    int full[3] = {10, 20, 30};       // all three explicit
+    int partial[3] = {10};            // rest are ZEROED: {10, 0, 0}
+    int inferred[] = {1, 2, 3};       // size deduced: 3
+    int zeroed[3]{};                  // all zero
+
+    std::cout &lt;&lt; &quot;full     : &quot; &lt;&lt; full[0] &lt;&lt; &#x27; &#x27; &lt;&lt; full[1] &lt;&lt; &#x27; &#x27;
+              &lt;&lt; full[2] &lt;&lt; &#x27;\n&#x27;;
+    std::cout &lt;&lt; &quot;partial  : &quot; &lt;&lt; partial[0] &lt;&lt; &#x27; &#x27; &lt;&lt; partial[1] &lt;&lt; &#x27; &#x27;
+              &lt;&lt; partial[2] &lt;&lt; &#x27;\n&#x27;;
+    std::cout &lt;&lt; &quot;inferred : &quot; &lt;&lt; inferred[0] &lt;&lt; &#x27; &#x27; &lt;&lt; inferred[1] &lt;&lt; &#x27; &#x27;
+              &lt;&lt; inferred[2] &lt;&lt; &#x27;\n&#x27;;
+    std::cout &lt;&lt; &quot;zeroed   : &quot; &lt;&lt; zeroed[0] &lt;&lt; &#x27; &#x27; &lt;&lt; zeroed[1] &lt;&lt; &#x27; &#x27;
+              &lt;&lt; zeroed[2] &lt;&lt; &#x27;\n&#x27;;
+
+    // --- Traversal discipline: const size + i &lt; N ---
+    const int N{5};
+    int scores[N]{72, 88, 95, 61, 79};
+
+    for (int i{0}; i &lt; N; ++i)        // valid indices: 0..N-1
+    {
+        std::cout &lt;&lt; &quot;scores[&quot; &lt;&lt; i &lt;&lt; &quot;] = &quot; &lt;&lt; scores[i] &lt;&lt; &#x27;\n&#x27;;
+    }
+
+    // --- Elements are writable through their index ---
+    scores[2] = 100;                  // replace 95
+    std::cout &lt;&lt; &quot;after fix, scores[2] = &quot; &lt;&lt; scores[2] &lt;&lt; &#x27;\n&#x27;;
+
+    // --- Memory is contiguous: addresses step by sizeof(int) ---
+    std::cout &lt;&lt; &quot;addresses (contiguous, 4-byte steps on this platform):\n&quot;;
+    for (int i{0}; i &lt; N; ++i)
+    {
+        std::cout &lt;&lt; &quot;  &amp;scores[&quot; &lt;&lt; i &lt;&lt; &quot;] = &quot; &lt;&lt; &amp;scores[i] &lt;&lt; &#x27;\n&#x27;;
+    }
+    // Note: address FORMAT is platform-specific (how it prints is not
+    // standard C++; that a block is contiguous IS standard).
+
+    // --- Out of bounds: NO compiler error, NO reliable runtime error ---
+    // scores[5] = 1;   // legal-looking, UNDEFINED BEHAVIOR — do not run.
+    // The discipline that replaces the missing check:
+    //   const int N + for (i = 0; i &lt; N; ++i) + never index by accident.
+
+    return 0;
+}</code></pre><h3>buggy_off_by_one.cpp</h3><p>SEEDED-BUG program for L12/L16 — students must find the three</p><pre><code class="language-cpp">// purpose: SEEDED-BUG program for L12/L16 — students must find the three
+//          bugs by trace table FIRST, then run to confirm.
+// build:   g++ -std=c++17 -Wall -Wextra -pedantic buggy_off_by_one.cpp -o buggy
+//
+// NOTE: this file intentionally contains logic errors (not syntax errors),
+// so it compiles clean but prints WRONG results. That is the lesson.
+
+#include &lt;iostream&gt;
+
+int main()
+{
+    // Bug 1 (off-by-one): intended to print 1..5, prints 0..4.
+    // The loop runs i = 0,1,2,3,4 — five iterations, wrong values.
+    std::cout &lt;&lt; &quot;Count 1 to 5: &quot;;
+    for (int i{0}; i &lt; 5; ++i)
+    {
+        std::cout &lt;&lt; i &lt;&lt; &#x27; &#x27;;          // BUG: starts at 0, should be 1..5
+    }
+    std::cout &lt;&lt; &#x27;\n&#x27;;
+
+    // Bug 2 (wrong boundary): intended sum of 1..4 = 10, but the condition
+    // uses &lt; instead of &lt;=, so it sums 1+2+3 = 6.
+    int sum{};
+    for (int i{1}; i &lt; 4; ++i)          // BUG: i &lt;= 4 was intended
+    {
+        sum += i;
+    }
+    std::cout &lt;&lt; &quot;Sum 1..4: &quot; &lt;&lt; sum &lt;&lt; &quot;   (expected 10)\n&quot;;
+
+    // Bug 3 (inverted condition): intended to print only passing scores
+    // (&gt;= 60), but prints the failing ones.
+    int scores[]{45, 72, 88, 59, 61};
+    std::cout &lt;&lt; &quot;Passing scores: &quot;;
+    for (int i{0}; i &lt; 5; ++i)
+    {
+        if (scores[i] &lt; 60)             // BUG: &lt; should be &gt;=
+        {
+            std::cout &lt;&lt; scores[i] &lt;&lt; &#x27; &#x27;;
+        }
+    }
+    std::cout &lt;&lt; &#x27;\n&#x27;;
+
+    return 0;
+}
+// Expected output after fixes:
+//   Count 1 to 5: 1 2 3 4 5
+//   Sum 1..4: 10
+//   Passing scores: 72 88 61</code></pre>
+<h2 id="lab-templates">Lab submission and debug-log templates</h2>
+<p>Every lab submission uses these two templates (linked from each lab manual).</p>
+<p><strong>Student:</strong> {name} · <strong>Login/ID:</strong> {id} · <strong>Date:</strong> {date}</p>
+<h2 id="1-task-summary">1. Task summary</h2>
+<table><thead><tr><th>Task</th><th>File</th><th>Status (done/partial)</th></tr></thead><tbody><tr><td>Guided 1</td><td><code>guided_1.cpp</code></td><td></td></tr><tr><td>Guided 2</td><td><code>guided_2.cpp</code></td><td></td></tr><tr><td>Independent 1</td><td><code>indep_1.cpp</code></td><td></td></tr><tr><td>Independent 2</td><td><code>indep_2.cpp</code></td><td></td></tr></tbody></table>
+<h2 id="2-build-log">2. Build log</h2>
+<p>Paste the exact compile command and its (empty) output:</p>
+<pre><code>g++ -std=c++17 -Wall -Wextra -pedantic indep_1.cpp -o indep_1</code></pre>
+<h2 id="3-test-evidence-table">3. Test-evidence table</h2>
+<table><thead><tr><th>#</th><th>Input</th><th>Expected output</th><th>Actual output</th><th>Verdict</th></tr></thead><tbody><tr><td>1</td><td>boundary:</td><td></td><td></td><td>pass/fail</td></tr><tr><td>2</td><td>normal:</td><td></td><td></td><td>pass/fail</td></tr><tr><td>3</td><td>normal:</td><td></td><td></td><td>pass/fail</td></tr><tr><td>4</td><td>invalid (from Lab 4):</td><td></td><td></td><td>pass/fail</td></tr><tr><td>5</td><td>own case:</td><td></td><td></td><td>pass/fail</td></tr></tbody></table>
+<h2 id="4-debug-log-summary-lab-4-onward">4. Debug log summary (Lab 4 onward)</h2>
+<p>One row per defect found during the session (full log in <a href="resources.html#lab-templates">debug_log_template.md</a>):</p>
+<table><thead><tr><th>Defect</th><th>Stage</th><th>Symptom</th><th>Cause</th><th>Fix</th></tr></thead><tbody><tr><td>1</td><td>compile/link/runtime/logic</td><td></td><td></td><td></td></tr></tbody></table>
+<h2 id="5-reflection-3-5-sentences">5. Reflection (3–5 sentences)</h2>
+<p>What was harder than expected, what would you do differently, what question is still open?</p>
+<h2 id="6-pre-lab-answers">6. Pre-lab answers</h2>
+<p>Attach scan/photo of the § 5 answers (or type them here).</p>
+<p><strong>Student:</strong> {name} · <strong>ID:</strong> {id}</p>
+<p>One block per defect. The grade pays for the <em>diagnosis</em>, not the fix.</p>
+<h2 id="defect-1">Defect 1</h2>
+<ol><li><strong>Reproduce:</strong> exact input/command that triggers it.</li><li><strong>Symptom:</strong> what happens (error text, wrong output, hang).</li><li><strong>Isolate:</strong> smallest input/code region that still shows it.</li><li><strong>Stage:</strong> compile / link / runtime / logic.</li><li><strong>Hypothesis:</strong> what you believed caused it.</li><li><strong>Test of hypothesis:</strong> what you changed/checked to confirm.</li><li><strong>Fix and verify:</strong> the change + the rerun that proves it fixed.</li></ol>
+</ol>
+<h2 id="defect-2">Defect 2</h2>
+<p>(same structure)</p>
+<hr>
+<p><strong>Reference:</strong> the five-step loop is taught in Lab 4 and used from that lab onward: reproduce → isolate → hypothesize → test → fix-and-verify.</p>
+<h2 id="glossary">Glossary</h2>
+<p>Beginner-language definitions, in first-use order. Terms are added as content is authored (<code>../docs/CONTENT_ROADMAP.md</code>); a term used in lecture notes must exist here.</p>
+<p>Status legend: ✅ defined · ⏳ planned (term listed, definition pending).</p>
+<h2 id="week-1-foundations">Week 1 — Foundations</h2>
+<ul><li><strong>algorithm</strong> ✅ — a finite, unambiguous sequence of steps that solves a problem; a recipe a computer can follow.</li><li><strong>program</strong> ✅ — an algorithm expressed in a programming language so a computer can execute it.</li><li><strong>source code</strong> ✅ — the human-readable text of a program (<code>.cpp</code> files).</li><li><strong>compiler</strong> ✅ — a program that translates source code into machine code.</li><li><strong>linker</strong> ✅ — a program that combines compiled pieces into one executable.</li><li><strong>executable</strong> ✅ — the runnable file the linker produces.</li><li><strong>syntax error / runtime error / logic error</strong> ✅ — three error classes: breaks grammar rules · crashes or misbehaves while running · runs but gives wrong results.</li><li><strong><code>main</code></strong> ✅ — the function where every C++ program starts executing.</li></ul>
+<h2 id="week-2-types">Week 2 — Types</h2>
+<ul><li><strong>variable</strong> ⏳ · <strong>type</strong> ⏳ · <strong>initialization</strong> ⏳ · <strong><code>const</code></strong> ⏳ · <strong>operator precedence</strong> ⏳ · <strong>integer division</strong> ⏳ · <strong>type conversion</strong> ⏳</li></ul>
+<h2 id="weeks-3-5-i-o-and-control-flow">Weeks 3–5 — I/O and control flow</h2>
+<ul><li><strong>stream</strong> ⏳ · <strong>stream state</strong> ⏳ · <strong><code>if</code>/<code>else</code></strong> ⏳ · <strong><code>switch</code></strong> ⏳ · <strong>short-circuit evaluation</strong> ⏳ · <strong>loop</strong> ⏳ · <strong>sentinel value</strong> ⏳ · <strong>accumulator</strong> ⏳ · <strong>off-by-one error</strong> ⏳ · <strong>infinite loop</strong> ⏳</li></ul>
+<h2 id="weeks-6-8-functions">Weeks 6–8 — Functions</h2>
+<ul><li><strong>function</strong> ⏳ · <strong>parameter / argument</strong> ⏳ · <strong>return value</strong> ⏳ · <strong>scope</strong> ⏳ · <strong>lifetime</strong> ⏳ · <strong>overloading</strong> ⏳ · <strong>call stack</strong> ⏳</li></ul>
+<h2 id="weeks-9-12-data">Weeks 9–12 — Data</h2>
+<ul><li><strong>array</strong> ⏳ · <strong><code>std::vector</code></strong> ⏳ · <strong>index / bounds</strong> ⏳ · <strong><code>std::string</code></strong> ⏳ · <strong><code>struct</code></strong> ⏳ · <strong>pointer</strong> ⏳ · <strong>address-of <code>&amp;</code></strong> ⏳ · *<em>dereference <code></em></code><strong> ⏳ · </strong><code>nullptr</code><strong> ⏳ · </strong>dynamic memory<strong> ⏳ · </strong>memory leak<strong> ⏳ · </strong>dangling pointer** ⏳</li></ul>
+<h2 id="weeks-13-15-files-library-craft">Weeks 13–15 — Files, library, craft</h2>
+<ul><li><strong>file stream</strong> ⏳ · <strong><code>ifstream</code> / <code>ofstream</code></strong> ⏳ · <strong>end-of-file</strong> ⏳ · <strong>iterator</strong> ⏳ · <strong>algorithm (STL)</strong> ⏳ · <strong>class</strong> ⏳ · <strong>encapsulation</strong> ⏳ · <strong>recursion</strong> ⏳ · <strong>base case</strong> ⏳ · <strong>RAII</strong> ⏳</li></ul>
+<h2 id="getting-help">Getting help</h2>
+<p><strong>The 30-minute rule:</strong> if one error resists you for 30 minutes, get help. Struggling is how you learn; <em>silent</em> struggling is how you fall behind.</p>
+<h2 id="1-before-you-ask-the-5-minute-self-check">1. Before you ask — the 5-minute self-check</h2>
+<ol><li><strong>Read the error top-down.</strong> The first diagnostic is usually the real one; later lines are often echoes. Find the file and line number.</li><li><strong>Reproduce it.</strong> Run the exact command from <a href="resources.html#toolchain-setup">../docs/TOOLCHAIN.md</a> § 5. Does it still fail?</li><li><strong>Check the last change.</strong> Undo the last edit mentally — did the error move?</li><li><strong>Explain it aloud</strong> (rubber-duck style): "This loop should sum 1..10, but <code>total</code> prints 555." Saying the expectation out loud finds logic bugs fast.</li><li><strong>Shrink the program.</strong> Comment out half; does the error remain? Binary search your own code.</li></ol>
+</ol>
+<h2 id="2-ask-a-good-question-in-office-hours-lab-or-the-forum">2. Ask a good question (in office hours, lab, or the forum)</h2>
+<p>Include, in this order:</p>
+<ol><li>What you expected to happen.</li><li>What actually happened (paste the <strong>first</strong> error and the code near its line number).</li><li>What you already tried (from § 1).</li></ol>
+</ol>
+<p>Asking this way is itself course outcome PF-A4 (<a href="outcomes.html">../LEARNING_OUTCOMES.md</a>).</p>
+<h2 id="3-where-to-get-help">3. Where to get help</h2>
+<table><thead><tr><th>Channel</th><th>Best for</th></tr></thead><tbody><tr><td>Lectures — ask immediately</td><td>concept confusion</td></tr><tr><td>Labs — raise your hand</td><td>build/run errors, task checkpoints</td></tr><tr><td>Office hours</td><td>assignments, debugging strategy, grading questions</td></tr><tr><td>Class forum/mailing list (as set up by your instructor)</td><td>quick environment questions</td></tr></tbody></table>
+<h2 id="4-integrity-guardrails-when-asking-online">4. Integrity guardrails when asking online</h2>
+<p>Discussing <em>ideas</em> publicly is fine; posting assignment code or pasting submissions into external services is not (<a href="overview.html">../COURSE_OVERVIEW.md</a> § 4.2). The suggested classroom AI policy: assistants may <em>explain</em> errors; they may not <em>write</em> code you submit.</p>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

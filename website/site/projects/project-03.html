@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Project 03 · Library Management System · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/projects/project-03.html">
+<link rel="stylesheet" href="../styles.css">
+<script src="../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../index.html">Home</a></li><li><a href="../overview.html">Overview</a></li><li><a href="../outcomes.html">Outcomes</a></li><li><a href="../schedule.html">Schedule</a></li><li><a href="../lectures.html">Lectures</a></li><li><a href="../labs.html">Labs</a></li><li><a href="../cases.html">Case Studies</a></li><li><a href="../exercises.html">Exercises</a></li><li><a href="../assignments.html">Assignments</a></li><li><a href="../projects.html" aria-current="page">Projects</a></li><li><a href="../resources.html">Resources</a></li><li><a href="../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="narrow">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../index.html">Home</a> › Project 03 · Library Management System</nav>
+<h1 class="page-title">Project 03 · Library Management System</h1>
+<p><strong>Modules 13–15 (Weeks 13–15) · structs, vector, references, file persistence — the first stateful project</strong> Outcomes: CLO-6…CLO-8 (PF-13…PF-15). Difficulty: ★★★☆☆ · Builds on P2.</p>
+<h2 id="1-problem-description">1. Problem description</h2>
+<p>A campus reading room lends books to members. The desk currently uses a paper register that is lost weekly. Write a console program that keeps a catalog of books and a register of which are out, <strong>saves state to a file between runs</strong>, and produces the desk's three daily reports. This is your first project whose data outlives the program: persistence changes design.</p>
+<h2 id="2-learning-objectives">2. Learning objectives</h2>
+<ol><li>Model records with a <code>struct</code> and manage a collection in <code>std::vector</code>.</li><li>Use references for in/out parameters where copies would lie.</li><li>Implement file round-tripping: load on start, save on change.</li><li>Apply the skip-and-report loader: malformed lines are data, not crashes.</li><li>Search by title (case-sensitive substring) and report by status.</li></ol>
+</ol>
+<h2 id="3-functional-requirements">3. Functional requirements</h2>
+<ul><li>FR1 — Book record: <code>struct Book { std::string title; std::string author; std::string id; bool out; std::string borrower; };</code> <code>id</code> is unique (B-1001 style); <code>borrower</code> is <code>-</code> when not out.</li><li>FR2 — On start, load <code>catalog.txt</code> (lines: <code>id;title;author;out;borrower</code>, <code>out</code> is <code>0</code>/<code>1</code>). Print <code>loaded: &lt;n&gt; skipped: &lt;k&gt;</code> — skip reasons counted, never fatal. Missing file = empty catalog (not an error).</li><li>FR3 — Menu loop: <code>add / lend / return / find / report / quit</code> (exact words).</li><li><code>add</code>: reads title, author; generates the next id (<code>B-1001</code> + 1 per catalog length ever added — keep the counter in the file via a new max).</li><li><code>lend &lt;id&gt; &lt;borrower&gt;</code>: marks out, records borrower; fails with <code>not available</code> if already out; <code>no such id</code> if absent.</li><li><code>return &lt;id&gt;</code>: marks in, borrower back to <code>-</code>; <code>no such id</code> if absent.</li><li><code>find &lt;text&gt;</code>: prints every title containing &lt;text&gt; (case-sensitive substring), <code>id title out?</code> lines; <code>none</code> if no hits.</li><li><code>report</code>: counts line <code>books: &lt;n&gt; out: &lt;k&gt; available: &lt;m&gt;</code> then the out-list <code>id -&gt; borrower</code>.</li><li>FR4 — Save the full catalog on <code>quit</code> (rewrite <code>catalog.txt</code>), and on every successful lend/return (crash tolerance — desk may lose power).</li><li>FR5 — <code>quit</code> is the only exit; EOF on stdin acts as <code>quit</code> (desk closes the terminal).</li></ul>
+<h2 id="4-non-functional-requirements">4. Non-functional requirements</h2>
+<ul><li>NFR1 — Vector capacity grows by need; no fixed-size arrays anywhere.</li><li>NFR2 — All mutation flows through functions taking <code>std::vector&lt;Book&gt;&amp;</code>; report functions take <code>const std::vector&lt;Book&gt;&amp;</code>.</li><li>NFR3 — The save format and the load format are the same line grammar — a file your program wrote must load with <code>skipped: 0</code>.</li><li>NFR4 — Semicolons or commas only in the file; titles containing the separator are rejected at add time with <code>title may not contain ';'</code> (documented limitation, not silent corruption).</li><li>NFR5 — Compiles with the course contract, zero warnings; no raw <code>new</code>/<code>delete</code> anywhere.</li></ul>
+<h2 id="5-suggested-data-structures">5. Suggested data structures</h2>
+<ul><li><code>std::vector&lt;Book&gt; catalog;</code> — the single source of truth.</li><li>Next-id policy: scan for the current maximum numeric id on load; new id = max + 1 (survives deletions-in-file; state the rule in a comment).</li><li>Deliberately <strong>no classes yet</strong>: P4 introduces the invariant-carrying class; here the struct is honest data and the functions are the behavior.</li></ul>
+<h2 id="6-user-interaction-design">6. User interaction design</h2>
+<pre><code class="language-text">loaded: 2 skipped: 1
+menu (add|lend|return|find|report|quit): lend B-1001 Ali
+ok
+menu (add|lend|return|find|report|quit): report
+books: 2 out: 1 available: 1
+B-1001 -&gt; Ali
+menu (add|lend|return|find|report|quit): add
+title: Dune
+author: Herbert
+added B-1003
+menu (add|lend|return|find|report|quit): quit
+saved: 3</code></pre>
+<h2 id="7-input-validation-requirements">7. Input validation requirements</h2>
+<ul><li>VR1 — Load-time classes per line: wrong field count, bad <code>out</code> flag, or empty id → skipped (counted by class in a comment-documented tally).</li><li>VR2 — <code>lend</code>/<code>return</code> with unknown id: <code>no such id</code>, state unchanged.</li><li>VR3 — <code>lend</code> on an out book: <code>not available</code>, state unchanged.</li><li>VR4 — Empty title or author at add: <code>bad text</code>, book not added.</li><li>VR5 — File cannot be <em>written</em> on save: <code>cannot save</code>, exit 2 (data environment failure) — after printing the report of what would be lost.</li></ul>
+<h2 id="8-testing-plan">8. Testing plan</h2>
+<table><thead><tr><th>#</th><th>Class</th><th>Scenario</th><th>Expected</th></tr></thead><tbody><tr><td>T1</td><td>round-trip</td><td>add 2, quit, restart</td><td><code>loaded: 2 skipped: 0</code></td></tr><tr><td>T2</td><td>corrupt line</td><td>catalog with 1 bad line</td><td><code>skipped: 1</code>, others load</td></tr><tr><td>T3</td><td>state machine</td><td>lend → lend same</td><td>second: <code>not available</code></td></tr><tr><td>T4</td><td>state machine</td><td>return → return</td><td>second: <code>no such id</code> only if id absent; else ok→ok</td></tr><tr><td>T5</td><td>search</td><td>find <code>du</code> against Dune</td><td>hit; <code>find zz</code> → <code>none</code></td></tr><tr><td>T6</td><td>id policy</td><td>add after max id B-1007</td><td>next is B-1008</td></tr><tr><td>T7</td><td>persistence</td><td>lend, kill program (EOF), restart</td><td>lend survived (saved on change)</td></tr><tr><td>T8</td><td>write-protect</td><td>read-only file/dir</td><td><code>cannot save</code>, exit 2</td></tr><tr><td>T9</td><td>separator</td><td>title <code>A;B</code></td><td>rejected, nothing added</td></tr><tr><td>T10</td><td>empty catalog</td><td>fresh file absent</td><td><code>loaded: 0 skipped: 0</code>, reports all zero</td></tr></tbody></table>
+<h2 id="9-milestones">9. Milestones</h2>
+<ol><li><strong>M1:</strong> struct + vector + load with skip-and-report + report + T2/T10.</li><li><strong>M2:</strong> menu + add (id policy) + lend/return state machine + T3/T4/T6.</li><li><strong>M3:</strong> save-on-quit + save-on-change + T1/T7/T8.</li><li><strong>M4:</strong> find + hardening pass (VR4/VR5, T5/T9) + full test table.</li></ol>
+</ol>
+<h2 id="10-extension-ideas">10. Extension ideas ⚙</h2>
+<ul><li>⚙ Due dates as day-numbers with an overdue report (arithmetic only).</li><li>⚙ <code>find</code> case-insensitive mode (tolower mapping — Module 11).</li><li>⚙ Two catalogs (books + members) with borrower ids resolved to names at report time — the join idea, two vectors.</li></ul>
+<h2 id="11-assessment-rubric-10-points-when-graded-as-homework">11. Assessment rubric (10 points when graded as homework)</h2>
+<table><thead><tr><th>Points</th><th>Line</th></tr></thead><tbody><tr><td>0–2</td><td>Load with skip-and-report; missing file handled (T2, T10)</td></tr><tr><td>0–2</td><td>State machine: lend/return invariants hold (T3, T4)</td></tr><tr><td>0–3</td><td>Persistence: round-trip, save-on-change, cannot-save path (T1, T7, T8)</td></tr><tr><td>0–2</td><td>Search + reports exact (T5, FR3 report line)</td></tr><tr><td>0–2</td><td>NFR1/NFR2/NFR5: vector+references, no raw pointers, contracts</td></tr></tbody></table>
+<p>Course-gate: does not compile with the contract → 0.</p>
+<h2 id="12-student-instructions">12. Student instructions</h2>
+<p>Work individually. Start from the file format — write a 3-line <code>catalog.txt</code> by hand and load it before writing any menu code. The skipped-counter and the round-trip test (T1) are the project's soul: a file you wrote must load clean. Deliverables: <code>library.cpp</code>, <code>test_table.md</code> (T1–T10), <code>postmortem.md</code>, and the sample <code>catalog.txt</code> you tested with. Zip as <code>p03_&lt;yourid&gt;.zip</code>. Use of <code>new</code>/<code>delete</code> or fixed-size arrays = scope violation under the scope-calibration line.</p>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

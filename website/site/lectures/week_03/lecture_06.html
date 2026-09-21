@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L06 · Type Conversions, Compound Assignment, and Mixed-Type Expressions · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/lectures/week_03/lecture_06.html">
+<link rel="stylesheet" href="../../styles.css">
+<script src="../../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../../index.html">Home</a></li><li><a href="../../overview.html">Overview</a></li><li><a href="../../outcomes.html">Outcomes</a></li><li><a href="../../schedule.html">Schedule</a></li><li><a href="../../lectures.html" aria-current="page">Lectures</a></li><li><a href="../../labs.html">Labs</a></li><li><a href="../../cases.html">Case Studies</a></li><li><a href="../../exercises.html">Exercises</a></li><li><a href="../../assignments.html">Assignments</a></li><li><a href="../../projects.html">Projects</a></li><li><a href="../../resources.html">Resources</a></li><li><a href="../../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="narrow">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../../index.html">Home</a> › L06 · Type Conversions, Compound Assignment, and Mixed-Type Expressions</nav>
+<h1 class="page-title">L06 · Type Conversions, Compound Assignment, and Mixed-Type Expressions</h1>
+<p><strong>Module 3 — Operators and Expressions · Week 3 · Lecture 6 of 32 · 120 minutes</strong> <strong>Outcomes:</strong> CLO-2 · PF-3.3, PF-3.4 · <a href="../../outcomes.html">LEARNING_OUTCOMES.md</a> · <strong>Assignment 1 due</strong></p>
+<h2 id="learning-objectives">Learning objectives</h2>
+<ol><li>Predict the value and type of mixed-type expressions: <code>int → double</code> promotion, assignment-driven conversion, and truncation on double→int narrowing (PF-3.3).</li><li>Convert deliberately with <code>static_cast&lt;int&gt;(...)</code> / <code>static_cast&lt;double&gt;(...)</code> and state where each is required in course code (PF-3.4).</li><li>Rewrite update expressions with <code>+=</code>, <code>-=</code>, <code>*=</code>, <code>/=</code>, and pre/post <code>++</code>/<code>--</code>, and predict expression values when increment placement matters (PF-3.4).</li></ol>
+</ol>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>L05 (arithmetic, truncation); L03 (assignment semantics).</p>
+<h2 id="concept-sequence">Concept sequence</h2>
+<ol><li>Implicit conversions: the compiler's silent rewrites</li><li>Promotion in mixed arithmetic (<code>int</code> op <code>double</code> → <code>double</code>)</li><li>Assignment conversion: widening vs narrowing (truncation, no rounding)</li><li>Explicit <code>static_cast</code> — course policy for narrowing</li><li>Compound assignment &amp; increment operators</li><li>Pre- vs post-increment: value of the <em>expression</em> vs the <em>variable</em></li></ol>
+</ol>
+<h2 id="teaching-topics-detailed">Teaching topics (detailed)</h2>
+<ul><li><strong>Promotion ladder:</strong> <code>bool → char → int → double</code>; demo: <code>3 + 0.5</code> → <code>3.5</code> (<code>int</code> promoted); <code>7 / 2</code> vs <code>7 / 2.0</code> vs <code>static_cast&lt;double&gt;(7) / 2</code> — three ways, one lesson.</li><li><strong>Assignment conversion:</strong> <code>double d{5};</code> fine (widening); <code>int i{5.7};</code> rejected by braces but <code>int i = 5.7;</code> compiles with truncation → course policy: braces + explicit casts for narrowing; <code>int i{static_cast&lt;int&gt;(5.7)};</code> → 5.</li><li><strong>char↔int:</strong> <code>static_cast&lt;int&gt;('A')</code> → 65 (peek at ASCII table; full use in Module 11); <code>char c{static_cast&lt;char&gt;(66)};</code> → 'B'.</li><li><strong>Compound assignment:</strong> <code>x += 5</code> as <code>x = x + 5</code>; readable only as update-in-place; loop-counter previews.</li><li><strong><code>++</code>/<code>--</code>:</strong> prefix vs postfix — <em>variable</em> ends the same, <em>expression value</em> differs (<code>int y = x++;</code> vs <code>int y = ++x;</code> with a state table); course style: prefer standalone statements or prefix; never two <code>++</code> on one variable in one statement (undefined behavior).</li><li><strong>Boolean pitfall preview:</strong> <code>bool b = 3.9;</code> → <code>true</code> (any nonzero → true); revisited in Module 4.</li></ul>
+<h2 id="c-examples-required">C++ examples required</h2>
+<table><thead><tr><th>File</th><th>Role</th></tr></thead><tbody><tr><td><code>conversion_demo.cpp</code> ✅</td><td>promotion, narrowing, casts, char codes — 12 printed lines students predict first</td></tr><tr><td>(live) <code>increment_trace.cpp</code></td><td>pre/post-increment state-table walk</td></tr></tbody></table>
+<h2 id="conceptual-explanation-beginner-first">Conceptual explanation (beginner-first)</h2>
+<p>Types must agree for an operation to happen — but C++ quietly <em>converts</em> values to make them agree. Mostly this is helpful: <code>3 + 0.5</code> becomes <code>3.5</code> because the <code>3</code> is <strong>promoted</strong> to a double. But conversions can also lose information: storing <code>5.7</code> into an <code>int</code> throws away the <code>.7</code> — <strong>not</strong> by rounding, but by truncating toward zero. The danger is that the <code>=</code> form performs this narrowing <em>silently</em>; that is why the course standardizes: brace-init when you mean it, explicit <code>static_cast</code> when narrowing is truly intended.</p>
+<p>The increment family (<code>++</code>, <code>--</code>) adds/subtracts one. The subtlety is the difference between <em>the variable's</em> new value and <em>the expression's</em> value: <code>++x</code> increments first, then yields the new value; <code>x++</code> yields the old value, then increments. In standalone statements there is no difference — which is why the course style says: use them standalone, and the subtlety stays out of your way.</p>
+<h2 id="terminology-and-definitions">Terminology and definitions</h2>
+<table><thead><tr><th>Term</th><th>Definition</th></tr></thead><tbody><tr><td>Implicit conversion</td><td>Compiler-inserted conversion to make types agree</td></tr><tr><td>Promotion</td><td>Smaller type widened (<code>int</code> → <code>double</code>) — no data loss</td></tr><tr><td>Narrowing</td><td>Conversion that can lose data (<code>double</code> → <code>int</code>, truncation)</td></tr><tr><td><code>static_cast&lt;T&gt;(x)</code></td><td>Explicit, searchable conversion — course-required for narrowing</td></tr><tr><td>Compound assignment</td><td><code>x += 5</code> ≡ <code>x = x + 5</code> (also <code>-= *= /= %=</code>)</td></tr><tr><td>Increment <code>++</code> / decrement <code>--</code></td><td>Add/subtract 1 (prefix vs postfix forms)</td></tr><tr><td>Prefix vs postfix</td><td><code>++x</code>: increment then yield; <code>x++</code>: yield then increment</td></tr><tr><td>Truncation toward zero</td><td><code>-3.9</code> → <code>-3</code> (not −4); same rule as integer division</td></tr></tbody></table>
+<h2 id="syntax-and-c-examples">Syntax and C++ examples</h2>
+<pre><code class="language-cpp">double d{5};                          // promotion: 5 -&gt; 5.0 (safe)
+int truncated = 5.7;                  // = form: silent truncation -&gt; 5
+int dollars{static_cast&lt;int&gt;(19.99)}; // explicit, searchable -&gt; 19
+int back{static_cast&lt;int&gt;(-3.9)};     // -&gt; -3 (toward zero)
+
+char c{&#x27;A&#x27;};
+int code{static_cast&lt;int&gt;(c)};        // 65 — chars are small numbers
+
+int x{5};
+x += 3;         // x = 8
+x *= 2;         // x = 16
+++x;            // x = 17 (standalone: prefix/postfix identical)
+int old{x++};   // old = 17, x = 18 (postfix yields OLD value)
+int neu{++x};   // x = 19 first, neu = 19 (prefix yields NEW value)</code></pre>
+<h2 id="line-by-line-code-explanation">Line-by-line code explanation</h2>
+<p><code>examples/conversion_demo.cpp</code> (predict each printed line first):</p>
+<ol><li><code>3 + 0.5</code> → <code>3.5</code>: the <code>int</code> is promoted; the <em>whole expression</em> becomes double.</li><li><code>double widened{5};</code> → prints <code>5</code> — widening never loses data, so braces allow it.</li><li><code>int truncated = 5.7;</code> → <code>5</code> — the <code>=</code> form silently truncates. The commented line above it (<code>int narrowed{5.7};</code>) is what <em>would</em> produce <code>error: narrowing conversion</code> — the brace shield.</li><li><code>static_cast&lt;int&gt;(19.99)</code> → 19 and <code>static_cast&lt;int&gt;(-3.9)</code> → <strong>-3</strong> — truncation toward zero, not flooring.</li><li><code>nine / 2.0</code> → 4.5 (promotion mid-expression), then wrapped in <code>static_cast&lt;int&gt;</code> → 4 — the two-step pipeline students must trace.</li><li><code>static_cast&lt;int&gt;('A')</code> → 65, <code>static_cast&lt;char&gt;(66)</code> → <code>B</code> — the char↔int dictionary that Module 11 builds on.</li><li><code>bool flag = 3.9;</code> → prints <code>1</code> — any nonzero value becomes true; note the braces would reject this narrowing (as intended).</li></ol>
+</ol>
+<h2 id="output-prediction-questions-with-answers">Output prediction questions (with answers)</h2>
+<ol><li><code>int x = 9 / 2.0;</code> — x? — <code>4</code> (9/2.0 is 4.5, then truncation on store).</li><li><code>static_cast&lt;int&gt;(-3.9)</code> — ? — <code>-3</code> (toward zero).</li><li>After <code>int a{5}; int b{a++};</code> — a and b? — <code>a=6, b=5</code> (postfix yields the old value).</li><li>After <code>int a{5}; int b{++a};</code> — ? — <code>a=6, b=6</code>.</li><li><code>double half{7 / 2};</code> — half? — <code>3.0</code> — the division happened in ints FIRST; storing into a double is too late (the classic order-of-events question).</li></ol>
+</ol>
+<h2 id="common-errors-and-debugging-examples">Common errors and debugging examples</h2>
+<table><thead><tr><th>Error</th><th>Symptom</th><th>Fix</th></tr></thead><tbody><tr><td>Rounding assumption</td><td><code>static_cast&lt;int&gt;(2.9)</code> believed to be 3; it is 2</td><td>Cast truncates; round explicitly if needed</td></tr><tr><td>Cast after the fact</td><td><code>double d{7 / 2};</code> → 3.0</td><td>Make ONE operand double: <code>7 / 2.0</code></td></tr><tr><td>Silent narrowing via <code>=</code></td><td>Data loss with no diagnostic</td><td>Brace-init; <code>static_cast</code> when intended</td></tr><tr><td>Two <code>++</code> on one variable in a statement</td><td>Undefined behavior</td><td>One modification per expression</td></tr><tr><td><code>x++</code> where <code>++x</code> intended (in expressions)</td><td>Off-by-one using the yielded value</td><td>Standalone style avoids it entirely</td></tr></tbody></table>
+<h2 id="common-student-misconceptions">Common student misconceptions</h2>
+<ul><li><strong>"<code>int + double</code> is an error because types differ."</strong> C++ promotes via the usual arithmetic conversions; students expect a compile error like Python 3's <code>int + str</code>.</li><li><strong>"Assignment in a condition is a typo the compiler catches."</strong> <code>if (x = 5)</code> assigns; only some cases warn — the course habit is <code>if (5 == x)</code> in risky spots or compiling with warnings on.</li><li><strong>"<code>x += 1</code> and <code>x = x + 1</code> can differ."</strong> For built-in types they compute the same; the compound form also avoids repeating a possibly expensive side-effecting left side.</li><li><strong>"Casting changes the stored value."</strong> <code>static_cast&lt;int&gt;(7.9)</code> converts <em>the value produced by the expression</em>; it never edits the original object.</li><li><strong>"Narrowing never bites if it compiles."</strong> List initialization (<code>int x{3.9};</code>) is rejected, but plain assignment <code>int x = 3.9;</code> silently truncates — show both side by side.</li></ul>
+<h2 id="classroom-demonstrations">Classroom demonstrations</h2>
+<ol><li><strong>The two-line proof:</strong> compile <code>int a{5.7};</code> (error) beside <code>int b = 5.7;</code> (silent 5) — the brace shield made visible.</li><li><strong>Pre/post state tables:</strong> trace <code>int old{x++};</code> and <code>int neu{++x};</code> on the board with columns <code>x</code>, <code>yielded</code> — the table IS the explanation.</li><li><strong>Character codes:</strong> print <code>'A'</code> + 1 as char → <code>'B'</code>, seeding Module 11's letter arithmetic.</li></ol>
+</ol>
+<h2 id="guided-student-activities">Guided student activities</h2>
+<p><strong>Conversion carousel (20 min):</strong> 6 stations around the room, each with a 3-line program and a prediction card; students rotate, commit predictions, then the station answer is revealed; debrief the two most-missed stations.</p>
+<h2 id="practice-problems">Practice problems</h2>
+<ul><li>Predict type+value of 8 mixed expressions (promotions, casts, char math).</li><li>Rewrite 6 update statements with compound assignment; 2 with correct pre/post choice.</li><li>Repair a money-split program that truncates the tip; use <code>static_cast</code> where required by the style guide.</li><li>(🟡 stretch) Show with a program that <code>0.1 + 0.2 == 0.3</code> is <code>false</code>; print with <code>setprecision(17)</code>.</li></ul>
+<h2 id="summary">Summary</h2>
+<p>Mixed-type expressions promote; assignment may narrow silently — which is why the course requires braces (which reject narrowing) and explicit <code>static_cast</code> (which documents it). Truncation is toward zero. Compound assignment updates in place; pre/post increment differ only in the value the <em>expression</em> yields — keep them standalone and the trap vanishes. Next (Module 4): programs that choose — <code>if</code>, comparisons, and logical operators.</p>
+<ul><li>"The compiler warns about every bad conversion." (Narrowing via <code>=</code> compiles silently; braces are the seatbelt.)</li><li>"<code>static_cast</code> is just fancy syntax for rounding." (It <em>truncates</em> toward zero and works for char↔int too.)</li><li>"<code>x++</code> and <code>++x</code> are interchangeable everywhere." (Statement: yes; expression: no.)</li><li>"<code>double</code> arithmetic is exact." (0.1 + 0.2 ≠ 0.3 demo here as a seed for Module 12 comparisons.)</li></ul>
+<h2 id="exit-ticket-formative-assessment">Exit ticket / formative assessment</h2>
+<ol><li><code>int x = 9 / 2.0;</code> — value? type of the right-hand side <em>before</em> the assignment conversion?</li><li><code>static_cast&lt;int&gt;(-3.9)</code> = ?</li><li>After <code>int a{5}; int b{a++};</code> what are <code>a</code> and <code>b</code>?</li></ol>
+</ol>
+<h2 id="estimated-time-allocation-120-min">Estimated time allocation (120 min)</h2>
+<table><thead><tr><th>Segment</th><th>Minutes</th></tr></thead><tbody><tr><td>Recall (division quiz) + silent conversions motivation</td><td>10</td></tr><tr><td>Promotion + assignment conversion + <code>static_cast</code> policy</td><td>35</td></tr><tr><td>Break</td><td>10</td></tr><tr><td>Compound assignment + pre/post increment with state tables</td><td>30</td></tr><tr><td>Conversion carousel activity</td><td>20</td></tr><tr><td>Assignment 1 hand-in reminder + exit ticket</td><td>15</td></tr></tbody></table>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

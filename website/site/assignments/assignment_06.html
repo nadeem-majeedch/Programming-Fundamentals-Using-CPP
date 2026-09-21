@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Assignment 6 · Campus Grid — 2-D Arrays · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/assignments/assignment_06.html">
+<link rel="stylesheet" href="../styles.css">
+<script src="../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../index.html">Home</a></li><li><a href="../overview.html">Overview</a></li><li><a href="../outcomes.html">Outcomes</a></li><li><a href="../schedule.html">Schedule</a></li><li><a href="../lectures.html">Lectures</a></li><li><a href="../labs.html">Labs</a></li><li><a href="../cases.html">Case Studies</a></li><li><a href="../exercises.html">Exercises</a></li><li><a href="../assignments.html" aria-current="page">Assignments</a></li><li><a href="../projects.html">Projects</a></li><li><a href="../resources.html">Resources</a></li><li><a href="../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="narrow">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../index.html">Home</a> › Assignment 6 · Campus Grid — 2-D Arrays</nav>
+<h1 class="page-title">Assignment 6 · Campus Grid — 2-D Arrays</h1>
+<p><strong>Module 10 (L19–L20) · 40 marks · due end of Week 11</strong> Outcomes: CLO-6 (PF-10.x)</p>
+<p>A campus map is an R×C grid of zone codes (integers 0..9). You will compute map statistics with correct 2-D traversal.</p>
+<h2 id="input">Input</h2>
+<p><code>R C</code> (1 ≤ R, C ≤ 20), then R rows × C columns of zone codes.</p>
+<h2 id="report-exact-labels-in-order">Report (exact labels, in order)</h2>
+<pre><code>sum     : S           (all cells)
+maxrow  : i v         (row index with the largest row total, and that total; ties → lowest index)
+diagonal: D           (sum of g[i][i] for i &lt; min(R,C))
+border  : B           (sum of all edge cells, corners counted once)
+zeros   : Z           (count of cells equal to 0)</code></pre>
+<h2 id="sample-run">Sample run</h2>
+<p>Input <code>3 4 / 1 2 3 4 / 5 0 0 2 / 9 1 1 1</code> →</p>
+<pre><code>sum     : 29
+maxrow  : 2 12
+diagonal: 5
+border  : 27
+zeros   : 2</code></pre>
+<p>Check: row totals 10 / 7 / 12 → row 2 wins; diagonal = 1 + 0 + 1 = 2 … careful: min(R,C) = 3 → g[0][0]+g[1][1]+g[2][2] = 1+0+1 = 2. If your program prints 5 you summed the wrong diagonal direction. <strong>The expected value is 2</strong> — fix the sample reasoning before coding.</p>
+<h2 id="required-functions">Required functions</h2>
+<ul><li><code>int totalSum(const int g[][20], int r, int c);</code></li><li><code>void maxRow(const int g[][20], int r, int c, int&amp; idx, int&amp; tot);</code></li><li><code>int diagonalSum(const int g[][20], int r, int c);</code> — main-diagonal only, i &lt; min(r,c).</li><li><code>int borderSum(const int g[][20], int r, int c);</code> — single pass, predicate form.</li><li><code>int countZeros(const int g[][20], int r, int c);</code></li></ul>
+<h2 id="constraints">Constraints</h2>
+<ul><li>Column dimension must be literal 20 in signatures (per the course rule).</li><li><code>borderSum</code> must be one pass with the edge predicate — no four separate loops.</li><li>No vectors; fixed <code>int grid[20][20]</code>.</li></ul>
+<h2 id="deliverables">Deliverables</h2>
+<p><code>campus.cpp</code> (contract, zero warnings) · <code>test_table.md</code> — 1×1 grid, 1×C and R×1 (whole grid is border!), diagonal on non-square grid, all-zero grid, tie between two rows · <code>postmortem.md</code> (10 marks).</p>
+<h2 id="note">Note</h2>
+<p>The worked sample above contains one deliberately wrong intermediate claim (diagonal 5) — your test table must list <strong>2</strong> as the expected diagonal with your own hand-check. Reading specs critically is part of the assignment.</p>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

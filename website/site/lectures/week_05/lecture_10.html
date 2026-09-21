@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>L10 · `for`, Nested Loops, `break`/`continue`, and Loop Patterns · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/lectures/week_05/lecture_10.html">
+<link rel="stylesheet" href="../../styles.css">
+<script src="../../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../../index.html">Home</a></li><li><a href="../../overview.html">Overview</a></li><li><a href="../../outcomes.html">Outcomes</a></li><li><a href="../../schedule.html">Schedule</a></li><li><a href="../../lectures.html" aria-current="page">Lectures</a></li><li><a href="../../labs.html">Labs</a></li><li><a href="../../cases.html">Case Studies</a></li><li><a href="../../exercises.html">Exercises</a></li><li><a href="../../assignments.html">Assignments</a></li><li><a href="../../projects.html">Projects</a></li><li><a href="../../resources.html">Resources</a></li><li><a href="../../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="narrow">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../../index.html">Home</a> › L10 · `for`, Nested Loops, `break`/`continue`, and Loop Patterns</nav>
+<h1 class="page-title">L10 · `for`, Nested Loops, `break`/`continue`, and Loop Patterns</h1>
+<p><strong>Module 5 — Loops and Repetition · Week 5 · Lecture 10 of 32 · 120 minutes</strong> <strong>Outcomes:</strong> CLO-3 · PF-5.3, PF-5.4 · <a href="../../outcomes.html">LEARNING_OUTCOMES.md</a> · <strong>Quiz 1 (Modules 1–4)</strong></p>
+<h2 id="learning-objectives">Learning objectives</h2>
+<ol><li>Write <code>for</code> loops for counted iteration (including step ≠ 1, downward counting, and accumulation), mapping <code>for</code> headers onto the init/test/update discipline from L09 (PF-5.3).</li><li>Build nested loops producing tables, shapes, and pair enumerations, and trace their total iteration counts (PF-5.3).</li><li>Predict <code>break</code>/<code>continue</code> behavior in single and nested loops, and select the right pattern — accumulate, search, validate, enumerate pairs — for a task (PF-5.4).</li></ol>
+</ol>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>L09 (while/do-while, trace tables, accumulator patterns).</p>
+<h2 id="concept-sequence">Concept sequence</h2>
+<ol><li><code>for</code> as packaged loop discipline (init; test; update in one line)</li><li>Counting variants: downward, step-2, character loops</li><li>Accumulator patterns in <code>for</code> form</li><li>Nested loops: tables, rectangles/triangles, all-pairs</li><li><code>break</code>/<code>continue</code> semantics (+ the nested-loop caveat)</li><li>The pattern catalogue (naming the reusable shapes)</li></ol>
+</ol>
+<h2 id="teaching-topics-detailed">Teaching topics (detailed)</h2>
+<ul><li><strong><code>for</code> equivalence:</strong> <code>for (int i{0}; i &lt; n; ++i)</code> ≡ the while form; scope rule: <code>i</code> exists <em>inside</em> the loop only (demo of the after-loop compile error and why it's a feature); prefer <code>for</code> when the count is known, <code>while</code> when it isn't.</li><li><strong>Counted variants:</strong> <code>for (int i{n}; i &gt; 0; --i)</code>, step-2, <code>for (char c{'a'}; c &lt;= 'e'; ++c)</code>.</li><li><strong>Nested loops:</strong> iteration-count arithmetic (outer n × inner m); multiplication table; right-triangle of stars (outer rows, inner columns depend on row — the key generalization); all-pairs comparison (<code>for i, for j&gt;i</code>).</li><li><strong><code>break</code>/<code>continue</code>:</strong> exits nearest loop / skips to next iteration; demo of the "break exits inner only" surprise; course style: allowed for search loops and input handling, sparingly elsewhere.</li><li><strong>Pattern catalogue (named for reuse in M9–M12):</strong> ACCUMULATE, COUNT-IF, FIND-FIRST (with <code>break</code>), VALIDATE-EVERY (with early <code>false</code>), ENUMERATE PAIRS, TABLE RENDER. Each gets a 5-line skeleton.</li></ul>
+<h2 id="c-examples-required">C++ examples required</h2>
+<table><thead><tr><th>File</th><th>Role</th></tr></thead><tbody><tr><td><code>loop_patterns.cpp</code> ✅</td><td>all six named patterns as runnable mini-demos with printed traces</td></tr><tr><td>(live) <code>shapes_nested.cpp</code></td><td>square → triangle → pyramid progression of nested loops</td></tr></tbody></table>
+<h2 id="common-student-misconceptions">Common student misconceptions</h2>
+<ul><li>"<code>for</code> and <code>while</code> are different kinds of loops." (Same semantics, different packaging; any <code>for</code> can be rewritten as <code>while</code>.)</li><li>"<code>break</code> exits all loops." (Nearest enclosing loop only — the classic nested-loop surprise.)</li><li>"Nested loop bodies always run n × m times." (Only when the inner count is independent of the outer variable — triangle shows dependence.)</li><li>"<code>continue</code> restarts the whole loop including initialization." (It jumps to the update/test, not the init.)</li></ul>
+<h2 id="conceptual-explanation-beginner-first">Conceptual explanation (beginner-first)</h2>
+<p>One loop repeats a single pass of work. But many problems are grids: a multiplication table needs every (row, column) pair; a class photo needs every (row, seat). The answer is <strong>a loop inside a loop</strong>. The outer loop picks a row; the inner loop sweeps across every column of that row; then the outer loop advances. The key mental model: <strong>for each pass of the outer loop, the inner loop runs completely</strong>.</p>
+<p>Nested loops also give the first honest answer to "how slow is my program?" If the outer runs <em>n</em> times and the inner runs <em>n</em> times for each outer pass, the body runs n×n = n² times. Compare a <em>n</em> line with a <em>n²</em> line: for n = 1,000 that's 1,000 steps versus 1,000,000. Doubling n doubles linear work but quadruples quadratic work. That intuition — <strong>growth rate, not stopwatch seconds</strong> — is what computer scientists call algorithmic complexity, and this lecture builds it by counting, not by memorizing notation.</p>
+<h2 id="terminology-and-definitions">Terminology and definitions</h2>
+<table><thead><tr><th>Term</th><th>Definition</th></tr></thead><tbody><tr><td>Nested loop</td><td>A loop inside the body of another loop</td></tr><tr><td>Outer / inner loop</td><td>The enclosing / enclosed loop; inner runs fully per outer pass</td></tr><tr><td>n² (quadratic) growth</td><td>Work grows with the square of input size</td></tr><tr><td>Linear growth</td><td>Work grows in step with input size</td></tr><tr><td>Growth rate</td><td>How work scales as n grows — independent of machine speed</td></tr><tr><td>Statement count</td><td>Number of executed statements — the concrete way to count work</td></tr><tr><td>Loop invariant (nested)</td><td>A claim true before every pass of <em>either</em> loop</td></tr><tr><td>Pair enumeration</td><td>Visiting all (i, j) combinations — the job nested loops do</td></tr></tbody></table>
+<h2 id="syntax-and-c-examples">Syntax and C++ examples</h2>
+<pre><code class="language-cpp">// the canonical nested loop: every (row, col) pair
+for (int row{1}; row &lt;= 3; ++row)
+{
+    for (int col{1}; col &lt;= 4; ++col)
+    {
+        std::cout &lt;&lt; row * col &lt;&lt; &#x27;\t&#x27;;   // inner body: 3 × 4 = 12 times
+    }
+    std::cout &lt;&lt; &#x27;\n&#x27;;                    // newline ONCE per row
+}
+
+// right triangle: row r prints r stars
+for (int r{1}; r &lt;= n; ++r)
+{
+    for (int s{1}; s &lt;= r; ++s)          // inner bound DEPENDS on r
+    {
+        std::cout &lt;&lt; &#x27;*&#x27;;
+    }
+    std::cout &lt;&lt; &#x27;\n&#x27;;
+}
+
+// counting statements: this double loop runs n² times
+for (int i{0}; i &lt; n; ++i)
+    for (int j{0}; j &lt; n; ++j)
+        ++steps;                          // executed n × n times total</code></pre>
+<h2 id="line-by-line-code-explanation">Line-by-line code explanation</h2>
+<p><code>examples/loop_patterns.cpp</code> (nested section, revisited from L09):</p>
+<ol><li>The outer <code>for</code> chooses the row; its body contains <em>two</em> statements: the inner <code>for</code> and the row's final <code>std::cout &lt;&lt; '\n'</code>.</li><li>The inner <code>for</code> runs its whole sweep — every column — for that one row, <em>then</em> control returns to the outer loop's update.</li><li>The newline is outside the inner loop but inside the outer: placement of statements relative to the loops determines output shape. Moving it one line up flattens the triangle into one long line.</li></ol>
+</ol>
+<p><code>examples/grid_basics.cpp</code> (used again here for its multiplication-table section):</p>
+<ol><li>Row and column indices both start at 1 (not 0) so the table reads naturally — indices are a design choice, not a law.</li><li><code>row * col</code> fills each cell; the <code>\t</code> aligns columns, the <code>\n</code> closes rows.</li><li>Predict-then-run: students write the output grid before compiling.</li></ol>
+</ol>
+<h2 id="output-prediction-questions-with-answers">Output prediction questions (with answers)</h2>
+<ol><li>Outer 1..3, inner 1..3, body prints <code>i*j</code> — how many body executions? — 9; the 3×3 table's cell count.</li><li>Triangle with n = 4 — how many stars total? — 1+2+3+4 = 10.</li><li>If the body prints and inner/outer both run 1..n, moving the newline inside the inner loop — ? — every number on its own line (no rows).</li><li>n = 1000 in an n² loop: roughly how many body executions? — one million; state it before computing it.</li><li>Doubling n from 500 to 1000 in an n² loop multiplies work by — ? — four; in a linear loop, two.</li></ol>
+</ol>
+<h2 id="common-errors-and-debugging-examples">Common errors and debugging examples</h2>
+<table><thead><tr><th>Error</th><th>Symptom</th><th>Fix</th></tr></thead><tbody><tr><td>Same name for both loop variables</td><td>Inner reuses/reshadows <code>i</code> — chaos</td><td><code>i</code> outer, <code>j</code> inner, always</td></tr><tr><td>Newline in the wrong loop</td><td>Output on one line, or one number per line</td><td>Ask "per cell or per row?" and place accordingly</td></tr><tr><td>Inner bound not reset</td><td>(Rare in C++ — for-loop scoping prevents it; a classic in languages with loop variables)</td><td>Declare inner counters in the inner <code>for</code></td></tr><tr><td>Off-by-one in inner bound</td><td>Missing or extra column per row</td><td>Trace one row by hand</td></tr><tr><td>Accidental n³</td><td>A third loop added thoughtlessly</td><td>Count the nesting depth — it multiplies</td></tr></tbody></table>
+<h2 id="classroom-demonstrations">Classroom demonstrations</h2>
+<ol><li><strong>Table on the board:</strong> for outer 1..3 × inner 1..3, list the nine (i, j) pairs in execution order — students see i change slowly, j quickly.</li><li><strong>Break the triangle:</strong> move the <code>\n</code> line-by-line (inside inner, at outer level, outside everything) and run each — placement is visual.</li><li><strong>Count-to-a-million:</strong> have the class count the n² body executions for n = 1000 out loud, then compare with a linear loop's 1000 — the gap is the lesson.</li></ol>
+</ol>
+<h2 id="guided-student-activities">Guided student activities</h2>
+<p><strong>Human loops (15 min):</strong> students execute a counted loop physically — counter card passed with each iteration; then a sentinel loop with a student sentry who refuses <code>0</code>; finally the off-by-one version misses the last pass and the class must fix the condition.</p>
+<h2 id="practice-problems">Practice problems</h2>
+<ul><li>Trace tables for 5 loops (mix of while/for, incl. one sentinel).</li><li>Write: multiplication-table printer (nested); sum-until-sentinel; do-while menu skeleton.</li><li>Find and fix the 3 seeded bugs in <code>buggy_off_by_one.cpp</code> by trace first.</li><li>(🞡 stretch) Convert a given for-loop into an equivalent while-loop and argue which reads better.</li></ul>
+<h2 id="summary">Summary</h2>
+<p>Nested loops enumerate combinations: outer picks the row, inner sweeps the columns, and the body runs (outer count) × (inner count) times. Statement placement — especially the newline — shapes the output. The same counting gives complexity intuition: linear work scales with n, nested work with n², and doubling the input multiplies work by 2 or by</p>
+<ol><li>Next (L11): week 6 turns from writing loops into <em>designing</em> —</li></ol>
+</ol>
+<p>problem-solving and algorithm design.</p>
+<h2 id="exit-ticket-formative-assessment">Exit ticket / formative assessment</h2>
+<ol><li>Write the nested loop printing a 4×6 rectangle of <code>#</code> characters.</li><li>A nested loop with outer bound n and inner bound n runs its body how many times? In growth-rate words?</li><li>Where does the <code>\n</code> go to make each row of the triangle appear on its own line, and why exactly there?</li></ol>
+</ol>
+<ol><li><code>for (int i{0}; i &lt; 4; ++i) for (int j{0}; j &lt; i; ++j) ++k;</code> — final <code>k</code>?</li><li>In a nested loop, <code>break</code> exits __________.</li><li>Which pattern fits: "print the first student below 40, then stop"?</li></ol>
+</ol>
+<h2 id="estimated-time-allocation-120-min">Estimated time allocation (120 min)</h2>
+<table><thead><tr><th>Segment</th><th>Minutes</th></tr></thead><tbody><tr><td>Recall (while quiz) + <code>for</code> packaging</td><td>10</td></tr><tr><td>Counted variants + accumulators</td><td>25</td></tr><tr><td><strong>Quiz 1 (Modules 1–4, 15 min, closed book)</strong></td><td>15</td></tr><tr><td>Break</td><td>10</td></tr><tr><td>Nested loops + shapes + break/continue</td><td>30</td></tr><tr><td>Pattern relay + exit ticket</td><td>30</td></tr></tbody></table>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>

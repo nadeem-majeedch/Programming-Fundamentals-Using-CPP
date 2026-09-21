@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Case Studies · Tier 4 · Advanced · Programming Fundamentals Using C++</title>
+<meta name="description" content="Programming Fundamentals Using C++ — a 16-week, 32-lecture first course in programming for university students.">
+<link rel="canonical" href="https://nadeem-majeedch.github.io/Programming-Fundamentals-Using-CPP/cases/tier4_advanced.html">
+<link rel="stylesheet" href="../styles.css">
+<script src="../site.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="../index.html">Programming Fundamentals Using C++</a>
+    <nav aria-label="Primary">
+      <ul><li><a href="../index.html">Home</a></li><li><a href="../overview.html">Overview</a></li><li><a href="../outcomes.html">Outcomes</a></li><li><a href="../schedule.html">Schedule</a></li><li><a href="../lectures.html">Lectures</a></li><li><a href="../labs.html">Labs</a></li><li><a href="../cases.html" aria-current="page">Case Studies</a></li><li><a href="../exercises.html">Exercises</a></li><li><a href="../assignments.html">Assignments</a></li><li><a href="../projects.html">Projects</a></li><li><a href="../resources.html">Resources</a></li><li><a href="../instructor.html">Instructor Info</a></li></ul>
+    </nav>
+  </div>
+</header>
+<main id="main" class="">
+<nav class="breadcrumbs" aria-label="Breadcrumb"><a href="../index.html">Home</a> › Case Studies · Tier 4 · Advanced</nav>
+<h1 class="page-title">Case Studies · Tier 4 · Advanced</h1>
+<p><strong>Lectures L23–L30 · Modules 12–15</strong> · think ~5 minutes · paper only. Cases ascend in difficulty within the tier. Worked solutions: instructor area only.</p>
+<hr>
+<h3 id="pf-cs-061-the-off-by-one-autopsy">PF-CS-061 · The Off-by-One Autopsy</h3>
+<ul><li><strong>Tier:</strong> 4 Advanced · <strong>Lecture:</strong> L23 · Module 12</li><li><strong>Context:</strong> A search routine returns "not found" for a value that exists.</li><li><strong>Problem:</strong> A binary search contains <code>high = n</code> (not n−1) and <code>low &lt;= high</code> mixed with <code>mid = (low+high)/2</code>. Given the array [2,4,6,8] and key 8, trace the buggy loop precisely, show the state that reads out of bounds or loops forever, and identify the minimal fix set.</li><li><strong>Input:</strong> the array and key. <strong>Output:</strong> trace table + defect list.</li><li><strong>Constraints:</strong> n ≤ 20.</li><li><strong>Thinking questions:</strong> What invariant must [low, high] satisfy? Which line breaks it?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Valid indices are 0…n−1; the initial high violates that.</li><li>Trace: low=0, high=4 → mid=2 compares a[2]=6 &lt; 8 → low=3, high=4 → mid=3... watch the boundary.</li><li>Fix: high = n−1 with low &lt;= high, <em>or</em> high = n with low &lt; high — pick one discipline.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-062-pointer-cipher-walk">PF-CS-062 · Pointer Cipher Walk</h3>
+<ul><li><strong>Tier:</strong> 4 Advanced · <strong>Lecture:</strong> L25 · Module 13</li><li><strong>Context:</strong> A toy cipher advances a pointer along a message.</li><li><strong>Problem:</strong> Using only pointer arithmetic (no indexing), design a walk that prints a C-string one character per line, then the same characters shifted +1 (letters wrap Z→A). Specify the stopping condition and why <code>*p != '\0'</code> is the contract, not <code>p != nullptr</code>.</li><li><strong>Input:</strong> one word (C-string). <strong>Output:</strong> vertical listing + shifted listing.</li><li><strong>Constraints:</strong> letters A–Z only; length ≤ 40.</li><li><strong>Thinking questions:</strong> What does p++ advance <em>by</em>? When is the pointer past the string — and is that pointer itself legal?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>p++ advances by sizeof(char) — one byte — to the next cell.</li><li>The terminator is the only sentinel: dereference-compare, don't compare pointers.</li><li>The one-past-the-end pointer may exist but must never be dereferenced.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-063-the-alias-explosion">PF-CS-063 · The Alias Explosion</h3>
+<ul><li><strong>Tier:</strong> 4 Advanced · <strong>Lecture:</strong> L26 · Module 13</li><li><strong>Context:</strong> A code review finds three names for one integer.</li><li><strong>Problem:</strong> Given int x; int&amp; r = x; int* p = &amp;x; — design the demonstration that changing through r and through *p is observable via x, then predict a five-line sequence of mixed mutations <em>before</em> running it. State the one operation that is illegal for r but legal for p.</li><li><strong>Input:</strong> the listed snippet. <strong>Output:</strong> predicted then actual values.</li><li><strong>Constraints:</strong> —</li><li><strong>Thinking questions:</strong> Which name is the object? Which two names are <em>windows</em> into it?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>x is the object; r is an alias; p holds an address.</li><li>r = 5, *p = 9, x = 11: all three names report the survivor.</li><li>r cannot be re-seated to alias y; p can be repointed.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-064-out-parameter-vs-return">PF-CS-064 · Out-Parameter vs Return</h3>
+<ul><li><strong>Tier:</strong> 4 Advanced · <strong>Lecture:</strong> L26 · Module 13</li><li><strong>Context:</strong> A parser must return two values: a code and a value.</li><li><strong>Problem:</strong> Design parse(const std::string&amp;, int&amp; code) returning double, versus a version returning bool with double&amp; out. Compare call sites and failure semantics; decide which communicates "this can fail" to a reader who only sees the call.</li><li><strong>Input:</strong> valid and invalid sample strings. <strong>Output:</strong> both interfaces' behavior.</li><li><strong>Constraints:</strong> inputs are numeric words or garbage.</li><li><strong>Thinking questions:</strong> Which design forces the caller to acknowledge failure? Where does the sentinel return version leak bugs?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>A bool return <em>demands</em> an if at the call site — visible control flow.</li><li>Sentinel values collide with legal data.</li><li>The out-parameter plus bool return separates "did it work" from "what it was".</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-065-the-dangling-return">PF-CS-065 · The Dangling Return</h3>
+<ul><li><strong>Tier:</strong> 4 Advanced · <strong>Lecture:</strong> L25 · Module 13</li><li><strong>Context:</strong> A helper returns int* to a newly computed value.</li><li><strong>Problem:</strong> Presented with int* makeValue() { int v = 42; return &amp;v; }, predict the defect, the likely (undefined) symptom, and produce two safe designs: return-by-value, and caller-supplied storage via a reference parameter. State which fix is idiomatic for this course and why.</li><li><strong>Input:</strong> the listed snippet. <strong>Output:</strong> defect analysis + fixed designs.</li><li><strong>Constraints:</strong> —</li><li><strong>Thinking questions:</strong> When does v's storage die? What does the returned pointer point <em>at</em> after that?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Automatic locals die at the closing brace.</li><li>The returned address is dangling: dereferencing is UB — anything may happen.</li><li>Return the int by value (copy is cheap); pointers out only for storage the caller owns.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-066-leak-hunter">PF-CS-066 · Leak Hunter</h3>
+<ul><li><strong>Tier:</strong> 4 Advanced · <strong>Lecture:</strong> L27 · Module 14</li><li><strong>Context:</strong> A long-running service grows in memory every hour.</li><li><strong>Problem:</strong> Given a loop that does int* p = new int[1000]; and (only on some paths) delete[] p;, classify which paths leak and redesign the ownership: exactly one owner, delete on every exit path, or replace with a stack/std::vector-based design. Defend the simplest correct choice for this course.</li><li><strong>Input:</strong> the listed loop. <strong>Output:</strong> leak paths + fixed design.</li><li><strong>Constraints:</strong> array of 1000 ints per iteration, 10⁶ iterations.</li><li><strong>Thinking questions:</strong> How many exit paths does the loop body have? What rule makes leaks impossible by construction?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Early returns and exceptions skip the delete.</li><li>One owner per allocation; every path frees — or no manual new at all.</li><li>A local std::vector&lt;int&gt; frees itself: RAII beats discipline.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-067-grow-on-demand-array">PF-CS-067 · Grow-on-Demand Array</h3>
+<ul><li><strong>Tier:</strong> 4 Advanced · <strong>Lecture:</strong> L27 · Module 14</li><li><strong>Context:</strong> A chat log must grow without a size limit.</li><li><strong>Problem:</strong> Design the growable array: a capacity variable, a size variable, and grow() that allocates double capacity and copies. Trace capacity growth for 17 pushes starting at 1. Why is doubling (not +10) the growth shape to prefer, in big-O terms?</li><li><strong>Input:</strong> push counts. <strong>Output:</strong> capacity trace + amortized argument.</li><li><strong>Constraints:</strong> capacity starts at 1; n ≤ 10⁵ conceptually.</li><li><strong>Thinking questions:</strong> What does a push do when size == capacity? How many total element-copies happen across all growths?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Full → allocate 2×, copy, free the old block.</li><li>Capacities: 1, 2, 4, 8, 16, 32 — 17 pushes land in 32.</li><li>Total copies ≈ 2n: doubling makes the <em>average</em> push O(1); +10 growth makes it O(n) per push on average... wait, decide: which is it and why?</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-068-struct-record-migration">PF-CS-068 · Struct Record Migration</h3>
+<ul><li><strong>Tier:</strong> 4 Advanced · <strong>Lecture:</strong> L28 · Module 14</li><li><strong>Context:</strong> A school converts three parallel arrays into one struct array.</li><li><strong>Problem:</strong> Given parallel arrays name[], id[], gpa[], design struct Student and the conversion. Then show the sort that reorders the records by gpa and prove records stay intact (one swap moves all fields). What breaks if one field is left in a parallel array?</li><li><strong>Input:</strong> 5 records as parallel arrays. <strong>Output:</strong> struct design + sorted record list.</li><li><strong>Constraints:</strong> ids unique; gpa 0.0–4.0.</li><li><strong>Thinking questions:</strong> What is the unit of swap after the migration? Which bug class disappears entirely?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>struct Student { name, id, gpa }; array of Student.</li><li>Swap copies whole records: t = a[i]; a[i] = a[j]; a[j] = t.</li><li>Half-migrated data keeps the misalignment bug alive — migrate the whole record.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-069-registry-with-sentinel-search">PF-CS-069 · Registry with Sentinel Search</h3>
+<ul><li><strong>Tier:</strong> 4 Advanced · <strong>Lecture:</strong> L28 · Module 14</li><li><strong>Context:</strong> A parts warehouse registers items and looks them up by SKU.</li><li><strong>Problem:</strong> Design struct Item { sku, qty } plus findItem(items, n, sku) returning the index or −1, and the transaction loop that applies stock movements until the sentinel <code>q</code>. Specify the three failure verdicts: unknown SKU, insufficient stock, non-positive amount.</li><li><strong>Input:</strong> registrations, then movements until <code>q</code>. <strong>Output:</strong> per-movement verdicts + final stock table.</li><li><strong>Constraints:</strong> ≤ 50 items; qty ≥ 0 always enforced.</li><li><strong>Thinking questions:</strong> Who validates the amount — the loop or the function? Where does the stock table print?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>findItem returns an index or −1; the caller interprets.</li><li>The transaction loop owns validation policy; findItem only finds.</li><li>Final table prints after the sentinel: one loop, three verdict branches.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-070-top-k-report">PF-CS-070 · Top-K Report</h3>
+<ul><li><strong>Tier:</strong> 4 Advanced · <strong>Lecture:</strong> L24 · Module 12</li><li><strong>Context:</strong> A mall dashboard shows the k highest-selling products.</li><li><strong>Problem:</strong> Design the top-k selection over n sales records (name, units) <em>without</em> fully sorting: find the k best by repeated max-extraction (or argue for a full sort when k ≈ n). Trace k = 3 on 8 records. What is the cost of each strategy in comparisons, roughly?</li><li><strong>Input:</strong> n records, then k. <strong>Output:</strong> the k leaders in order.</li><li><strong>Constraints:</strong> 1 ≤ k ≤ n ≤ 100; unit counts may tie (state the tie rule).</li><li><strong>Thinking questions:</strong> What does one extraction cost? When does repeated-max collapse into a sort?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>One pass to find the max is O(n); extract k times is O(kn).</li><li>Mark extracted records as used (or swap them to the back).</li><li>k ≈ n → just sort: O(n log n) beats O(n²).</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-071-binary-search-contract-test">PF-CS-071 · Binary Search Contract Test</h3>
+<ul><li><strong>Tier:</strong> 4 Advanced · <strong>Lecture:</strong> L23 · Module 12</li><li><strong>Context:</strong> A library ships binary search; you must certify it.</li><li><strong>Problem:</strong> Design the <em>minimal</em> test battery for binary search over an ascending array: empty, one element, first, last, absent-below, absent-above, absent-middle, duplicates. For each, state the expected result and which loop boundary it stresses. Which single test catches the <code>low &lt; high</code> vs <code>low &lt;= high</code> confusion?</li><li><strong>Input:</strong> the test table. <strong>Output:</strong> table + the discriminating test.</li><li><strong>Constraints:</strong> array ≤ 16 elements.</li><li><strong>Thinking questions:</strong> What does "absent-below" do to mid? Why is a two-element array a perfect boundary trap?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Empty must return "not found" without indexing — test it first.</li><li>Two elements exercise mid == low and mid == high both.</li><li>Absent-below with low &lt;= high and a wrong mid-step can loop forever — that's the discriminator.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-072-median-without-full-sort">PF-CS-072 · Median Without Full Sort</h3>
+<ul><li><strong>Tier:</strong> 4 Advanced · <strong>Lecture:</strong> L23 · Module 12</li><li><strong>Context:</strong> A statistics chip reports medians under tight CPU budgets.</li><li><strong>Problem:</strong> Design a median routine that sorts a <em>copy</em> (justify why not the original), handles even/odd n, and argue whether counting-based selection could beat sorting for small-range data. What does your routine return for n == 0 — and can it ever be "no data"?</li><li><strong>Input:</strong> n values. <strong>Output:</strong> median (1 dp) or a documented empty verdict.</li><li><strong>Constraints:</strong> 1 ≤ n ≤ 999; values 0…100.</li><li><strong>Thinking questions:</strong> Why does sorting in place corrupt the caller's data? What does "copy" cost, and is it acceptable?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>The caller's array must survive — copy, sort the copy.</li><li>Even n averages the two middle elements — careful with integer division.</li><li>n == 0 is a contract violation: reject before touching anything.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-073-the-nullpointerexception-class">PF-CS-073 · The NullPointerException Class</h3>
+<ul><li><strong>Tier:</strong> 4 Advanced · <strong>Lecture:</strong> L25 · Module 13</li><li><strong>Context:</strong> A crash report blames "pointer p" in three functions.</li><li><strong>Problem:</strong> Three snippets use p without checking: dereference on entry, after delete, and inside a loop that may never set it. Design the checklist that prevents all three defect classes at review time, and rewrite each snippet defensively.</li><li><strong>Input:</strong> the three snippets. <strong>Output:</strong> checklist + rewritten snippets.</li><li><strong>Constraints:</strong> —</li><li><strong>Thinking questions:</strong> Which check belongs at <em>every</em> dereference? Which defect has no runtime symptom at all?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Rule: no dereference without proof of validity.</li><li>Uninitialized pointers: initialize to nullptr at birth.</li><li>Use-after-delete: set p = nullptr immediately after delete.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-074-struct-vs-parallel-arrays-benchmark">PF-CS-074 · Struct vs Parallel Arrays Benchmark</h3>
+<ul><li><strong>Tier:</strong> 4 Advanced · <strong>Lecture:</strong> L28 · Module 14</li><li><strong>Context:</strong> A debate: which layout for 10⁴ records?</li><li><strong>Problem:</strong> Design the argument (not code) comparing parallel arrays vs struct arrays for: sort a column, update one record, add a field, and pass "a student" to a function. Score each layout per operation and crown a winner for a beginner codebase.</li><li><strong>Input:</strong> the four operations. <strong>Output:</strong> comparison matrix + verdict.</li><li><strong>Constraints:</strong> —</li><li><strong>Thinking questions:</strong> Which operations touch one record vs one field? What does the compiler do for you with a struct copy?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Sorting a field still needs record integrity — parallel arrays fight you.</li><li>Adding a field: struct = one line; parallel = every array plus every swap.</li><li>Passing a struct copies the unit; passing "a student" from parallel arrays is 3 arguments.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-075-two-key-sort-name-then-score">PF-CS-075 · Two-Key Sort (Name then Score)</h3>
+<ul><li><strong>Tier:</strong> 4 Advanced · <strong>Lecture:</strong> L23 · Module 12</li><li><strong>Context:</strong> A directory sorts by name, breaking ties by score.</li><li><strong>Problem:</strong> Design the comparison-first sort: "less" means name &lt; name, or equal names and score &lt; score. Implement with any class sort using this comparator logic, and trace a tie case. What property must the comparator have (transitivity) and what breaks without it?</li><li><strong>Input:</strong> 6 (name, score) records with at least two name-ties. <strong>Output:</strong> sorted list.</li><li><strong>Constraints:</strong> names may repeat; scores 0…100.</li><li><strong>Thinking questions:</strong> What is the composite key? Why must "equal" be consistent in both branches?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>less(a,b) = (a.name &lt; b.name) || (a.name == b.name &amp;&amp; a.score &lt; b.score).</li><li>Trace two equal names: the score decides; equal both → not less either way.</li><li>A contradictory comparator (a&lt;b and b&lt;a) corrupts any sort — transitivity is the guard.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-076-the-cost-ladder">PF-CS-076 · The Cost Ladder</h3>
+<ul><li><strong>Tier:</strong> 4 Advanced · <strong>Lecture:</strong> L23 · Module 12</li><li><strong>Context:</strong> Three algorithms find whether a value exists; the team must pick.</li><li><strong>Problem:</strong> Given costs — linear scan O(n); sort-once-then-binary O(n log n + q log n); hash-like counting array O(n + q) for values ≤ 1000 — design the decision guide for (n, q) pairs: (10⁶, 1), (10³, 10⁶), (10⁶, 10⁶). Which wins each, and what data constraint backs the third option?</li><li><strong>Input:</strong> the three scenarios. <strong>Output:</strong> per-scenario winner + reasoning.</li><li><strong>Constraints:</strong> values in 0…1000 for option C only.</li><li><strong>Thinking questions:</strong> What does q (query count) do to amortization? Why can't the counting array scale past 1000?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>One query → linear; many queries on small ranges → counting.</li><li>Sort once pays off only when q log n beats q·n... compare directly.</li><li>The counting array's memory is O(range) — the range bound is the catch.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-077-merge-sorted-queues">PF-CS-077 · Merge Sorted Queues</h3>
+<ul><li><strong>Tier:</strong> 4 Advanced · <strong>Lecture:</strong> L23 · Module 12</li><li><strong>Context:</strong> Two sorted daily logs must merge into one sorted log.</li><li><strong>Problem:</strong> Design the two-index merge of sorted arrays A (m) and B (n) into C, tracing index movement on A=[1,4,9], B=[2,3,10]. Specify the tail handling (what happens when one array empties first) and the total comparison bound.</li><li><strong>Input:</strong> two sorted arrays. <strong>Output:</strong> merged sorted array.</li><li><strong>Constraints:</strong> duplicates allowed (state which array wins ties).</li><li><strong>Thinking questions:</strong> What does the output index count? Why can the merge never need more than m+n−1 comparisons?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Take the smaller head; advance that index only.</li><li>When one side empties, copy the other's tail directly.</li><li>Each comparison emits one element; ≤ m+n−1 emissions come from comparisons.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-078-the-nightly-settlement-file">PF-CS-078 · The Nightly Settlement File</h3>
+<ul><li><strong>Tier:</strong> 4 Advanced · <strong>Lecture:</strong> L29 · Module 15</li><li><strong>Context:</strong> A bank processes an end-of-day file: deposits and withdrawals.</li><li><strong>Problem:</strong> Design the pipeline: read records (id, action, amount), apply with an overdraft guard, tally processed vs skipped, and print a closing report. Specify every skip reason and where each is counted. What should the report print if the file is empty?</li><li><strong>Input:</strong> a transaction file's format spec. <strong>Output:</strong> per-record verdicts + closing report.</li><li><strong>Constraints:</strong> amounts &gt; 0; balances never negative.</li><li><strong>Thinking questions:</strong> Which loop reads the file — and what state does each record need? What is the invariant of a balance?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>getline + istringstream per line: malformed lines are data, not crashes.</li><li>Withdraw &gt; balance → skip with reason; both counters advance... decide which counters.</li><li>Empty file: report prints zeros — and that is correct behavior, not an error.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-079-configuration-with-defaults">PF-CS-079 · Configuration with Defaults</h3>
+<ul><li><strong>Tier:</strong> 4 Advanced · <strong>Lecture:</strong> L30 · Module 15</li><li><strong>Context:</strong> An app reads <code>key value</code> config lines; some keys may be missing.</li><li><strong>Problem:</strong> Design the loader: apply known keys, report unknown ones, and <em>after</em> reading, print the effective config where missing keys show their defaults. Trace on a file missing one of three keys. Decide: is an unknown key fatal, a warning, or silent?</li><li><strong>Input:</strong> config file contents. <strong>Output:</strong> effective config + anomalies.</li><li><strong>Constraints:</strong> three known keys; ≤ 20 lines.</li><li><strong>Thinking questions:</strong> When is a default "used"? Why must defaults print <em>after</em> the file is fully read?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Store seen-keys; a missing key falls back at print time.</li><li>Unknown keys: warn and continue (policy — justify it).</li><li>A later line could override an earlier one — last-write-wins, then report.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<hr>
+<h3 id="pf-cs-080-the-self-validating-form">PF-CS-080 · The Self-Validating Form</h3>
+<ul><li><strong>Tier:</strong> 4 Advanced · <strong>Lecture:</strong> L30 · Module 15</li><li><strong>Context:</strong> A kiosk collects applicant records with strict validation.</li><li><strong>Problem:</strong> Design record intake: name (non-empty), age (15–60), GPA (0.0–4.0) — re-prompting on each invalid field until valid, counting rejections per field. When does prompting end, and what does the summary report? Decide whether EOF (input closed) is an error or a graceful stop.</li><li><strong>Input:</strong> interactive field entries. <strong>Output:</strong> per-field prompts + rejection counts + final record.</li><li><strong>Constraints:</strong> bounded retries are <em>not</em> allowed (loop until valid or EOF).</li><li><strong>Thinking questions:</strong> What is the loop's exit condition — really? Which failure mode is the user's, and which is the environment's?</li></ul>
+<p>&lt;details&gt;&lt;summary&gt;Hints (progressive)&lt;/summary&gt;</p>
+<ol><li>Two exits: valid input, or stream closure (EOF) — handle both.</li><li>Per-field rejection counters make the summary useful to UI designers.</li><li>Never trust the stream state between reads: clear-and-check is the pattern.</li></ol>
+</ol>
+<p>&lt;/details&gt;</p>
+<div class="pager"><span>Programming Fundamentals Using C++ · C++17 · 16 weeks</span><a href="#main" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">Back to top ↑</a></div>
+</main>
+<footer class="site">
+  <p>Generated from the course repository · the repository files are the source of truth · <a href="https://isocpp.org" rel="noopener">Standard C++</a></p>
+</footer>
+</body>
+</html>
